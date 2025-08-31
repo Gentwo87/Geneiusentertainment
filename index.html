@@ -25,35 +25,44 @@
       background:var(--bg); color:var(--ink);
       font-family: "Trebuchet MS", Arial, sans-serif;
       overflow-y:auto; overflow-x:hidden;
+      position:relative;
     }
 
     .container{width:min(1120px,92vw); margin:0 auto}
     .center{text-align:center}
 
-    /* ===== HERO (with spotlight + subtle sparkles) ===== */
+    /* ===== Sparkles (animated, full page) ===== */
+    #sparkles{
+      position:fixed; inset:0;
+      pointer-events:none; z-index:0;
+    }
+    .sparkle{
+      position:absolute;
+      width:2px; height:2px;
+      background:var(--gold);
+      border-radius:50%;
+      opacity:0;
+      animation:sparkle 4s infinite;
+    }
+    @keyframes sparkle{
+      0%   { opacity:0; transform:scale(0); }
+      50%  { opacity:1; transform:scale(1.5); }
+      100% { opacity:0; transform:scale(0); }
+    }
+
+    /* ===== HERO (with spotlight) ===== */
     header.hero{
       position:relative;
       padding:90px 20px 60px;
       text-align:center;
-      /* Spotlight glow behind the logo */
       background:
         radial-gradient(
           circle at center,
           rgba(201,151,0,0.25) 0%,
           rgba(0,0,0,1) 70%
         );
-      overflow:hidden;
+      z-index:1; /* sits above sparkles */
     }
-    /* Subtle gold sparkles overlay (static) */
-    header.hero::after{
-      content:"";
-      position:absolute; inset:0;
-      background:url('https://www.transparenttextures.com/patterns/stardust.png') repeat;
-      opacity:.18;               /* strength of sparkles */
-      pointer-events:none;       /* never block clicks/scroll */
-    }
-
-    /* Header content */
     #logo{display:block; margin:12px auto 14px; max-width:320px; height:auto}
     header.hero p{margin:6px 0 0; color:var(--bronze); font-weight:600}
     .btn{
@@ -70,15 +79,14 @@
       text-transform:uppercase;
       letter-spacing:2px;
       margin:0 0 14px;
+      position:relative;
+      z-index:1;
     }
     p{color:var(--muted); line-height:1.6; margin:8px 0}
-
-    /* Per-section heading tweaks if you want different tones */
     #welcome h2{ color:#FFD700; }  /* brighter gold for Welcome */
-    #about   h2{ color:var(--gold); }
 
     /* ===== Sections ===== */
-    section.section{padding:60px 20px}
+    section.section{padding:60px 20px; position:relative; z-index:1}
     .section .sub{color:#b6b7c5; margin:0 0 24px; text-align:center}
 
     /* ===== Tiles / Cards ===== */
@@ -108,12 +116,15 @@
     }
 
     /* ===== Footer ===== */
-    footer{background:#111; padding:20px; text-align:center; color:#aaa; margin-top:40px}
+    footer{background:#111; padding:20px; text-align:center; color:#aaa; margin-top:40px; position:relative; z-index:1}
     footer a{color:var(--gold); text-decoration:none}
   </style>
 </head>
 
 <body>
+  <!-- Sparkles Layer -->
+  <div id="sparkles"></div>
+
   <!-- HERO -->
   <header class="hero">
     <img id="logo" src="logo.png" alt="Geneius Entertainment logo">
@@ -156,17 +167,17 @@
 
       <div class="cards">
         <div class="card-act">
-          <img src="https://picsum.photos/800/520?random=21" alt="Modern Party Band (placeholder)">
+          <img src="https://picsum.photos/800/520?random=41" alt="Modern Party Band (placeholder)">
           <div class="meta"><strong>Modern Party Band</strong><br><span class="tag">Band</span></div>
         </div>
 
         <div class="card-act">
-          <img src="https://picsum.photos/800/520?random=22" alt="Signature Wedding DJ (placeholder)">
+          <img src="https://picsum.photos/800/520?random=42" alt="Signature Wedding DJ (placeholder)">
           <div class="meta"><strong>Signature Wedding DJ</strong><br><span class="tag">DJ</span></div>
         </div>
 
         <div class="card-act">
-          <img src="https://picsum.photos/800/520?random=23" alt="Soulful Acoustic Duo (placeholder)">
+          <img src="https://picsum.photos/800/520?random=43" alt="Soulful Acoustic Duo (placeholder)">
           <div class="meta"><strong>Soulful Acoustic Duo</strong><br><span class="tag">Singers</span></div>
         </div>
       </div>
@@ -180,35 +191,12 @@
       <p class="sub">Tell us your vibe and we’ll match the perfect act.</p>
 
       <div class="grid cols-3">
-        <div class="tile">
-          <div class="icon">🎤</div>
-          <div><h3>Singers &amp; Duos</h3><p class="sub">Acoustic, pop, R&amp;B, jazz.</p></div>
-        </div>
-
-        <div class="tile">
-          <div class="icon">🎧</div>
-          <div><h3>DJs</h3><p class="sub">Wedding, party &amp; club specialists.</p></div>
-        </div>
-
-        <div class="tile">
-          <div class="icon">🎸</div>
-          <div><h3>Bands</h3><p class="sub">Party, function &amp; tribute bands.</p></div>
-        </div>
-
-        <div class="tile">
-          <div class="icon">🩰</div>
-          <div><h3>Dancers</h3><p class="sub">Choreographed shows &amp; walkabout.</p></div>
-        </div>
-
-        <div class="tile">
-          <div class="icon">🎈</div>
-          <div><h3>Kids &amp; Family</h3><p class="sub">Party hosts, face painters, magicians.</p></div>
-        </div>
-
-        <div class="tile">
-          <div class="icon">✨</div>
-          <div><h3>Speciality Acts</h3><p class="sub">Sax with DJ, LED shows, caricaturists.</p></div>
-        </div>
+        <div class="tile"><div class="icon">🎤</div><div><h3>Singers &amp; Duos</h3><p class="sub">Acoustic, pop, R&amp;B, jazz.</p></div></div>
+        <div class="tile"><div class="icon">🎧</div><div><h3>DJs</h3><p class="sub">Wedding, party &amp; club specialists.</p></div></div>
+        <div class="tile"><div class="icon">🎸</div><div><h3>Bands</h3><p class="sub">Party, function &amp; tribute bands.</p></div></div>
+        <div class="tile"><div class="icon">🩰</div><div><h3>Dancers</h3><p class="sub">Choreographed shows &amp; walkabout.</p></div></div>
+        <div class="tile"><div class="icon">🎈</div><div><h3>Kids &amp; Family</h3><p class="sub">Party hosts, face painters, magicians.</p></div></div>
+        <div class="tile"><div class="icon">✨</div><div><h3>Speciality Acts</h3><p class="sub">Sax with DJ, LED shows, caricaturists.</p></div></div>
       </div>
     </div>
   </section>
@@ -230,6 +218,19 @@
   <script>
     // year
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    // generate sparkles
+    const sparkleContainer = document.getElementById('sparkles');
+    const COUNT = 120; // adjust how many sparkles
+    for (let i = 0; i < COUNT; i++) {
+      const s = document.createElement('div');
+      s.className = 'sparkle';
+      s.style.top  = Math.random() * window.innerHeight + 'px';
+      s.style.left = Math.random() * window.innerWidth  + 'px';
+      s.style.animationDuration = (3 + Math.random() * 4) + 's';
+      s.style.animationDelay = (Math.random() * 5) + 's';
+      sparkleContainer.appendChild(s);
+    }
   </script>
 </body>
 </html>
