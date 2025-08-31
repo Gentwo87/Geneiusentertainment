@@ -1,6 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head> <style>
+  body {
+    background-color: black;
+    overflow: hidden;
+    color: white;
+  }
+
+  .sparkle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: gold;
+    border-radius: 50%;
+    animation: sparkle 3s infinite;
+  }
+
+  @keyframes sparkle {
+    0% { opacity: 0; transform: scale(0); }
+    50% { opacity: 1; transform: scale(1.5); }
+    100% { opacity: 0; transform: scale(0); }
+  }
+</style>
+
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Genius Entertainment</title>
@@ -154,5 +176,17 @@
   <footer id="contact">
     <p>Contact us: Contact@geneiusentertainment.com</p>
   </footer>
-</body>
+</body> <div id="sparkles"></div>
+<script>
+  const sparkleContainer = document.getElementById('sparkles');
+  for (let i = 0; i < 100; i++) {
+    const s = document.createElement('div');
+    s.className = 'sparkle';
+    s.style.top = Math.random() * window.innerHeight + 'px';
+    s.style.left = Math.random() * window.innerWidth + 'px';
+    s.style.animationDuration = (2 + Math.random() * 3) + 's';
+    sparkleContainer.appendChild(s);
+  }
+</script>
+
 </html>
