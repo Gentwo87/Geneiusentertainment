@@ -1,244 +1,243 @@
 <!DOCTYPE html>
 <html lang="en">
-<style> html, body { height: auto; }
-body { overflow-y: auto; overflow-x: hidden; }   /* allow vertical scroll */
-#sparkles { position: fixed; inset: 0; pointer-events: none; }  /* won’t intercept scrolling */
-
-  /* Page background */
-  body {
-    background-color: #000000; /* black */
-    color: #f5f5f5; /* light text by default */
-    font-family: 'Trebuchet MS', sans-serif;
-    margin: 0;
-    padding: 0;
-    text-align: center;
-  }
-
-  /* Headings */
-  h1, h2, h3 {
-    color: #B8860B; /* classic gold */
-    text-transform: uppercase;
-    letter-spacing: 2px;
-  }
-
-  /* Paragraph text */
-  p {
-    color: #dcdcdc; /* softer white */
-    line-height: 1.6;
-  }
-
-  /* Buttons */
-  .button {
-    display: inline-block;
-    background-color: #FFD700; /* gold */
-    color: black;
-    padding: 10px 20px;
-    margin: 10px;
-    border-radius: 6px;
-    font-weight: bold;
-    text-decoration: none;
-    transition: 0.3s ease;
-  }
-  .button:hover {
-    background-color: #b8860b; /* darker gold hover */
-    color: white;
-  }
-
-  /* Footer */
-  footer {
-    margin-top: 40px;
-    padding: 15px;
-    background: #111;
-    color: #aaa;
-    font-size: 0.9em;
-  }
-</style>
-<head> <style>
-  body {
-    background-color: black;
-    color: white;
-  }
-
-  .sparkle {
-    position: absolute;
-    width: 2px;
-    height: 2px;
-    background: gold;
-    border-radius: 50%;
-    animation: sparkle 3s infinite;
-  }
-
-  @keyframes sparkle {
-    0% { opacity: 0; transform: scale(0); }
-    50% { opacity: 1; transform: scale(1.5); }
-    100% { opacity: 0; transform: scale(0); }
-  }
-</style>
-
+<head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Genius Entertainment</title>
-  <style> /* ===== Acts grid ===== */
-.section { padding: 60px 20px; max-width: 1120px; margin: 0 auto; }
-.section h2 { text-align:center; margin: 0 0 16px; }
-.section .sub { color:#b6b7c5; text-align:center; margin:0 0 28px; }
+  <title>Geneius Entertainment</title>
 
-.grid { display:grid; gap:16px; }
-.grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
-@media (max-width: 900px){ .grid.cols-3 { grid-template-columns: 1fr; } }
+  <style>
+    /* ===== Base / Theme ===== */
+    :root{
+      --bg:#000;           /* black */
+      --ink:#f5f5f5;       /* light text */
+      --muted:#ccc;        /* softer text */
+      --gold:#C99700;      /* rich gold */
+      --gold-bright:#FFD700;
+      --panel1:#15151b;
+      --panel2:#0f0f14;
+      --line:rgba(255,255,255,.08);
+    }
+    *{box-sizing:border-box}
+    html,body{height:auto}
+    body{
+      margin:0; padding:0;
+      background:var(--bg); color:var(--ink);
+      font-family: "Trebuchet MS", Arial, sans-serif;
+      overflow-y:auto; overflow-x:hidden;
+    }
 
-.tile {
-  background: linear-gradient(180deg,#15151b,#0f0f14);
-  border:1px solid rgba(255,255,255,.06);
-  border-radius:14px; padding:16px 18px;
-  display:flex; gap:12px; align-items:flex-start;
-}
-.tile .icon {
-  width:44px; height:44px; border-radius:10px;
-  display:grid; place-items:center;
-  background:#171722; border:1px solid rgba(255,255,255,.08);
-  font-size:22px;
-}
+    /* ===== Layout helpers ===== */
+    .container{width:min(1120px,92vw); margin:0 auto}
+    .center{text-align:center}
 
-/* ===== Featured cards ===== */
-.cards { display:grid; grid-template-columns: repeat(3, 1fr); gap:16px; }
-@media (max-width: 900px){ .cards { grid-template-columns: 1fr; } }
-.card-act {
-  overflow:hidden; border-radius:16px;
-  border:1px solid rgba(255,255,255,.06); background:#121217;
-}
-.card-act img { width:100%; height:auto; display:block; }
-.card-act .meta { padding:12px 14px; }
-.tag {
-  display:inline-block; font-size:.8rem; color:#fdeec0;
-  background:#1b1710; border:1px solid rgba(212,175,55,.45);
-  padding:.2rem .5rem; border-radius:999px;
-}
+    /* ===== Header / Hero ===== */
+    header{padding:24px 0 12px; text-align:center; background:#111;}
+    #logo{display:block; margin:12px auto 8px; max-width:300px; height:auto}
+    header p{margin:6px 0 0; color:var(--muted)}
 
-    body { margin:0; font-family: Arial, sans-serif; background:#0b0b0d; color:white; }
-    header { background:#111; padding:20px; text-align:center; }
-    h1 { color:#d4af37; margin:0; }
-    p { color:#ccc; }
-    .hero { text-align:center; padding:60px 20px; }
-    .btn { background:#d4af37; color:black; padding:10px 20px; text-decoration:none; border-radius:5px; }
-    footer { background:#111; padding:20px; text-align:center; margin-top:40px; color:#888; }
+    /* Headings */
+    h1,h2,h3{color:var(--gold); text-transform:uppercase; letter-spacing:2px; margin:0 0 14px}
+    p{color:var(--muted); line-height:1.6; margin:8px 0}
+
+    /* Buttons */
+    .btn{
+      display:inline-block; background:var(--gold); color:#000;
+      padding:10px 20px; margin:16px 8px; border-radius:6px;
+      font-weight:bold; text-decoration:none; transition:background .25s ease, color .25s ease;
+    }
+    .btn:hover{background:var(--gold-bright); color:#000}
+
+    /* Sections */
+    section.section{padding:60px 20px}
+    .section .sub{color:#b6b7c5; margin:0 0 24px; text-align:center}
+
+    /* Cards / tiles */
+    .grid{display:grid; gap:16px}
+    .cols-3{grid-template-columns:repeat(3,1fr)}
+    @media (max-width:900px){ .cols-3{grid-template-columns:1fr} }
+
+    .tile{
+      background:linear-gradient(180deg, var(--panel1), var(--panel2));
+      border:1px solid var(--line); border-radius:14px; padding:16px 18px;
+      display:flex; gap:12px; align-items:flex-start;
+    }
+    .tile .icon{
+      width:44px; height:44px; border-radius:10px; font-size:22px;
+      display:grid; place-items:center; background:#171722; border:1px solid var(--line);
+    }
+
+    .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+    @media (max-width:900px){ .cards{grid-template-columns:1fr} }
+    .card-act{overflow:hidden; border-radius:16px; border:1px solid var(--line); background:#121217}
+    .card-act img{width:100%; height:auto; display:block}
+    .card-act .meta{padding:12px 14px}
+    .tag{
+      display:inline-block; font-size:.8rem; color:#fdeec0;
+      background:#1b1710; border:1px solid rgba(212,175,55,.45);
+      padding:.2rem .5rem; border-radius:999px;
+    }
+
+    /* Sparkles (non-blocking) */
+    #sparkles{position:fixed; inset:0; pointer-events:none; z-index:0}
+    .sparkle{
+      position:absolute; width:2px; height:2px; background:var(--gold); border-radius:50%;
+      animation:sparkle 3s infinite;
+    }
+    @keyframes sparkle{
+      0%{opacity:0; transform:scale(0)}
+      50%{opacity:1; transform:scale(1.5)}
+      100%{opacity:0; transform:scale(0)}
+    }
+
+    /* Content above sparkles */
+    .content{position:relative; z-index:1}
+
+    /* Footer */
+    footer{background:#111; padding:20px; text-align:center; color:#aaa; margin-top:40px}
+    footer a{color:var(--gold); text-decoration:none}
   </style>
 </head>
+
 <body>
-  <header>
-    <img src="logo.png" alt="Genius Entertainment logo" style="max-width:300px; height:auto;">
-<p>Your All-in-One Entertainment Agency</p>
+  <!-- Sparkles layer -->
+  <div id="sparkles" aria-hidden="true"></div>
 
-    <p>Performers You Remember</p>
-  </header>
+  <div class="content">
+    <!-- Header / Hero -->
+    <header class="center">
+      <img id="logo" src="logo.png" alt="Geneius Entertainment logo">
+      <p>Your All-in-One Entertainment Agency</p>
+      <a href="#contact" class="btn">Enquire Now</a>
+    </header>
 
-  <section class="hero">
-    <h2>Welcome</h2>
-    <section id="about" style="padding:60px 20px; max-width:800px; margin:0 auto; text-align:center;">
-  <h2>About Us</h2>
-      <p style="color:#ccc; line-height:1.6;">
-    At <strong>Geneius Entertainment</strong>, we bring together a wide range of talented performers —
-    from singers, bands, DJs, and dancers to children’s entertainers and speciality acts.
-    Founded by Gene, a professional dancer, choreographer, football coach and DJ with years of
-    experience entertaining people around the world, creating events and shows on some of the 
-    worlds biggest stages, our mission is to provide unforgettable performances tailored to every event.
-  </p>
-  <p style="color:#ccc; line-height:1.6;">
-    Whether you’re planning a wedding, a corporate event, community celebration or pub gigs 
-    our growing network of acts ensures we can deliver the perfect entertainment to
-    make your occasion truly special.
-  </p>
-</section>
+    <!-- Welcome -->
+    <section class="section center" id="welcome">
+      <h2>Welcome</h2>
+      <p>Singers • Bands • Tributes • DJs • Dancers • Kids’ &amp; Family Acts • Speciality Performers</p>
+    </section>
 
-    <p>Singers • Bands • Tributes • DJs • Dancers • Kids’ & Family Acts • Speciality Performers</p>
-      <section id="categories" class="section">
-        <section id="featured" class="section">
-  <h2>Featured Acts</h2>
-  <p class="sub">A small selection — ask for the full roster.</p>
-
-  <div class="cards">
-    <!-- Card 1 -->
-    <div class="card-act">
-      <img src="act1.jpg" alt="Modern Party Band">
-      <div class="meta">
-        <strong>Modern Party Band</strong><br>
-        <span class="tag">Band</span>
+    <!-- About Us -->
+    <section class="section" id="about">
+      <div class="container center">
+        <h2>About Us</h2>
+        <p>
+          At <strong>Geneius Entertainment</strong>, we bring together a wide range of talented performers —
+          from singers, bands, DJs, and dancers to children’s entertainers and speciality acts.
+        </p>
+        <p>
+          Founded by Gene — dancer, choreographer, football coach and DJ — with years spent entertaining
+          audiences worldwide and producing shows on major stages, our mission is to deliver unforgettable
+          performances tailored to every event.
+        </p>
+        <p>
+          Whether you’re planning a wedding, corporate event, community celebration or venue programming,
+          our growing network ensures we can match the perfect entertainment to your brief.
+        </p>
       </div>
-    </div>
+    </section>
 
-    <!-- Card 2 -->
-    <div class="card-act">
-      <img src="act2.jpg" alt="Signature Wedding DJ">
-      <div class="meta">
-        <strong>Signature Wedding DJ</strong><br>
-        <span class="tag">DJ</span>
-      </div>
-    </div>
+    <!-- Featured Acts -->
+    <section class="section" id="featured">
+      <div class="container">
+        <h2 class="center">Featured Acts</h2>
+        <p class="sub">A small selection — ask for the full roster.</p>
 
-    <!-- Card 3 -->
-    <div class="card-act">
-      <img src="act3.jpg" alt="Soulful Acoustic Duo">
-      <div class="meta">
-        <strong>Soulful Acoustic Duo</strong><br>
-        <span class="tag">Singers</span>
+        <div class="cards">
+          <div class="card-act">
+            <img src="https://picsum.photos/800/520?random=11" alt="Modern Party Band (placeholder)">
+            <div class="meta">
+              <strong>Modern Party Band</strong><br><span class="tag">Band</span>
+            </div>
+          </div>
+
+          <div class="card-act">
+            <img src="https://picsum.photos/800/520?random=12" alt="Signature Wedding DJ (placeholder)">
+            <div class="meta">
+              <strong>Signature Wedding DJ</strong><br><span class="tag">DJ</span>
+            </div>
+          </div>
+
+          <div class="card-act">
+            <img src="https://picsum.photos/800/520?random=13" alt="Soulful Acoustic Duo (placeholder)">
+            <div class="meta">
+              <strong>Soulful Acoustic Duo</strong><br><span class="tag">Singers</span>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="section" id="categories">
+      <div class="container">
+        <h2 class="center">Book by Category</h2>
+        <p class="sub">Tell us your vibe and we’ll match the perfect act.</p>
+
+        <div class="grid cols-3">
+          <div class="tile">
+            <div class="icon">🎤</div>
+            <div><h3>Singers &amp; Duos</h3><p class="sub">Acoustic, pop, R&amp;B, jazz.</p></div>
+          </div>
+
+          <div class="tile">
+            <div class="icon">🎧</div>
+            <div><h3>DJs</h3><p class="sub">Wedding, party &amp; club specialists.</p></div>
+          </div>
+
+          <div class="tile">
+            <div class="icon">🎸</div>
+            <div><h3>Bands</h3><p class="sub">Party, function &amp; tribute bands.</p></div>
+          </div>
+
+          <div class="tile">
+            <div class="icon">🩰</div>
+            <div><h3>Dancers</h3><p class="sub">Choreographed shows &amp; walkabout.</p></div>
+          </div>
+
+          <div class="tile">
+            <div class="icon">🎈</div>
+            <div><h3>Kids &amp; Family</h3><p class="sub">Party hosts, face painters, magicians.</p></div>
+          </div>
+
+          <div class="tile">
+            <div class="icon">✨</div>
+            <div><h3>Speciality Acts</h3><p class="sub">Sax with DJ, LED shows, caricaturists.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="section center" id="contact">
+      <div class="container">
+        <h2>Contact</h2>
+        <p>Email: <a href="mailto:contact@geneiusentertainment.com">contact@geneiusentertainment.com</a></p>
+        <a class="btn" href="mailto:contact@geneiusentertainment.com">Send Enquiry</a>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      © <span id="year"></span> Geneius Entertainment. All rights reserved.
+    </footer>
   </div>
-</section>
 
-  <h2>Book by Category</h2>
-  <p class="sub">Tell us your vibe and we’ll match the perfect act.</p>
+  <!-- Sparkle script (non-blocking, limited count) -->
+  <script>
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
 
-  <div class="grid cols-3">
-    <div class="tile">
-      <div class="icon">🎤</div>
-      <div><h3>Singers & Duos</h3><p class="sub">Acoustic, pop, R&B, jazz.</p></div>
-    </div>
-
-    <div class="tile">
-      <div class="icon">🎧</div>
-      <div><h3>DJs</h3><p class="sub">Wedding, party & club specialists.</p></div>
-    </div>
-
-    <div class="tile">
-      <div class="icon">🎸</div>
-      <div><h3>Bands</h3><p class="sub">Party, function & tribute bands.</p></div>
-    </div>
-
-    <div class="tile">
-      <div class="icon">🩰</div>
-      <div><h3>Dancers</h3><p class="sub">Choreographed shows & walkabout.</p></div>
-    </div>
-
-    <div class="tile">
-      <div class="icon">🎈</div>
-      <div><h3>Kids & Family</h3><p class="sub">Party hosts, face painters, magicians.</p></div>
-    </div>
-
-    <div class="tile">
-      <div class="icon">✨</div>
-      <div><h3>Speciality Acts</h3><p class="sub">Sax with DJ, LED shows, caricaturists.</p></div>
-    </div>
-  </div>
-</section>
-
-    <a href="#contact" class="btn">Enquire Now</a>
-  </section>
-
-  <footer id="contact">
-    <p>Contact us: Contact@geneiusentertainment.com</p>
-  </footer>
-</body> <div id="sparkles"></div>
-<script>
-  const sparkleContainer = document.getElementById('sparkles');
-  for (let i = 0; i < 100; i++) {
-    const s = document.createElement('div');
-    s.className = 'sparkle';
-    s.style.top = Math.random() * window.innerHeight + 'px';
-    s.style.left = Math.random() * window.innerWidth + 'px';
-    s.style.animationDuration = (2 + Math.random() * 3) + 's';
-    sparkleContainer.appendChild(s);
-  }
-</script>
-
+    // Sparkles
+    const sparkleContainer = document.getElementById('sparkles');
+    const COUNT = 100; // lower this if you want fewer sparkles
+    for (let i = 0; i < COUNT; i++) {
+      const s = document.createElement('div');
+      s.className = 'sparkle';
+      s.style.top  = Math.random() * window.innerHeight + 'px';
+      s.style.left = Math.random() * window.innerWidth  + 'px';
+      s.style.animationDuration = (2 + Math.random() * 3) + 's';
+      sparkleContainer.appendChild(s);
+    }
+  </script>
+</body>
 </html>
