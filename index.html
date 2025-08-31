@@ -6,17 +6,18 @@
   <title>Geneius Entertainment</title>
 
   <style>
-    /* ===== Base / Theme ===== */
+    /* ===== Theme ===== */
     :root{
-      --bg:#000;           /* black */
-      --ink:#f5f5f5;       /* light text */
-      --muted:#ccc;        /* softer text */
-      --gold:#C99700;      /* rich gold */
-      --gold-bright:#FFD700;
+      --bg:#000000;              /* page background */
+      --ink:#f5f5f5;             /* body text */
+      --muted:#bfbfbf;           /* softer text */
+      --gold:#C99700;            /* deep rich gold */
+      --bronze:#B8860B;          /* bronze (header text) */
       --panel1:#15151b;
       --panel2:#0f0f14;
       --line:rgba(255,255,255,.08);
     }
+
     *{box-sizing:border-box}
     html,body{height:auto}
     body{
@@ -26,32 +27,61 @@
       overflow-y:auto; overflow-x:hidden;
     }
 
-    /* ===== Layout helpers ===== */
     .container{width:min(1120px,92vw); margin:0 auto}
     .center{text-align:center}
 
-    /* ===== Header / Hero ===== */
-    header{padding:24px 0 12px; text-align:center; background:#111;}
-    #logo{display:block; margin:12px auto 8px; max-width:300px; height:auto}
-    header p{margin:6px 0 0; color:var(--muted)}
+    /* ===== HERO (with spotlight + subtle sparkles) ===== */
+    header.hero{
+      position:relative;
+      padding:90px 20px 60px;
+      text-align:center;
+      /* Spotlight glow behind the logo */
+      background:
+        radial-gradient(
+          circle at center,
+          rgba(201,151,0,0.25) 0%,
+          rgba(0,0,0,1) 70%
+        );
+      overflow:hidden;
+    }
+    /* Subtle gold sparkles overlay (static) */
+    header.hero::after{
+      content:"";
+      position:absolute; inset:0;
+      background:url('https://www.transparenttextures.com/patterns/stardust.png') repeat;
+      opacity:.18;               /* strength of sparkles */
+      pointer-events:none;       /* never block clicks/scroll */
+    }
 
-    /* Headings */
-    h1,h2,h3{color:var(--gold); text-transform:uppercase; letter-spacing:2px; margin:0 0 14px}
-    p{color:var(--muted); line-height:1.6; margin:8px 0}
-
-    /* Buttons */
+    /* Header content */
+    #logo{display:block; margin:12px auto 14px; max-width:320px; height:auto}
+    header.hero p{margin:6px 0 0; color:var(--bronze); font-weight:600}
     .btn{
       display:inline-block; background:var(--gold); color:#000;
-      padding:10px 20px; margin:16px 8px; border-radius:6px;
-      font-weight:bold; text-decoration:none; transition:background .25s ease, color .25s ease;
+      padding:10px 20px; margin:18px 8px; border-radius:6px;
+      font-weight:bold; text-decoration:none; transition:filter .25s ease;
+      border:1px solid rgba(255,255,255,.08);
     }
-    .btn:hover{background:var(--gold-bright); color:#000}
+    .btn:hover{filter:brightness(1.12)}
 
-    /* Sections */
+    /* ===== Headings / text ===== */
+    h1,h2,h3{
+      color:var(--gold);
+      text-transform:uppercase;
+      letter-spacing:2px;
+      margin:0 0 14px;
+    }
+    p{color:var(--muted); line-height:1.6; margin:8px 0}
+
+    /* Per-section heading tweaks if you want different tones */
+    #welcome h2{ color:#FFD700; }  /* brighter gold for Welcome */
+    #about   h2{ color:var(--gold); }
+
+    /* ===== Sections ===== */
     section.section{padding:60px 20px}
     .section .sub{color:#b6b7c5; margin:0 0 24px; text-align:center}
 
-    /* Cards / tiles */
+    /* ===== Tiles / Cards ===== */
     .grid{display:grid; gap:16px}
     .cols-3{grid-template-columns:repeat(3,1fr)}
     @media (max-width:900px){ .cols-3{grid-template-columns:1fr} }
@@ -77,167 +107,129 @@
       padding:.2rem .5rem; border-radius:999px;
     }
 
-    /* Sparkles (non-blocking) */
-    #sparkles{position:fixed; inset:0; pointer-events:none; z-index:0}
-    .sparkle{
-      position:absolute; width:2px; height:2px; background:var(--gold); border-radius:50%;
-      animation:sparkle 3s infinite;
-    }
-    @keyframes sparkle{
-      0%{opacity:0; transform:scale(0)}
-      50%{opacity:1; transform:scale(1.5)}
-      100%{opacity:0; transform:scale(0)}
-    }
-
-    /* Content above sparkles */
-    .content{position:relative; z-index:1}
-
-    /* Footer */
+    /* ===== Footer ===== */
     footer{background:#111; padding:20px; text-align:center; color:#aaa; margin-top:40px}
     footer a{color:var(--gold); text-decoration:none}
   </style>
 </head>
 
 <body>
-  <!-- Sparkles layer -->
-  <div id="sparkles" aria-hidden="true"></div>
+  <!-- HERO -->
+  <header class="hero">
+    <img id="logo" src="logo.png" alt="Geneius Entertainment logo">
+    <p>Your All-in-One Entertainment Agency</p>
+    <p>Performers You Remember</p>
+    <a href="#contact" class="btn">Enquire Now</a>
+  </header>
 
-  <div class="content">
-    <!-- Header / Hero -->
-    <header class="center">
-      <img id="logo" src="logo.png" alt="Geneius Entertainment logo">
-      <p>Your All-in-One Entertainment Agency</p>
-      <a href="#contact" class="btn">Enquire Now</a>
-    </header>
+  <!-- Welcome -->
+  <section class="section center" id="welcome">
+    <h2>Welcome</h2>
+    <p>Singers • Bands • Tributes • DJs • Dancers • Kids’ &amp; Family Acts • Speciality Performers</p>
+  </section>
 
-    <!-- Welcome -->
-    <section class="section center" id="welcome">
-      <h2>Welcome</h2>
-      <p>Singers • Bands • Tributes • DJs • Dancers • Kids’ &amp; Family Acts • Speciality Performers</p>
-    </section>
+  <!-- About Us -->
+  <section class="section" id="about">
+    <div class="container center">
+      <h2>About Us</h2>
+      <p>
+        At <strong>Geneius Entertainment</strong>, we bring together a wide range of talented performers —
+        from singers, bands, DJs, and dancers to children’s entertainers and speciality acts.
+      </p>
+      <p>
+        Founded by Gene — dancer, choreographer, football coach and DJ — with years spent entertaining
+        audiences worldwide and producing shows on major stages, our mission is to deliver unforgettable
+        performances tailored to every event.
+      </p>
+      <p>
+        Whether you’re planning a wedding, corporate event, community celebration or venue programming,
+        our growing network ensures we can match the perfect entertainment to your brief.
+      </p>
+    </div>
+  </section>
 
-    <!-- About Us -->
-    <section class="section" id="about">
-      <div class="container center">
-        <h2>About Us</h2>
-        <p>
-          At <strong>Geneius Entertainment</strong>, we bring together a wide range of talented performers —
-          from singers, bands, DJs, and dancers to children’s entertainers and speciality acts.
-        </p>
-        <p>
-          Founded by Gene — dancer, choreographer, football coach and DJ — with years spent entertaining
-          audiences worldwide and producing shows on major stages, our mission is to deliver unforgettable
-          performances tailored to every event.
-        </p>
-        <p>
-          Whether you’re planning a wedding, corporate event, community celebration or venue programming,
-          our growing network ensures we can match the perfect entertainment to your brief.
-        </p>
-      </div>
-    </section>
+  <!-- Featured Acts -->
+  <section class="section" id="featured">
+    <div class="container">
+      <h2 class="center">Featured Acts</h2>
+      <p class="sub">A small selection — ask for the full roster.</p>
 
-    <!-- Featured Acts -->
-    <section class="section" id="featured">
-      <div class="container">
-        <h2 class="center">Featured Acts</h2>
-        <p class="sub">A small selection — ask for the full roster.</p>
+      <div class="cards">
+        <div class="card-act">
+          <img src="https://picsum.photos/800/520?random=21" alt="Modern Party Band (placeholder)">
+          <div class="meta"><strong>Modern Party Band</strong><br><span class="tag">Band</span></div>
+        </div>
 
-        <div class="cards">
-          <div class="card-act">
-            <img src="https://picsum.photos/800/520?random=11" alt="Modern Party Band (placeholder)">
-            <div class="meta">
-              <strong>Modern Party Band</strong><br><span class="tag">Band</span>
-            </div>
-          </div>
+        <div class="card-act">
+          <img src="https://picsum.photos/800/520?random=22" alt="Signature Wedding DJ (placeholder)">
+          <div class="meta"><strong>Signature Wedding DJ</strong><br><span class="tag">DJ</span></div>
+        </div>
 
-          <div class="card-act">
-            <img src="https://picsum.photos/800/520?random=12" alt="Signature Wedding DJ (placeholder)">
-            <div class="meta">
-              <strong>Signature Wedding DJ</strong><br><span class="tag">DJ</span>
-            </div>
-          </div>
-
-          <div class="card-act">
-            <img src="https://picsum.photos/800/520?random=13" alt="Soulful Acoustic Duo (placeholder)">
-            <div class="meta">
-              <strong>Soulful Acoustic Duo</strong><br><span class="tag">Singers</span>
-            </div>
-          </div>
+        <div class="card-act">
+          <img src="https://picsum.photos/800/520?random=23" alt="Soulful Acoustic Duo (placeholder)">
+          <div class="meta"><strong>Soulful Acoustic Duo</strong><br><span class="tag">Singers</span></div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Categories -->
-    <section class="section" id="categories">
-      <div class="container">
-        <h2 class="center">Book by Category</h2>
-        <p class="sub">Tell us your vibe and we’ll match the perfect act.</p>
+  <!-- Categories -->
+  <section class="section" id="categories">
+    <div class="container">
+      <h2 class="center">Book by Category</h2>
+      <p class="sub">Tell us your vibe and we’ll match the perfect act.</p>
 
-        <div class="grid cols-3">
-          <div class="tile">
-            <div class="icon">🎤</div>
-            <div><h3>Singers &amp; Duos</h3><p class="sub">Acoustic, pop, R&amp;B, jazz.</p></div>
-          </div>
+      <div class="grid cols-3">
+        <div class="tile">
+          <div class="icon">🎤</div>
+          <div><h3>Singers &amp; Duos</h3><p class="sub">Acoustic, pop, R&amp;B, jazz.</p></div>
+        </div>
 
-          <div class="tile">
-            <div class="icon">🎧</div>
-            <div><h3>DJs</h3><p class="sub">Wedding, party &amp; club specialists.</p></div>
-          </div>
+        <div class="tile">
+          <div class="icon">🎧</div>
+          <div><h3>DJs</h3><p class="sub">Wedding, party &amp; club specialists.</p></div>
+        </div>
 
-          <div class="tile">
-            <div class="icon">🎸</div>
-            <div><h3>Bands</h3><p class="sub">Party, function &amp; tribute bands.</p></div>
-          </div>
+        <div class="tile">
+          <div class="icon">🎸</div>
+          <div><h3>Bands</h3><p class="sub">Party, function &amp; tribute bands.</p></div>
+        </div>
 
-          <div class="tile">
-            <div class="icon">🩰</div>
-            <div><h3>Dancers</h3><p class="sub">Choreographed shows &amp; walkabout.</p></div>
-          </div>
+        <div class="tile">
+          <div class="icon">🩰</div>
+          <div><h3>Dancers</h3><p class="sub">Choreographed shows &amp; walkabout.</p></div>
+        </div>
 
-          <div class="tile">
-            <div class="icon">🎈</div>
-            <div><h3>Kids &amp; Family</h3><p class="sub">Party hosts, face painters, magicians.</p></div>
-          </div>
+        <div class="tile">
+          <div class="icon">🎈</div>
+          <div><h3>Kids &amp; Family</h3><p class="sub">Party hosts, face painters, magicians.</p></div>
+        </div>
 
-          <div class="tile">
-            <div class="icon">✨</div>
-            <div><h3>Speciality Acts</h3><p class="sub">Sax with DJ, LED shows, caricaturists.</p></div>
-          </div>
+        <div class="tile">
+          <div class="icon">✨</div>
+          <div><h3>Speciality Acts</h3><p class="sub">Sax with DJ, LED shows, caricaturists.</p></div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Contact -->
-    <section class="section center" id="contact">
-      <div class="container">
-        <h2>Contact</h2>
-        <p>Email: <a href="mailto:contact@geneiusentertainment.com">contact@geneiusentertainment.com</a></p>
-        <a class="btn" href="mailto:contact@geneiusentertainment.com">Send Enquiry</a>
-      </div>
-    </section>
+  <!-- Contact -->
+  <section class="section center" id="contact">
+    <div class="container">
+      <h2>Contact</h2>
+      <p>Email: <a href="mailto:contact@geneiusentertainment.com">contact@geneiusentertainment.com</a></p>
+      <a class="btn" href="mailto:contact@geneiusentertainment.com">Send Enquiry</a>
+    </div>
+  </section>
 
-    <!-- Footer -->
-    <footer>
-      © <span id="year"></span> Geneius Entertainment. All rights reserved.
-    </footer>
-  </div>
+  <!-- Footer -->
+  <footer>
+    © <span id="year"></span> Geneius Entertainment. All rights reserved.
+  </footer>
 
-  <!-- Sparkle script (non-blocking, limited count) -->
   <script>
-    // Year
+    // year
     document.getElementById('year').textContent = new Date().getFullYear();
-
-    // Sparkles
-    const sparkleContainer = document.getElementById('sparkles');
-    const COUNT = 100; // lower this if you want fewer sparkles
-    for (let i = 0; i < COUNT; i++) {
-      const s = document.createElement('div');
-      s.className = 'sparkle';
-      s.style.top  = Math.random() * window.innerHeight + 'px';
-      s.style.left = Math.random() * window.innerWidth  + 'px';
-      s.style.animationDuration = (2 + Math.random() * 3) + 's';
-      sparkleContainer.appendChild(s);
-    }
   </script>
 </body>
 </html>
