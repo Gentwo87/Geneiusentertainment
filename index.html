@@ -104,8 +104,10 @@
       display:grid; place-items:center; background:#171722; border:1px solid var(--line);
     }
 
-    .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
-    @media (max-width:900px){ .cards{grid-template-columns:1fr} }
+    .cards{display:grid; grid-template-columns:repeat(4,1fr); gap:16px}
+    @media (max-width:1100px){ .cards{grid-template-columns:repeat(2,1fr)} }
+    @media (max-width:700px){ .cards{grid-template-columns:1fr} }
+
     .card-act{overflow:hidden; border-radius:16px; border:1px solid var(--line); background:#121217}
     .card-act img{width:100%; height:auto; display:block}
     .card-act .meta{padding:12px 14px}
@@ -165,39 +167,33 @@
       <h2 class="center">Featured Acts</h2>
       <p class="sub">A small selection — ask for the full roster.</p>
 
-     <section class="section" id="featured">
-  <div class="container">
-    <h2 class="center">Featured Acts</h2>
-    <p class="sub">A small selection — ask for the full roster.</p>
+      <div class="cards">
+        <!-- Singer -->
+        <div class="card-act">
+          <img src="singer.png" alt="Featured Woman Singer">
+          <div class="meta"><strong>Star Vocalist</strong><br><span class="tag">Singer</span></div>
+        </div>
 
-    <div class="cards">
-      <!-- Singer -->
-      <div class="card-act">
-        <img src="singer.png" alt="Featured Woman Singer">
-        <div class="meta"><strong>Star Vocalist</strong><br><span class="tag">Singer</span></div>
-      </div>
+        <!-- DJ -->
+        <div class="card-act">
+          <img src="dj.png" alt="Featured DJ">
+          <div class="meta"><strong>Signature DJ</strong><br><span class="tag">DJ</span></div>
+        </div>
 
-      <!-- DJ -->
-      <div class="card-act">
-        <img src="dj.png" alt="Featured DJ">
-        <div class="meta"><strong>Signature DJ</strong><br><span class="tag">DJ</span></div>
-      </div>
+        <!-- Tribute -->
+        <div class="card-act">
+          <img src="tribute.png" alt="Featured Tribute Act">
+          <div class="meta"><strong>Tribute Artist</strong><br><span class="tag">Tribute</span></div>
+        </div>
 
-      <!-- Tribute -->
-      <div class="card-act">
-        <img src="tribute.png" alt="Featured Tribute Act">
-        <div class="meta"><strong>Tribute Artist</strong><br><span class="tag">Tribute</span></div>
-      </div>
-
-      <!-- Band -->
-      <div class="card-act">
-        <img src="band.png" alt="Featured Band">
-        <div class="meta"><strong>Party Band</strong><br><span class="tag">Band</span></div>
+        <!-- Band -->
+        <div class="card-act">
+          <img src="band.png" alt="Featured Band">
+          <div class="meta"><strong>Party Band</strong><br><span class="tag">Band</span></div>
+        </div>
       </div>
     </div>
-  </div>
-</section>
-
+  </section>
 
   <!-- Categories -->
   <section class="section" id="categories">
@@ -234,9 +230,9 @@
     // year
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // generate sparkles
+    // generate sparkles (animated)
     const sparkleContainer = document.getElementById('sparkles');
-    const COUNT = 120; // adjust how many sparkles
+    const COUNT = 140; // adjust how many sparkles
     for (let i = 0; i < COUNT; i++) {
       const s = document.createElement('div');
       s.className = 'sparkle';
@@ -246,6 +242,20 @@
       s.style.animationDelay = (Math.random() * 5) + 's';
       sparkleContainer.appendChild(s);
     }
+
+    // optional: reposition sparkles on resize (keeps edges filled)
+    window.addEventListener('resize', () => {
+      sparkleContainer.innerHTML = '';
+      for (let i = 0; i < COUNT; i++) {
+        const s = document.createElement('div');
+        s.className = 'sparkle';
+        s.style.top  = Math.random() * window.innerHeight + 'px';
+        s.style.left = Math.random() * window.innerWidth  + 'px';
+        s.style.animationDuration = (3 + Math.random() * 4) + 's';
+        s.style.animationDelay = (Math.random() * 5) + 's';
+        sparkleContainer.appendChild(s);
+      }
+    });
   </script>
 </body>
 </html>
