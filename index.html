@@ -4,10 +4,128 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Geneius Entertainment</title>
-  <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* ===== Theme ===== */
+    :root{
+      --bg:#000000;              /* page background */
+      --ink:#f5f5f5;             /* body text */
+      --muted:#bfbfbf;           /* softer text */
+      --gold:#C99700;            /* deep rich gold */
+      --bronze:#B8860B;          /* bronze accent */
+      --panel1:#15151b;
+      --panel2:#0f0f14;
+      --line:rgba(255,255,255,.08);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:auto}
+    body{
+      margin:0; padding:0;
+      background:var(--bg); color:var(--ink);
+      font-family: "Trebuchet MS", Arial, sans-serif;
+      overflow-y:auto; overflow-x:hidden;
+      position:relative;
+    }
+
+    .container{width:min(1120px,92vw); margin:0 auto}
+    .center{text-align:center}
+
+    /* ===== Sparkles (animated, full page) ===== */
+    #sparkles{
+      position:fixed; inset:0;
+      pointer-events:none; z-index:0;
+    }
+    .sparkle{
+      position:absolute; width:2px; height:2px;
+      background:var(--gold); border-radius:50%;
+      opacity:0; animation:sparkle 4s infinite;
+    }
+    @keyframes sparkle{
+      0%   { opacity:0; transform:scale(0); }
+      50%  { opacity:1; transform:scale(1.5); }
+      100% { opacity:0; transform:scale(0); }
+    }
+
+    /* ===== Hero (spotlight) ===== */
+    header.hero{
+      position:relative;
+      padding:90px 20px 60px;
+      text-align:center;
+      background:
+        radial-gradient(circle at center,
+          rgba(201,151,0,0.25) 0%,
+          rgba(0,0,0,1) 70%);
+      z-index:1; /* above sparkles */
+    }
+    #logo{display:block; margin:12px auto 14px; max-width:320px; height:auto}
+    header.hero p{margin:6px 0 0; color:var(--bronze); font-weight:600}
+
+    /* Buttons */
+    .btn{
+      display:inline-block; background:var(--gold); color:#000;
+      padding:10px 20px; margin:18px 8px; border-radius:6px;
+      font-weight:bold; text-decoration:none; transition:filter .25s ease;
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .btn:hover{filter:brightness(1.12)}
+
+    /* Headings / text */
+    h1,h2,h3{
+      color:var(--gold);
+      text-transform:uppercase;
+      letter-spacing:2px;
+      margin:0 0 14px;
+      position:relative; z-index:1;
+    }
+    p{color:var(--muted); line-height:1.6; margin:8px 0}
+    #welcome h2{ color:#FFD700; }  /* brighter gold for Welcome */
+
+    /* Sections */
+    section.section{padding:60px 20px; position:relative; z-index:1}
+    .section .sub{color:#b6b7c5; margin:0 0 24px; text-align:center}
+
+    /* ===== Clickable tiles (anchor links) ===== */
+    .grid{display:grid; gap:16px}
+    .cols-3{grid-template-columns:repeat(3,1fr)}
+    @media (max-width:900px){ .cols-3{grid-template-columns:1fr} }
+
+    a.tile{
+      display:flex; gap:12px; align-items:flex-start;
+      text-decoration:none; color:inherit;
+      background:linear-gradient(180deg, var(--panel1), var(--panel2));
+      border:1px solid var(--line); border-radius:14px; padding:16px 18px;
+      transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+    a.tile:hover{
+      transform:translateY(-2px);
+      box-shadow:0 6px 18px rgba(0,0,0,.35);
+      border-color:rgba(212,175,55,.45);
+    }
+    .tile .icon{
+      width:44px; height:44px; border-radius:10px; font-size:22px;
+      display:grid; place-items:center; background:#171722; border:1px solid var(--line);
+    }
+
+    /* ===== Cards (featured acts) ===== */
+    .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+    @media (max-width:900px){ .cards{grid-template-columns:1fr} }
+    .card-act{overflow:hidden; border-radius:16px; border:1px solid var(--line); background:#121217}
+    .card-act img{width:100%; height:auto; display:block}
+    .card-act .meta{padding:12px 14px}
+    .tag{
+      display:inline-block; font-size:.8rem; color:#fdeec0;
+      background:#1b1710; border:1px solid rgba(212,175,55,.45);
+      padding:.2rem .5rem; border-radius:999px;
+    }
+
+    /* Footer */
+    footer{background:#111; padding:20px; text-align:center; color:#aaa; margin-top:40px; position:relative; z-index:1}
+    footer a{color:var(--gold); text-decoration:none}
+  </style>
 </head>
 <body>
-  <!-- Animated sparkles across the whole page -->
+  <!-- Sparkles Layer -->
   <div id="sparkles" aria-hidden="true"></div>
 
   <!-- HERO -->
@@ -52,57 +170,129 @@
 
       <div class="cards">
         <div class="card-act">
-          <img src="https://picsum.photos/800/520?random=41" alt="Modern Party Band (placeholder)">
+          <img src="Band.png" alt="Band">
           <div class="meta"><strong>Modern Party Band</strong><br><span class="tag">Band</span></div>
         </div>
         <div class="card-act">
-          <img src="https://picsum.photos/800/520?random=42" alt="Signature Wedding DJ (placeholder)">
+          <img src="DJ.png" alt="DJ">
           <div class="meta"><strong>Signature Wedding DJ</strong><br><span class="tag">DJ</span></div>
         </div>
         <div class="card-act">
-          <img src="singer.png" alt="Featured Woman Singer">
+          <img src="Woman singer.png" alt="Featured Woman Singer">
           <div class="meta"><strong>Star Vocalist</strong><br><span class="tag">Singer</span></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Categories (ALL tiles fully clickable) -->
+  <!-- Categories (click tiles to jump to sections below) -->
   <section class="section" id="categories">
     <div class="container">
       <h2 class="center">Book by Category</h2>
       <p class="sub">Tell us your vibe and we’ll match the perfect act.</p>
 
       <div class="grid cols-3">
-        <a href="singers.html" class="tile">
+        <a href="#section-singers" class="tile">
           <div class="icon">🎤</div>
           <div><h3>Singers &amp; Duos</h3><p class="sub">Acoustic, pop, R&amp;B, jazz.</p></div>
         </a>
 
-        <a href="djs.html" class="tile">
+        <a href="#section-djs" class="tile">
           <div class="icon">🎧</div>
           <div><h3>DJs</h3><p class="sub">Wedding, party &amp; club specialists.</p></div>
         </a>
 
-        <a href="bands.html" class="tile">
+        <a href="#section-bands" class="tile">
           <div class="icon">🎸</div>
           <div><h3>Bands</h3><p class="sub">Party, function &amp; tribute bands.</p></div>
         </a>
 
-        <a href="dancers.html" class="tile">
+        <a href="#section-dancers" class="tile">
           <div class="icon">🩰</div>
           <div><h3>Dancers</h3><p class="sub">Choreographed shows &amp; walkabout.</p></div>
         </a>
 
-        <a href="kids.html" class="tile">
+        <a href="#section-kids" class="tile">
           <div class="icon">🎈</div>
           <div><h3>Kids &amp; Family</h3><p class="sub">Party hosts, face painters, magicians.</p></div>
         </a>
 
-        <a href="speciality.html" class="tile">
+        <a href="#section-tribute" class="tile">
           <div class="icon">✨</div>
-          <div><h3>Speciality Acts</h3><p class="sub">Sax with DJ, LED shows, caricaturists.</p></div>
+          <div><h3>Tribute &amp; Speciality</h3><p class="sub">Tributes, sax with DJ, LED shows.</p></div>
         </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Singers -->
+  <section class="section" id="section-singers">
+    <div class="container">
+      <h2 class="center">Singers</h2>
+      <div class="cards">
+        <div class="card-act">
+          <img src="singer.png" alt="Singer">
+          <div class="meta"><strong>Soulful Acoustic Duo</strong><br><span class="tag">Singers</span></div>
+        </div>
+        <div class="card-act">
+          <img src="Woman singer.png" alt="Woman Singer">
+          <div class="meta"><strong>Star Vocalist</strong><br><span class="tag">Singer</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DJs -->
+  <section class="section" id="section-djs">
+    <div class="container">
+      <h2 class="center">DJs</h2>
+      <div class="cards">
+        <div class="card-act">
+          <img src="DJ.png" alt="DJ">
+          <div class="meta"><strong>Wedding & Party DJ</strong><br><span class="tag">DJ</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bands -->
+  <section class="section" id="section-bands">
+    <div class="container">
+      <h2 class="center">Bands</h2>
+      <div class="cards">
+        <div class="card-act">
+          <img src="band.png" alt="Band">
+          <div class="meta"><strong>Modern Party Band</strong><br><span class="tag">Band</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dancers -->
+  <section class="section" id="section-dancers">
+    <div class="container">
+      <h2 class="center">Dancers</h2>
+      <p class="sub">Add images here when ready.</p>
+    </div>
+  </section>
+
+  <!-- Kids & Family -->
+  <section class="section" id="section-kids">
+    <div class="container">
+      <h2 class="center">Kids & Family</h2>
+      <p class="sub">Add images here when ready.</p>
+    </div>
+  </section>
+
+  <!-- Tribute & Speciality -->
+  <section class="section" id="section-tribute">
+    <div class="container">
+      <h2 class="center">Tribute & Speciality</h2>
+      <div class="cards">
+        <div class="card-act">
+          <img src="tribute.png" alt="Tribute">
+          <div class="meta"><strong>Iconic Tribute</strong><br><span class="tag">Tribute</span></div>
+        </div>
       </div>
     </div>
   </section>
@@ -121,6 +311,27 @@
     © <span id="year"></span> Geneius Entertainment. All rights reserved.
   </footer>
 
-  <script src="main.js"></script>
+  <script>
+    // Footer year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Animated sparkles
+    const sparkleContainer = document.getElementById('sparkles');
+    const COUNT = 120; // adjust how many sparkles
+    function seedSparkles(){
+      sparkleContainer.innerHTML = "";
+      for (let i = 0; i < COUNT; i++) {
+        const s = document.createElement('div');
+        s.className = 'sparkle';
+        s.style.top  = Math.random() * window.innerHeight + 'px';
+        s.style.left = Math.random() * window.innerWidth  + 'px';
+        s.style.animationDuration = (3 + Math.random() * 4) + 's';
+        s.style.animationDelay    = (Math.random() * 5) + 's';
+        sparkleContainer.appendChild(s);
+      }
+    }
+    seedSparkles();
+    window.addEventListener('resize', () => { clearTimeout(window._spT); window._spT = setTimeout(seedSparkles, 250); });
+  </script>
 </body>
 </html>
