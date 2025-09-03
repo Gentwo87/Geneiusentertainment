@@ -57,7 +57,6 @@
       text-decoration:none; color:inherit; position:relative; transition:transform .18s, box-shadow .18s, border-color .18s;
     }
     .card-act:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.35);border-color:rgba(212,175,55,.45)}
-    .card-act img{width:100%;display:block}
     .card-act .meta{padding:12px 14px}
     .tag{display:inline-block;font-size:.8rem;color:#fdeec0;background:#1b1710;border:1px solid rgba(212,175,55,.45);padding:.2rem .5rem;border-radius:999px}
 
@@ -67,7 +66,7 @@
       height:260px;           /* adjust card height here */
       object-fit:cover;
       display:block;
-      background:#0e0e12;     /* subtle backdrop while loading */
+      background:#0e0e12;
       border:0;
       border-radius:16px 16px 0 0;
     }
@@ -130,7 +129,7 @@
       <p class="sub center">Tap to view posters &amp; artist details.</p>
 
       <div class="cards">
-        <!-- Singers (video: Lamps.mp4) -->
+        <!-- Singers -->
         <a href="singers.html" class="card-act" aria-label="View Singers">
           <video autoplay loop muted playsinline preload="auto">
             <source src="Lamps.mp4" type="video/mp4">
@@ -139,16 +138,22 @@
           <div class="meta"><span class="tag">Singers</span></div>
         </a>
 
-        <!-- Tributes (image placeholder) -->
+        <!-- Tributes -->
         <a href="tribute.html" class="card-act" aria-label="View Tributes">
-          <img src="Tribute.png" alt="Tribute Act">
+          <video autoplay loop muted playsinline preload="auto">
+            <source src="Lampt.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
           <div class="meta"><span class="tag">Tributes</span></div>
         </a>
 
-        <!-- Bands (image + coming soon) -->
+        <!-- Bands -->
         <a href="bands.html" class="card-act" aria-label="View Bands">
           <span class="badge-soon">COMING SOON</span>
-          <img src="Band.png" alt="Band">
+          <video autoplay loop muted playsinline preload="auto">
+            <source src="Lampb.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
           <div class="meta"><span class="tag">Bands</span></div>
         </a>
       </div>
