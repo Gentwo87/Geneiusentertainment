@@ -14,18 +14,16 @@
     html,body{height:auto}
     body{margin:0;background:var(--bg);color:var(--ink);font-family:"Trebuchet MS",Arial,sans-serif;overflow-x:hidden;position:relative}
 .animated-text {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 260px; /* adjust if needed */
-  background: linear-gradient(45deg, #C99700, #FFD700, #C99700);
-  background-size: 400% 400%;
-  color: #000;
   font-size: 2rem;
   font-weight: bold;
   text-transform: uppercase;
-  border-radius: 14px 14px 0 0;
+  background: linear-gradient(45deg, #C99700, #FFD700, #C99700);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   animation: shimmer 6s infinite linear;
+  text-align: center;
+  padding: 60px 0; /* adjust spacing so it looks balanced */
 }
 
 @keyframes shimmer {
