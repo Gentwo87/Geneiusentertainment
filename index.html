@@ -17,28 +17,6 @@
       font-family:"Trebuchet MS",Arial,sans-serif;overflow-x:hidden;position:relative
     }
 
-    /* Bronze/Gold animated text (for cards) */
-    .animated-text{
-      display:block;
-      text-align:center;
-      padding:72px 0; /* controls card “image” height */
-      font-size:clamp(28px,4.8vw,44px);
-      font-weight:800;
-      letter-spacing:.06em;
-      text-transform:uppercase;
-
-      /* bronze-gold shimmer */
-      background-image:linear-gradient(90deg,#b8860b,#d4af37,#b8860b);
-      background-size:300% 100%;
-      background-position:0% 50%;
-      -webkit-background-clip:text;
-      background-clip:text;
-      -webkit-text-fill-color:transparent;
-      color:transparent;
-      animation:goldShine 4s linear infinite;
-    }
-    @keyframes goldShine{ 100%{ background-position:100% 50%; } }
-
     .container{width:min(1120px,92vw);margin:0 auto}
     .center{text-align:center}
 
@@ -79,15 +57,24 @@
       text-decoration:none; color:inherit; position:relative; transition:transform .18s, box-shadow .18s, border-color .18s;
     }
     .card-act:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.35);border-color:rgba(212,175,55,.45)}
-    .card-act img{width:100%;display:block}
     .card-act .meta{padding:12px 14px}
     .tag{display:inline-block;font-size:.8rem;color:#fdeec0;background:#1b1710;border:1px solid rgba(212,175,55,.45);padding:.2rem .5rem;border-radius:999px}
+
+    /* Netflix-style video tiles */
+    .card-act video{
+      width:100%;
+      height:260px;           /* adjust card height here */
+      object-fit:cover;
+      display:block;
+      background:#0e0e12;     /* subtle backdrop while loading */
+      border:0;
+    }
 
     /* Coming soon badge */
     .badge-soon{
       position:absolute; top:10px; right:-24px; transform:rotate(15deg);
       background:#33270a; color:#fdeec0; border:1px solid rgba(212,175,55,.6);
-      padding:6px 16px; font-weight:700; letter-spacing:.5px; border-radius:999px;
+      padding:6px 16px; font-weight:700; letter-spacing:.5px; border-radius:999px; z-index:2;
     }
 
     /* Category tiles */
@@ -142,21 +129,30 @@
 
       <div class="cards">
         <!-- Singers -->
-        <a href="singers.html" class="card-act">
-          <div class="animated-text">SINGERS</div>
+        <a href="singers.html" class="card-act" aria-label="View Singers">
+          <video autoplay loop muted playsinline preload="auto" poster="singers.jpg">
+            <source src="singers.webm" type="video/webm">
+            <source src="singers.mp4"  type="video/mp4">
+          </video>
           <div class="meta"><span class="tag">Singers</span></div>
         </a>
 
         <!-- Tributes -->
-        <a href="tribute.html" class="card-act">
-          <div class="animated-text">TRIBUTES</div>
+        <a href="tribute.html" class="card-act" aria-label="View Tributes">
+          <video autoplay loop muted playsinline preload="auto" poster="tributes.jpg">
+            <source src="tributes.webm" type="video/webm">
+            <source src="tributes.mp4"  type="video/mp4">
+          </video>
           <div class="meta"><span class="tag">Tributes</span></div>
         </a>
 
         <!-- Bands (Coming soon) -->
-        <a href="bands.html" class="card-act">
+        <a href="bands.html" class="card-act" aria-label="View Bands">
           <span class="badge-soon">COMING SOON</span>
-          <div class="animated-text">BANDS</div>
+          <video autoplay loop muted playsinline preload="auto" poster="bands.jpg">
+            <source src="bands.webm" type="video/webm">
+            <source src="bands.mp4"  type="video/mp4">
+          </video>
           <div class="meta"><span class="tag">Bands</span></div>
         </a>
       </div>
