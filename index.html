@@ -13,7 +13,26 @@
     *{box-sizing:border-box}
     html,body{height:auto}
     body{margin:0;background:var(--bg);color:var(--ink);font-family:"Trebuchet MS",Arial,sans-serif;overflow-x:hidden;position:relative}
+.animated-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 260px; /* adjust if needed */
+  background: linear-gradient(45deg, #C99700, #FFD700, #C99700);
+  background-size: 400% 400%;
+  color: #000;
+  font-size: 2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-radius: 14px 14px 0 0;
+  animation: shimmer 6s infinite linear;
+}
 
+@keyframes shimmer {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
     .container{width:min(1120px,92vw);margin:0 auto}
     .center{text-align:center}
 
@@ -112,9 +131,11 @@
       <div class="cards">
         <!-- Singers -->
         <a href="singers.html" class="card-act">
-          <img src="Singer.png" alt="Singer">
-          <div class="meta"<br><span class="tag">Singers</span></div>
-        </a>
+  <div class="animated-text">Singers</div>
+  <div class="meta">
+    <span class="tag">Singers</span>
+  </div>
+</a>
 
         <!-- Tributes -->
         <a href="tribute.html" class="card-act">
