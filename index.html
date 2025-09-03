@@ -57,6 +57,7 @@
       text-decoration:none; color:inherit; position:relative; transition:transform .18s, box-shadow .18s, border-color .18s;
     }
     .card-act:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.35);border-color:rgba(212,175,55,.45)}
+    .card-act img{width:100%;display:block}
     .card-act .meta{padding:12px 14px}
     .tag{display:inline-block;font-size:.8rem;color:#fdeec0;background:#1b1710;border:1px solid rgba(212,175,55,.45);padding:.2rem .5rem;border-radius:999px}
 
@@ -68,6 +69,7 @@
       display:block;
       background:#0e0e12;     /* subtle backdrop while loading */
       border:0;
+      border-radius:16px 16px 0 0;
     }
 
     /* Coming soon badge */
@@ -121,38 +123,32 @@
     </div>
   </section>
 
-  <!-- Featured Acts (Singers, Tributes, Bands[coming soon]) -->
+  <!-- Featured Acts -->
   <section class="section" id="featured">
     <div class="container">
       <h2 class="center">Featured Acts</h2>
       <p class="sub center">Tap to view posters &amp; artist details.</p>
 
       <div class="cards">
-        <!-- Singers -->
+        <!-- Singers (video: Lamps.mp4) -->
         <a href="singers.html" class="card-act" aria-label="View Singers">
-          <video autoplay loop muted playsinline preload="auto" poster="singers.jpg">
-            <source src="singers.webm" type="video/webm">
-            <source src="singers.mp4"  type="video/mp4">
+          <video autoplay loop muted playsinline preload="auto">
+            <source src="Lamps.mp4" type="video/mp4">
+            Your browser does not support the video tag.
           </video>
           <div class="meta"><span class="tag">Singers</span></div>
         </a>
 
-        <!-- Tributes -->
+        <!-- Tributes (image placeholder) -->
         <a href="tribute.html" class="card-act" aria-label="View Tributes">
-          <video autoplay loop muted playsinline preload="auto" poster="tributes.jpg">
-            <source src="tributes.webm" type="video/webm">
-            <source src="tributes.mp4"  type="video/mp4">
-          </video>
+          <img src="Tribute.png" alt="Tribute Act">
           <div class="meta"><span class="tag">Tributes</span></div>
         </a>
 
-        <!-- Bands (Coming soon) -->
+        <!-- Bands (image + coming soon) -->
         <a href="bands.html" class="card-act" aria-label="View Bands">
           <span class="badge-soon">COMING SOON</span>
-          <video autoplay loop muted playsinline preload="auto" poster="bands.jpg">
-            <source src="bands.webm" type="video/webm">
-            <source src="bands.mp4"  type="video/mp4">
-          </video>
+          <img src="Band.png" alt="Band">
           <div class="meta"><span class="tag">Bands</span></div>
         </a>
       </div>
