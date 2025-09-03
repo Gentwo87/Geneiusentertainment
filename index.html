@@ -12,35 +12,33 @@
     }
     *{box-sizing:border-box}
     html,body{height:auto}
-    body{margin:0;background:var(--bg);color:var(--ink);font-family:"Trebuchet MS",Arial,sans-serif;overflow-x:hidden;position:relative}
-.animated-text{
-  /* sizing */
-  display:block;
-  text-align:center;
-  padding:72px 0;               /* adjust height/spacing */
-  font-size:clamp(28px,4.8vw,44px);
-  font-weight:800;
-  letter-spacing:.06em;
-  text-transform:uppercase;
+    body{
+      margin:0;background:var(--bg);color:var(--ink);
+      font-family:"Trebuchet MS",Arial,sans-serif;overflow-x:hidden;position:relative
+    }
 
-  /* gold gradient that moves */
-  background-image:linear-gradient(90deg,#a37b00,#ffd76a,#a37b00);
-  background-size:300% 100%;
-  background-position:0% 50%;
+    /* Bronze/Gold animated text (for cards) */
+    .animated-text{
+      display:block;
+      text-align:center;
+      padding:72px 0; /* controls card “image” height */
+      font-size:clamp(28px,4.8vw,44px);
+      font-weight:800;
+      letter-spacing:.06em;
+      text-transform:uppercase;
 
-  /* clip gradient to the letters */
-  -webkit-background-clip:text;
-  background-clip:text;
-  -webkit-text-fill-color:transparent; /* Safari/Chrome */
-  color:transparent;                   /* fallback */
+      /* bronze-gold shimmer */
+      background-image:linear-gradient(90deg,#b8860b,#d4af37,#b8860b);
+      background-size:300% 100%;
+      background-position:0% 50%;
+      -webkit-background-clip:text;
+      background-clip:text;
+      -webkit-text-fill-color:transparent;
+      color:transparent;
+      animation:goldShine 4s linear infinite;
+    }
+    @keyframes goldShine{ 100%{ background-position:100% 50%; } }
 
-  /* animation */
-  animation:goldShine 4s linear infinite;
-}
-
-@keyframes goldShine{
-  100%{ background-position:100% 50%; }
-}
     .container{width:min(1120px,92vw);margin:0 auto}
     .center{text-align:center}
 
@@ -57,8 +55,12 @@
     #logo{display:block;margin:12px auto 14px;max-width:320px;height:auto}
     header.hero p{margin:6px 0 0;color:var(--bronze);font-weight:600}
 
-    .btn{display:inline-block;background:var(--gold);color:#000;padding:10px 20px;margin:18px 8px;border-radius:6px;
-      font-weight:bold;text-decoration:none;border:1px solid rgba(255,255,255,.08);transition:filter .25s}
+    .btn{
+      display:inline-block;background:var(--gold);color:#000;
+      padding:10px 20px;margin:18px 8px;border-radius:6px;
+      font-weight:bold;text-decoration:none;border:1px solid rgba(255,255,255,.08);
+      transition:filter .25s
+    }
     .btn:hover{filter:brightness(1.12)}
 
     h1,h2,h3{color:var(--gold);text-transform:uppercase;letter-spacing:2px;margin:0 0 14px;position:relative;z-index:1}
@@ -80,6 +82,7 @@
     .card-act img{width:100%;display:block}
     .card-act .meta{padding:12px 14px}
     .tag{display:inline-block;font-size:.8rem;color:#fdeec0;background:#1b1710;border:1px solid rgba(212,175,55,.45);padding:.2rem .5rem;border-radius:999px}
+
     /* Coming soon badge */
     .badge-soon{
       position:absolute; top:10px; right:-24px; transform:rotate(15deg);
@@ -87,7 +90,7 @@
       padding:6px 16px; font-weight:700; letter-spacing:.5px; border-radius:999px;
     }
 
-    /* Category tiles (optional extra links section) */
+    /* Category tiles */
     .grid{display:grid;gap:16px}
     .cols-3{grid-template-columns:repeat(3,1fr)}
     @media (max-width:900px){.cols-3{grid-template-columns:1fr}}
@@ -95,7 +98,8 @@
       display:flex;gap:12px;align-items:flex-start;text-decoration:none;color:inherit;
       background:linear-gradient(180deg,var(--panel1),var(--panel2));
       border:1px solid var(--line);border-radius:14px;padding:16px 18px;
-      transition:transform .18s,box-shadow .18s,border-color .18s}
+      transition:transform .18s,box-shadow .18s,border-color .18s
+    }
     a.tile:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.35);border-color:rgba(212,175,55,.45)}
     .tile .icon{width:44px;height:44px;border-radius:10px;font-size:22px;display:grid;place-items:center;background:#171722;border:1px solid var(--line)}
 
@@ -130,7 +134,7 @@
     </div>
   </section>
 
-  <!-- Featured Acts (order: Singers, Tributes, DJ, Bands[coming soon]) -->
+  <!-- Featured Acts (Singers, Tributes, Bands[coming soon]) -->
   <section class="section" id="featured">
     <div class="container">
       <h2 class="center">Featured Acts</h2>
@@ -139,51 +143,56 @@
       <div class="cards">
         <!-- Singers -->
         <a href="singers.html" class="card-act">
-  <div class="animated-text">Singers</div>
-  <div class="meta">
-    <span class="tag">Singers</span>
-  </div>
-</a>
+          <div class="animated-text">SINGERS</div>
+          <div class="meta"><span class="tag">Singers</span></div>
+        </a>
 
         <!-- Tributes -->
         <a href="tribute.html" class="card-act">
-          <img src="Tribute.png" alt="Tribute Act">
-          <div class="meta"<br><span class="tag">Tributes</span></div>
+          <div class="animated-text">TRIBUTES</div>
+          <div class="meta"><span class="tag">Tributes</span></div>
         </a>
 
         <!-- Bands (Coming soon) -->
         <a href="bands.html" class="card-act">
           <span class="badge-soon">COMING SOON</span>
-          <img src="Band.png" alt="Band">
-          <div class="meta"<br><span class="tag">Bands</span></div>
+          <div class="animated-text">BANDS</div>
+          <div class="meta"><span class="tag">Bands</span></div>
         </a>
       </div>
     </div>
   </section>
 
-  <!-- Quick Category tiles (same 4, optional) -->
+  <!-- Additional Categories -->
   <section class="section" id="categories">
     <div class="container">
       <h2 class="center">Additional Categories</h2>
       <p class="sub">Click through to see posters &amp; artists.</p>
+
       <div class="grid cols-3">
-  <a href="dancers.html" class="tile">
-    <div class="icon">🕺</div>
-    <div>
-      <h3>Dancers/Performers</h3>
-      <p class="sub">Choreographed shows & walkabout.</p>
-    </div>
-  </a>
+        <a href="dancers.html" class="tile">
+          <div class="icon">🕺</div>
+          <div>
+            <h3>Dancers/Performers</h3>
+            <p class="sub">Choreographed shows & walkabout.</p>
+          </div>
+        </a>
 
-  <a href="kids.html" class="tile">
-    <div class="icon">🎂</div>
-    <div>
-      <h3>Kids Party Entertainment</h3>
-      <p class="sub">Party hosts, magicians & more.</p>
-    </div>
-  </a>
+        <a href="kids.html" class="tile">
+          <div class="icon">🎂</div>
+          <div>
+            <h3>Kids Party Entertainment</h3>
+            <p class="sub">Party hosts, magicians & more.</p>
+          </div>
+        </a>
 
-        <a href="dj.html" class="tile"><div class="icon">🎧</div><div><h3>DJs</h3><p class="sub">Wedding, party &amp; club specialists.</p></div></a>
+        <a href="dj.html" class="tile">
+          <div class="icon">🎧</div>
+          <div>
+            <h3>DJs</h3>
+            <p class="sub">Wedding, party &amp; club specialists.</p>
+          </div>
+        </a>
       </div>
     </div>
   </section>
@@ -205,12 +214,20 @@
 
     // Sparkles
     const wrap=document.getElementById('sparkles');const COUNT=120;
-    function seed(){wrap.innerHTML='';for(let i=0;i<COUNT;i++){const s=document.createElement('div');
-      s.className='sparkle';s.style.top=Math.random()*innerHeight+'px';
-      s.style.left=Math.random()*innerWidth+'px';
-      s.style.animationDuration=(3+Math.random()*4)+'s';
-      s.style.animationDelay=(Math.random()*5)+'s';wrap.appendChild(s)}}
-    seed();addEventListener('resize',()=>{clearTimeout(window._t);window._t=setTimeout(seed,250)});
+    function seed(){
+      wrap.innerHTML='';
+      for(let i=0;i<COUNT;i++){
+        const s=document.createElement('div');
+        s.className='sparkle';
+        s.style.top=Math.random()*innerHeight+'px';
+        s.style.left=Math.random()*innerWidth+'px';
+        s.style.animationDuration=(3+Math.random()*4)+'s';
+        s.style.animationDelay=(Math.random()*5)+'s';
+        wrap.appendChild(s)
+      }
+    }
+    seed();
+    addEventListener('resize',()=>{clearTimeout(window._t);window._t=setTimeout(seed,250)});
   </script>
 </body>
 </html>
