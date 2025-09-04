@@ -8,17 +8,55 @@
     #sparkles{position:fixed;inset:0;pointer-events:none;z-index:0}
     .sparkle{position:absolute;width:2px;height:2px;background:#C99700;border-radius:50%;opacity:0;animation:s 4s infinite}
     @keyframes s{0%{opacity:0;transform:scale(0)}50%{opacity:1;transform:scale(1.5)}100%{opacity:0;transform:scale(0)}}
+
     header{position:relative;text-align:center;padding:60px 20px;background:radial-gradient(circle at center,rgba(201,151,0,.25),#000 70%);z-index:1}
     #logo{max-width:260px;height:auto;display:block;margin:0 auto 10px}
     h1,h2{color:#C99700;text-transform:uppercase;letter-spacing:2px;margin:0 0 14px}
     p.sub{color:#bfbfbf;margin:0 0 24px;text-align:center}
     .btn{display:inline-block;background:#C99700;color:#000;padding:10px 18px;margin-top:12px;border-radius:6px;text-decoration:none;font-weight:bold}
+
     .container{width:min(1120px,92vw);margin:0 auto}
     .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;padding:30px 20px;position:relative;z-index:1}
-    .card{background:#15151b;border:1px solid rgba(255,255,255,.08);border-radius:14px;overflow:hidden}
-    .card img{width:100%;display:block}
-    .meta{padding:12px 14px}
-    .tag{display:inline-block;font-size:.8rem;color:#fdeec0;background:#1b1710;border:1px solid rgba(212,175,55,.45);padding:.2rem .5rem;border-radius:999px}
+
+    /* Card */
+    .artist-card{
+      position:relative; overflow:hidden; border-radius:14px;
+      background:#15151b; border:1px solid rgba(255,255,255,.08);
+      transition:transform .18s, box-shadow .18s, border-color .18s;
+    }
+    .artist-card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.35);border-color:rgba(212,175,55,.45)}
+
+    /* Image (blur/darken on hover/tap) */
+    .artist-card img{width:100%;display:block;transition:filter .3s ease}
+    .artist-card:hover img,
+    .artist-card.open img,
+    .artist-card:focus-within img{filter:blur(3px) brightness(0.6)}
+
+    /* Name strip under image */
+    .artist-meta{padding:12px 14px}
+    .artist-meta strong{color:#C99700; text-transform:uppercase; letter-spacing:.06em}
+
+    /* Bio overlay */
+    .bio{
+      position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-end;
+      padding:16px; gap:10px; opacity:0; pointer-events:none; transition:opacity .2s ease;
+      background:linear-gradient(to top, rgba(0,0,0,.78) 28%, rgba(0,0,0,.15) 65%, rgba(0,0,0,0));
+      backdrop-filter:saturate(120%) blur(2px);
+    }
+    .artist-card:hover .bio,
+    .artist-card.open .bio,
+    .artist-card:focus-within .bio{opacity:1; pointer-events:auto}
+
+    .bio h3{margin:0;color:#B8860B;text-transform:uppercase;letter-spacing:.06em;font-size:1rem}
+    .bio p{margin:0;color:#d9d9d9;line-height:1.45}
+    .bio .tags{font-size:.85rem;color:#fdeec0;margin-bottom:6px}
+    .bio .actions{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+    .bio .btn{
+      display:inline-block;background:#C99700;color:#000;padding:8px 12px;border-radius:8px;
+      font-weight:700;text-decoration:none;border:0
+    }
+    .bio .btn.alt{background:transparent;color:#f5f5f5;border:1px solid rgba(255,255,255,.25)}
+
     footer{background:#111;color:#aaa;text-align:center;padding:18px;margin-top:30px;position:relative;z-index:1}
   </style>
 </head>
@@ -31,29 +69,90 @@
     <a class="btn" href="index.html">← Back to Home</a>
   </header>
 
-  <p class="sub">Replace these poster placeholders with your singers.</p>
+  <p class="sub">Hover an artist to read their bio. Tap on mobile to toggle.</p>
 
   <div class="container">
     <div class="cards">
-      <div class="card">
-        <img src="Gemma.jpg" alt="Singer poster">
-        <div class="meta"><strong>Gemma Andrew</strong><br><span class="tag">Singer</span></div>
+      <!-- Artist 1 -->
+      <div class="artist-card" tabindex="0">
+        <img src="Gemma.jpg" alt="Gemma Andrew promotional poster">
+        <div class="artist-meta"><strong>Gemma Andrew</strong></div>
+
+        <div class="bio">
+          <h3>Gemma Andrew</h3>
+          <p class="tags">Pop • R&amp;B • Wedding / Corporate</p>
+          <p>Powerhouse vocalist with a modern setlist from 90s to current chart. Perfect for weddings, venues and corporate evenings.</p>
+          <div class="actions">
+            <a class="btn" href="mailto:contact@geneiusentertainment.com?subject=Booking%20Gemma%20Andrew">Enquire</a>
+            <a class="btn alt" href="Gemma.jpg" target="_blank" rel="noopener">View Poster</a>
+          </div>
+        </div>
       </div>
-      <div class="card">
-        <img src="MeghanG.jpeg" alt="Female singer poster">
-        <div class="meta"><strong>Meghan Gray</strong><br><span class="tag">Singer</span></div>
+
+      <!-- Artist 2 -->
+      <div class="artist-card" tabindex="0">
+        <img src="MeghanG.jpeg" alt="Meghan Gray promotional poster">
+        <div class="artist-meta"><strong>Meghan Gray</strong></div>
+
+        <div class="bio">
+          <h3>Meghan Gray</h3>
+          <p class="tags">Acoustic • Soul • Lounge / Evening</p>
+          <p>Soulful acoustic performer ideal for cocktail hours and intimate receptions, with bespoke first-dance options available.</p>
+          <div class="actions">
+            <a class="btn" href="mailto:contact@geneiusentertainment.com?subject=Booking%20Meghan%20Gray">Enquire</a>
+            <a class="btn alt" href="MeghanG.jpeg" target="_blank" rel="noopener">View Poster</a>
+          </div>
+        </div>
       </div>
-      <div class="card">
-        <img src="https://picsum.photos/800/520?random=501" alt="Placeholder">
-        <div class="meta"><strong>Artist Name</strong><br><span class="tag">Singer</span></div>
+
+      <!-- Artist 3 (placeholder—duplicate & replace as you add more) -->
+      <div class="artist-card" tabindex="0">
+        <img src="https://picsum.photos/800/520?random=501" alt="Artist placeholder">
+        <div class="artist-meta"><strong>Artist Name</strong></div>
+
+        <div class="bio">
+          <h3>Artist Name</h3>
+          <p class="tags">Genre • Style • Event Type</p>
+          <p>Short intro about the artist, setlist highlights, and the types of events they suit (venues, weddings, corporate, etc.).</p>
+          <div class="actions">
+            <a class="btn" href="mailto:contact@geneiusentertainment.com?subject=Booking%20Artist%20Name">Enquire</a>
+            <a class="btn alt" href="#" target="_blank" rel="noopener">View Poster</a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
   <footer>© <span id="y"></span> Geneius Entertainment</footer>
+
   <script>
+    // year
     document.getElementById('y').textContent=new Date().getFullYear();
-    const w=document.getElementById('sparkles');const N=100;function go(){w.innerHTML='';for(let i=0;i<N;i++){const e=document.createElement('div');e.className='sparkle';e.style.top=Math.random()*innerHeight+'px';e.style.left=Math.random()*innerWidth+'px';e.style.animationDuration=(3+Math.random()*4)+'s';e.style.animationDelay=(Math.random()*5)+'s';w.appendChild(e)}}go();addEventListener('resize',()=>{clearTimeout(window._t);window._t=setTimeout(go,200)});
+
+    // sparkles
+    const w=document.getElementById('sparkles');const N=100;
+    function go(){w.innerHTML='';for(let i=0;i<N;i++){const e=document.createElement('div');
+      e.className='sparkle';
+      e.style.top=Math.random()*innerHeight+'px';
+      e.style.left=Math.random()*innerWidth+'px';
+      e.style.animationDuration=(3+Math.random()*4)+'s';
+      e.style.animationDelay=(Math.random()*5)+'s';
+      w.appendChild(e)}}
+    go();addEventListener('resize',()=>{clearTimeout(window._t);window._t=setTimeout(go,200)});
+
+    // tap-to-toggle bio on touch devices (and allow keyboard toggle)
+    document.querySelectorAll('.artist-card').forEach(card=>{
+      card.addEventListener('click', e=>{
+        if(e.target.closest('.actions')) return; // ignore clicks on buttons
+        card.classList.toggle('open');
+      });
+      card.addEventListener('keydown', e=>{
+        if(e.key==='Enter' || e.key===' '){
+          e.preventDefault();
+          card.classList.toggle('open');
+        }
+      });
+    });
   </script>
 </body>
 </html>
