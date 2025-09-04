@@ -8,17 +8,34 @@
     #sparkles{position:fixed;inset:0;pointer-events:none;z-index:0}
     .sparkle{position:absolute;width:2px;height:2px;background:#C99700;border-radius:50%;opacity:0;animation:s 4s infinite}
     @keyframes s{0%{opacity:0;transform:scale(0)}50%{opacity:1;transform:scale(1.5)}100%{opacity:0;transform:scale(0)}}
-    header{position:relative;text-align:center;padding:60px 20px;background:radial-gradient(circle at center,rgba(201,151,0,.25),#000 70%);z-index:1}
+
+    header{position:relative;text-align:center;padding:60px 20px;
+      background:radial-gradient(circle at center,rgba(201,151,0,.25),#000 70%);z-index:1}
     #logo{max-width:260px;height:auto;display:block;margin:0 auto 10px}
     h1,h2{color:#C99700;text-transform:uppercase;letter-spacing:2px;margin:0 0 14px}
     p.sub{color:#bfbfbf;margin:0 0 24px;text-align:center}
     .btn{display:inline-block;background:#C99700;color:#000;padding:10px 18px;margin-top:12px;border-radius:6px;text-decoration:none;font-weight:bold}
+
     .container{width:min(1120px,92vw);margin:0 auto}
-    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;padding:30px 20px;position:relative;z-index:1}
-    .card{background:#15151b;border:1px solid rgba(255,255,255,.08);border-radius:14px;overflow:hidden}
-    .card img{width:100%;display:block}
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;
+      padding:30px 20px;position:relative;z-index:1}
+
+    /* DJ cards */
+    .card{position:relative;overflow:hidden;border-radius:14px;border:1px solid rgba(255,255,255,.08);
+      background:#15151b;cursor:pointer}
+    .card img{width:100%;height:auto;display:block;transition:filter .3s ease}
+    .card:hover img{filter:blur(4px) brightness(0.6)}
+
+    /* Overlay bio */
+    .overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
+      justify-content:center;padding:20px;background:rgba(0,0,0,0.6);opacity:0;transition:opacity .3s ease}
+    .card:hover .overlay{opacity:1}
+    .overlay p{color:#f5f5f5;font-size:.95rem;text-align:center;line-height:1.4}
+
     .meta{padding:12px 14px}
-    .tag{display:inline-block;font-size:.8rem;color:#fdeec0;background:#1b1710;border:1px solid rgba(212,175,55,.45);padding:.2rem .5rem;border-radius:999px}
+    .tag{display:inline-block;font-size:.8rem;color:#fdeec0;background:#1b1710;
+      border:1px solid rgba(212,175,55,.45);padding:.2rem .5rem;border-radius:999px}
+
     footer{background:#111;color:#aaa;text-align:center;padding:18px;margin-top:30px;position:relative;z-index:1}
   </style>
 </head>
@@ -31,25 +48,52 @@
     <a class="btn" href="index.html">← Back to Home</a>
   </header>
 
-  <p class="sub">Add your DJ posters and descriptions here.</p>
+  <p class="sub">Hover over the posters to learn more about our DJs.</p>
 
   <div class="container">
     <div class="cards">
+
+      <!-- DJ 1 -->
       <div class="card">
-        <img src="TheGeneral.jpg" alt="DJ poster">
-        <div class="meta"><strong>The General/DJ Genie</strong><br><span class="tag">DJ</span></div>
+        <img src="TheGeneral.jpg" alt="The General DJ poster">
+        <div class="overlay">
+          <p><strong>The General / DJ Genie</strong><br>
+          Known for his high-energy sets and seamless mixing, The General keeps the dancefloor alive with everything from classic party anthems to modern hits.</p>
+        </div>
+        <div class="meta"><strong>The General / DJ Genie</strong><br><span class="tag">DJ</span></div>
       </div>
+
+      <!-- DJ 2 -->
       <div class="card">
-        <img src="DJLeon.jpg" alt="DJ poster">
+        <img src="DJLeon.jpg" alt="DJ Leon poster">
+        <div class="overlay">
+          <p><strong>DJ Leon</strong><br>
+          A versatile DJ who blends house, R&B, and chart classics. Perfect for weddings, private events, and club nights.</p>
+        </div>
         <div class="meta"><strong>DJ Leon</strong><br><span class="tag">DJ</span></div>
       </div>
+
     </div>
   </div>
 
   <footer>© <span id="y"></span> Geneius Entertainment</footer>
   <script>
     document.getElementById('y').textContent=new Date().getFullYear();
-    const w=document.getElementById('sparkles');const N=100;function go(){w.innerHTML='';for(let i=0;i<N;i++){const e=document.createElement('div');e.className='sparkle';e.style.top=Math.random()*innerHeight+'px';e.style.left=Math.random()*innerWidth+'px';e.style.animationDuration=(3+Math.random()*4)+'s';e.style.animationDelay=(Math.random()*5)+'s';w.appendChild(e)}}go();addEventListener('resize',()=>{clearTimeout(window._t);window._t=setTimeout(go,200)});
+    const w=document.getElementById('sparkles');const N=100;
+    function go(){
+      w.innerHTML='';
+      for(let i=0;i<N;i++){
+        const e=document.createElement('div');
+        e.className='sparkle';
+        e.style.top=Math.random()*innerHeight+'px';
+        e.style.left=Math.random()*innerWidth+'px';
+        e.style.animationDuration=(3+Math.random()*4)+'s';
+        e.style.animationDelay=(Math.random()*5)+'s';
+        w.appendChild(e);
+      }
+    }
+    go();
+    addEventListener('resize',()=>{clearTimeout(window._t);window._t=setTimeout(go,200)});
   </script>
 </body>
 </html>
