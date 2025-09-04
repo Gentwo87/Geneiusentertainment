@@ -5,17 +5,39 @@
   <title>Bands | Geneius Entertainment</title>
   <style>
     body{margin:0;background:#000;color:#f5f5f5;font-family:"Trebuchet MS",Arial,sans-serif;position:relative}
+    /* Sparkles */
     #sparkles{position:fixed;inset:0;pointer-events:none;z-index:0}
     .sparkle{position:absolute;width:2px;height:2px;background:#C99700;border-radius:50%;opacity:0;animation:s 4s infinite}
     @keyframes s{0%{opacity:0;transform:scale(0)}50%{opacity:1;transform:scale(1.5)}100%{opacity:0;transform:scale(0)}}
-    header{position:relative;text-align:center;padding:60px 20px;background:radial-gradient(circle at center,rgba(201,151,0,.25),#000 70%);z-index:1}
+
+    /* Header */
+    header{position:relative;text-align:center;padding:60px 20px;
+      background:radial-gradient(circle at center,rgba(201,151,0,.25),#000 70%);z-index:1}
     #logo{max-width:260px;height:auto;display:block;margin:0 auto 10px}
     h1,h2{color:#C99700;text-transform:uppercase;letter-spacing:2px;margin:0 0 14px}
     p.sub{color:#bfbfbf;margin:0 0 24px;text-align:center}
     .btn{display:inline-block;background:#C99700;color:#000;padding:10px 18px;margin-top:12px;border-radius:6px;text-decoration:none;font-weight:bold}
+
+    /* Grid */
     .container{width:min(1120px,92vw);margin:0 auto}
-    .soon{margin:50px auto 20px; padding:18px 22px; display:inline-block; background:#1b1710;
-      border:1px solid rgba(212,175,55,.45); color:#fdeec0; border-radius:12px; font-weight:700; letter-spacing:.5px}
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;
+      padding:30px 20px;position:relative;z-index:1}
+
+    /* Cards + hover bio */
+    .card{position:relative;overflow:hidden;border-radius:14px;border:1px solid rgba(255,255,255,.08);
+      background:#15151b;cursor:pointer}
+    .card img{width:100%;height:auto;display:block;transition:filter .3s ease}
+    .card:hover img{filter:blur(4px) brightness(0.6)}
+
+    .overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
+      justify-content:center;padding:20px;background:rgba(0,0,0,0.6);opacity:0;transition:opacity .3s ease}
+    .card:hover .overlay{opacity:1}
+    .overlay p{color:#f5f5f5;font-size:.95rem;text-align:center;line-height:1.4}
+
+    .meta{padding:12px 14px}
+    .tag{display:inline-block;font-size:.8rem;color:#fdeec0;background:#1b1710;
+      border:1px solid rgba(212,175,55,.45);padding:.2rem .5rem;border-radius:999px}
+
     footer{background:#111;color:#aaa;text-align:center;padding:18px;margin-top:30px;position:relative;z-index:1}
   </style>
 </head>
@@ -28,13 +50,66 @@
     <a class="btn" href="index.html">← Back to Home</a>
   </header>
 
-  <p class="sub">We’re curating our live bands — posters and details will appear here.</p>
-  <div class="center"><span class="soon">COMING SOON</span></div>
+  <p class="sub">Hover over the posters to read a short bio.</p>
+
+  <div class="container">
+    <div class="cards">
+
+      <!-- Band 1 -->
+      <div class="card">
+        <!-- Replace with your poster: e.g. PartyBand.jpg -->
+        <img src="https://picsum.photos/800/520?random=701" alt="Modern Party Band">
+        <div class="overlay">
+          <p><strong>Modern Party Band</strong><br>
+          Crowd-pleasing hits from the 90s to today, slick harmonies and a tight rhythm section. Ideal for weddings & corporate events.</p>
+        </div>
+        <div class="meta"><strong>Modern Party Band</strong><br><span class="tag">Band</span></div>
+      </div>
+
+      <!-- Band 2 -->
+      <div class="card">
+        <!-- Replace with your poster: e.g. SoulCity.jpg -->
+        <img src="https://picsum.photos/800/520?random=702" alt="Soul City Band">
+        <div class="overlay">
+          <p><strong>Soul City</strong><br>
+          A brass-driven soul & Motown show with choreography, medleys and audience interaction. Perfect for big dancefloors.</p>
+        </div>
+        <div class="meta"><strong>Soul City</strong><br><span class="tag">Band</span></div>
+      </div>
+
+      <!-- More placeholders as needed -->
+      <div class="card">
+        <img src="https://picsum.photos/800/520?random=703" alt="Function Band">
+        <div class="overlay">
+          <p><strong>Function Collective</strong><br>
+          Premium 4–7 piece line-up covering pop, rock and indie classics. Add sax or extra vocals for a larger show.</p>
+        </div>
+        <div class="meta"><strong>Function Collective</strong><br><span class="tag">Band</span></div>
+      </div>
+
+    </div>
+  </div>
 
   <footer>© <span id="y"></span> Geneius Entertainment</footer>
   <script>
     document.getElementById('y').textContent=new Date().getFullYear();
-    const w=document.getElementById('sparkles');const N=100;function go(){w.innerHTML='';for(let i=0;i<N;i++){const e=document.createElement('div');e.className='sparkle';e.style.top=Math.random()*innerHeight+'px';e.style.left=Math.random()*innerWidth+'px';e.style.animationDuration=(3+Math.random()*4)+'s';e.style.animationDelay=(Math.random()*5)+'s';w.appendChild(e)}}go();addEventListener('resize',()=>{clearTimeout(window._t);window._t=setTimeout(go,200)});
+
+    // sparkles
+    const w=document.getElementById('sparkles');const N=100;
+    function go(){
+      w.innerHTML='';
+      for(let i=0;i<N;i++){
+        const e=document.createElement('div');
+        e.className='sparkle';
+        e.style.top=Math.random()*innerHeight+'px';
+        e.style.left=Math.random()*innerWidth+'px';
+        e.style.animationDuration=(3+Math.random()*4)+'s';
+        e.style.animationDelay=(Math.random()*5)+'s';
+        w.appendChild(e);
+      }
+    }
+    go();
+    addEventListener('resize',()=>{clearTimeout(window._t);window._t=setTimeout(go,200)});
   </script>
 </body>
 </html>
