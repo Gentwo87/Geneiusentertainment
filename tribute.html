@@ -4,83 +4,57 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tributes | Geneius Entertainment</title>
   <style>
-    /* Base */
-    body{margin:0;background:#000;color:#f5f5f5;font-family:"Trebuchet MS",Arial,sans-serif;position:relative}
-    a{color:inherit}
-
-    /* Sparkles */
+    body {
+      margin:0; background:#000; color:#f5f5f5;
+      font-family:"Trebuchet MS",Arial,sans-serif; position:relative;
+    }
     #sparkles{position:fixed;inset:0;pointer-events:none;z-index:0}
-    .sparkle{position:absolute;width:2px;height:2px;background:#C99700;border-radius:50%;opacity:0;animation:s 4s infinite}
-    @keyframes s{0%{opacity:0;transform:scale(0)}50%{opacity:1;transform:scale(1.5)}100%{opacity:0;transform:scale(0)}}
+    .sparkle{position:absolute;width:2px;height:2px;background:#C99700;
+      border-radius:50%;opacity:0;animation:s 4s infinite}
+    @keyframes s{0%{opacity:0;transform:scale(0)}
+                 50%{opacity:1;transform:scale(1.5)}
+                 100%{opacity:0;transform:scale(0)}}
 
-    /* Header */
     header{position:relative;text-align:center;padding:60px 20px;
-      background:radial-gradient(circle at center,rgba(201,151,0,.25),#000 70%);z-index:1}
+      background:radial-gradient(circle at center,rgba(201,151,0,.25),#000 70%);
+      z-index:1}
     #logo{max-width:260px;height:auto;display:block;margin:0 auto 10px}
-    h1,h2{color:#C99700;text-transform:uppercase;letter-spacing:2px;margin:0 0 14px}
-    .btn.head{display:inline-block;background:#C99700;color:#000;padding:10px 18px;margin-top:12px;border-radius:6px;text-decoration:none;font-weight:bold}
+    h1{color:#C99700;text-transform:uppercase;letter-spacing:2px;margin:0 0 14px}
     p.sub{color:#bfbfbf;margin:0 0 24px;text-align:center}
+    .btn{display:inline-block;background:#C99700;color:#000;padding:10px 18px;
+      margin-top:12px;border-radius:6px;text-decoration:none;font-weight:bold}
 
-    /* Grid */
     .container{width:min(1120px,92vw);margin:0 auto}
-    .cards{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-      gap:16px;
-      padding:30px 20px;
-      position:relative; z-index:1;
-    }
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:16px;padding:30px 20px;position:relative;z-index:1}
 
-    /* Cards + hover bio */
-    .card{
-      position:relative; overflow:hidden; border-radius:14px;
-      border:1px solid rgba(255,255,255,.08); background:#15151b; cursor:pointer;
-      transition:transform .18s, box-shadow .18s, border-color .18s;
-    }
-    .card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.35);border-color:rgba(212,175,55,.45)}
-
-    /* Poster sizing */
+    .card{position:relative;overflow:hidden;border-radius:14px;
+      border:1px solid rgba(255,255,255,.08);background:#15151b;cursor:pointer}
     .card img{
-      width:100%; height:auto; display:block;
-      max-height:400px;            /* keeps posters from getting huge */
-      object-fit:cover;            /* smart crop if aspect ratios differ */
+      width:100%; height:280px; object-fit:cover; display:block;
       transition:filter .3s ease;
     }
-    .card:hover img,
-    .card.open img{                /* mobile tap support */
-      filter:blur(4px) brightness(0.6);
-    }
 
-    /* Overlay content */
+    /* Overlay bio */
     .overlay{
-      position:absolute; inset:0;
-      display:flex; flex-direction:column; align-items:center; justify-content:center;
-      padding:20px; text-align:center;
-      background:rgba(0,0,0,0.6);
-      opacity:0; transition:opacity .3s ease;
+      position:absolute;inset:0;background:rgba(0,0,0,.7);
+      backdrop-filter:blur(6px);color:#fff;padding:20px;text-align:center;
+      opacity:0;transition:opacity .3s ease;display:flex;
+      flex-direction:column;justify-content:center;align-items:center;
     }
-    .card:hover .overlay,
-    .card.open .overlay{opacity:1}
+    .card:hover img{filter:blur(4px) brightness(.7)}
+    .card:hover .overlay{opacity:1}
 
-    .overlay p{color:#f5f5f5;font-size:.95rem;line-height:1.4;margin:0}
-    .overlay strong{color:#B8860B;letter-spacing:.04em;text-transform:uppercase}
+    .overlay p{font-size:.9rem;margin-bottom:14px;line-height:1.4}
+    .overlay .btn{margin:6px 4px;padding:8px 14px;font-size:.85rem}
 
-    /* Buttons in overlay */
-    .buttons{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
-    .buttons .btn{
-      background:#C99700; color:#000; padding:8px 14px; border-radius:6px;
-      font-size:.85rem; text-decoration:none; font-weight:bold; transition:filter .25s
-    }
-    .buttons .btn:hover{filter:brightness(1.15)}
-    .buttons .btn.alt{background:transparent;color:#f5f5f5;border:1px solid rgba(255,255,255,.25)}
-
-    /* Caption under card (optional) */
-    .meta{padding:12px 14px}
+    .meta{padding:12px 14px;background:#111}
+    .meta strong{color:#C99700;text-transform:uppercase;font-size:.9rem}
     .tag{display:inline-block;font-size:.8rem;color:#fdeec0;background:#1b1710;
       border:1px solid rgba(212,175,55,.45);padding:.2rem .5rem;border-radius:999px}
 
-    /* Footer */
-    footer{background:#111;color:#aaa;text-align:center;padding:18px;margin-top:30px;position:relative;z-index:1}
+    footer{background:#111;color:#aaa;text-align:center;padding:18px;
+      margin-top:30px;position:relative;z-index:1}
   </style>
 </head>
 <body>
@@ -88,69 +62,41 @@
 
   <header>
     <a href="index.html"><img id="logo" src="logo.png" alt="Geneius Entertainment"></a>
-    <h1>Tributes</h1>
-    <a class="btn head" href="index.html">← Back to Home</a>
+    <h1>Tribute Acts</h1>
+    <a class="btn" href="index.html">← Back to Home</a>
   </header>
 
-  <p class="sub">Hover a poster to read the bio. Tap on mobile to toggle.</p>
+  <p class="sub">Hover an artist to read their bio. Tap on mobile to toggle.</p>
 
   <div class="container">
     <div class="cards">
-
-      <!-- Spice Girls Tribute -->
-      <div class="card" tabindex="0">
-        <img src="Spice.png" alt="Spice Girls Tribute poster">
+      <!-- Tribute Example 1 -->
+      <div class="card">
+        <img src="Spice.png" alt="Spice Girls Tribute">
         <div class="overlay">
-          <p><strong>Gel Duo — Spice Girls Tribute</strong><br>
-          High-energy tribute with iconic choreography and harmonies — perfect for parties and retro nights.</p>
-          <div class="buttons">
-            <a href="contact.html" class="btn">Enquire</a>
-            <a href="Spice.png" target="_blank" rel="noopener" class="btn alt">View Poster</a>
-          </div>
+          <p>A high-energy Spice Girls tribute act that brings all the classic hits to life.</p>
+          <a href="contact.html" class="btn">Enquire</a>
+          <a href="Spice.png" target="_blank" class="btn">View Poster</a>
         </div>
         <div class="meta"><strong>Spice Girls Tribute</strong><br><span class="tag">Tribute</span></div>
       </div>
 
-      <!-- ABBA Tribute -->
-      <div class="card" tabindex="0">
-        <img src="Abbagels.jpg" alt="ABBA Tribute poster">
+      <!-- Tribute Example 2 -->
+      <div class="card">
+        <img src="ABBA.png" alt="ABBA Tribute">
         <div class="overlay">
-          <p><strong>Gel Duo — ABBA Tribute</strong><br>
-          Golden-era ABBA hits with dazzling vocals and costume changes — guaranteed sing-along moments.</p>
-          <div class="buttons">
-            <a href="contact.html" class="btn">Enquire</a>
-            <a href="Abbagels.jpg" target="_blank" rel="noopener" class="btn alt">View Poster</a>
-          </div>
+          <p>An amazing ABBA tribute, performing all the classics with style and flair.</p>
+          <a href="contact.html" class="btn">Enquire</a>
+          <a href="ABBA.png" target="_blank" class="btn">View Poster</a>
         </div>
         <div class="meta"><strong>ABBA Tribute</strong><br><span class="tag">Tribute</span></div>
       </div>
-
-      <!-- More tributes — duplicate this block and swap image/text -->
-      <!--
-      <div class="card" tabindex="0">
-        <img src="YourPoster.jpg" alt="Artist Tribute poster">
-        <div class="overlay">
-          <p><strong>Artist Name — Tribute</strong><br>
-          Short bio about the act and what events it suits best.</p>
-          <div class="buttons">
-            <a href="contact.html" class="btn">Enquire</a>
-            <a href="YourPoster.jpg" target="_blank" rel="noopener" class="btn alt">View Poster</a>
-          </div>
-        </div>
-        <div class="meta"><strong>Artist Name Tribute</strong><br><span class="tag">Tribute</span></div>
-      </div>
-      -->
-
     </div>
   </div>
 
   <footer>© <span id="y"></span> Geneius Entertainment</footer>
-
   <script>
-    // Year
     document.getElementById('y').textContent=new Date().getFullYear();
-
-    // Sparkles
     const w=document.getElementById('sparkles');const N=100;
     function go(){
       w.innerHTML='';
@@ -161,25 +107,12 @@
         e.style.left=Math.random()*innerWidth+'px';
         e.style.animationDuration=(3+Math.random()*4)+'s';
         e.style.animationDelay=(Math.random()*5)+'s';
-        w.appendChild(e);
+        w.appendChild(e)
       }
     }
     go();
-    addEventListener('resize',()=>{clearTimeout(window._t);window._t=setTimeout(go,200)});
-
-    // Mobile tap-to-toggle (and keyboard Enter/Space)
-    document.querySelectorAll('.card').forEach(card=>{
-      card.addEventListener('click', e=>{
-        if(e.target.closest('.buttons')) return; // let buttons work normally
-        card.classList.toggle('open');
-      });
-      card.addEventListener('keydown', e=>{
-        if(e.key==='Enter' || e.key===' '){
-          e.preventDefault();
-          card.classList.toggle('open');
-        }
-      });
-    });
+    addEventListener('resize',()=>{clearTimeout(window._t);
+      window._t=setTimeout(go,200)});
   </script>
 </body>
 </html>
