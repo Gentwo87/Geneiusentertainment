@@ -5,10 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Browse Acts | Geneius Entertainment</title>
   <style>
-    :root{
-      --bg:#000; --ink:#f5f5f5; --muted:#bfbfbf;
-      --gold:#C99700; --accent:#2a210c; --line:rgba(255,255,255,.12);
-    }
+    :root{ --bg:#000; --ink:#f5f5f5; --muted:#bfbfbf; --gold:#C99700; --accent:#2a210c; --line:rgba(255,255,255,.12); }
     *{box-sizing:border-box}
     body{margin:0;background:var(--bg);color:var(--ink);font-family:"Trebuchet MS",Arial,sans-serif}
     .wrap{width:min(1120px,92vw);margin:0 auto;padding:28px 0 40px}
@@ -16,32 +13,18 @@
     header img{height:70px;width:auto}
     h1{margin:6px 0 0;font-size:1.6rem;color:var(--gold);letter-spacing:1px}
     p.sub{color:var(--muted);margin:0 0 14px;text-align:center}
-
-    /* Search + chips */
-    #acts-search{
-      width:100%;max-width:720px;display:block;margin:10px auto 8px;padding:12px 14px;
-      background:#13131a;border:1px solid var(--line);border-radius:10px;color:#eee;
-    }
+    #acts-search{width:100%;max-width:720px;display:block;margin:10px auto 8px;padding:12px 14px;background:#13131a;border:1px solid var(--line);border-radius:10px;color:#eee}
     .chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:8px 0 18px}
-    .chip{
-      padding:.38rem .7rem;border-radius:999px;background:#111;border:1px solid var(--line);color:#ddd;
-      cursor:pointer;user-select:none;font-size:.92rem;
-    }
+    .chip{padding:.38rem .7rem;border-radius:999px;background:#111;border:1px solid var(--line);color:#ddd;cursor:pointer;user-select:none;font-size:.92rem}
     .chip.active{background:var(--accent);border-color:var(--gold);color:#ffd76a}
-
-    /* Cards grid */
     .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin-top:8px}
-    .card{
-      display:block;text-decoration:none;color:inherit;background:#15151b;border:1px solid var(--line);
-      border-radius:14px;overflow:hidden;transition:transform .18s, box-shadow .18s, border-color .18s;
-    }
+    .card{display:block;text-decoration:none;color:inherit;background:#15151b;border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:transform .18s, box-shadow .18s, border-color .18s}
     .card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.35);border-color:rgba(212,175,55,.45)}
     .card img{width:100%;height:200px;object-fit:cover;display:block}
     .meta{padding:12px 14px}
     .name{font-weight:700}
     .tags{margin-top:6px;display:flex;gap:6px;flex-wrap:wrap}
     .tag{display:inline-block;font-size:.78rem;color:#fdeec0;background:#1b1710;border:1px solid rgba(212,175,55,.45);padding:.18rem .48rem;border-radius:999px}
-
     .empty{opacity:.7;text-align:center;padding:24px}
     footer{margin-top:26px;color:#aaa;text-align:center}
   </style>
@@ -49,9 +32,7 @@
 <body>
   <div class="wrap">
     <header>
-      <a href="index.html" aria-label="Home">
-        <img src="logo.png" alt="Geneius Entertainment">
-      </a>
+      <a href="index.html" aria-label="Home"><img src="logo.png" alt="Geneius Entertainment"></a>
       <h1>Browse all acts</h1>
     </header>
     <p class="sub">Use search or tap a category. Acts can appear in multiple categories.</p>
@@ -77,52 +58,13 @@
     <footer>© <span id="y"></span> Geneius Entertainment</footer>
   </div>
 
-  <script>
-    // ---- Inline data (add/edit here) ----
-    const TALENT = [
-      {
-        id:'gemma-andrew',
-        name:'Gemma Andrew',
-        img:'Gemma.jpg',
-        link:'singers.html',
-        bio:'Diverse singer with a strong, soulful voice and high-energy shows.',
-        tags:['singers','soloists','vocalists','weddings','parties']
-      },
-      {
-        id:'meghan-gray',
-        name:'Meghan Gray',
-        img:'MeghanG.jpeg',
-        link:'singers.html',
-        bio:'Modern vocalist with soulful depth, vibrant stage presence.',
-        tags:['singers','soloists','vocalists','weddings','90s']
-      },
-      {
-        id:'gel-duo-spice',
-        name:'Gel Duo – Spice Girls Tribute',
-        img:'Spice.png',
-        link:'tribute.html',
-        bio:'High-impact Spice Girls tribute duo with quick costume changes.',
-        tags:['tributes','duos','90s','parties','clubs']
-      },
-      {
-        id:'elvis-tribute',
-        name:'Elvis Tribute (Placeholder)',
-        img:'Tribute.png',
-        link:'tribute.html',
-        bio:'Classic Elvis tribute – poster placeholder.',
-        tags:['tributes','soloists','weddings']
-      },
-      {
-        id:'dj-geneius',
-        name:'DJ Geneius',
-        img:'logo.png',
-        link:'dj.html',
-        bio:'Wedding, party & club specialist.',
-        tags:['djs','clubs','parties','weddings']
-      }
-    ];
+  <!-- Load the data first -->
+  <script src="talent.js"></script>
 
-    // ---- Page logic (filter + search + render) ----
+  <!-- Page logic (filter + search + render) -->
+  <script>
+    const TALENT = (window.TALENT || []); // from talent.js
+
     const grid = document.getElementById('acts-grid');
     const input = document.getElementById('acts-search');
     const chips = [...document.querySelectorAll('.chip')];
