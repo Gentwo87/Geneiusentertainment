@@ -3,54 +3,170 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Acts | Geneius Entertainment</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Browse Acts | Geneius Entertainment</title>
   <style>
-    /* Page-specific helpers (keeps your existing style.css intact) */
-    .acts-wrap{width:min(1120px,92vw);margin:0 auto;padding:28px 0 40px}
-    .filters{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0 16px}
-    .chip{border:1px solid rgba(255,255,255,.12);background:#15151b;color:#f5f5f5;
-          border-radius:999px;padding:8px 12px;font-size:.9rem;cursor:pointer}
-    .chip.active{border-color:rgba(201,151,0,.65);background:#1b1710;color:#fdeec0}
-    .searchbar{display:flex;gap:10px;margin:10px 0 18px}
-    .searchbar input{flex:1;padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:#0f0f14;color:#f5f5f5}
-    .grid{display:grid;gap:16px}
-    @media (min-width:700px){.grid{grid-template-columns:repeat(2,1fr)}}
-    @media (min-width:1100px){.grid{grid-template-columns:repeat(3,1fr)}}
-    .card{background:#15151b;border:1px solid rgba(255,255,255,.08);border-radius:14px;overflow:hidden}
-    .card img{width:100%;display:block;aspect-ratio:16/9;object-fit:cover}
+    :root{
+      --bg:#000; --ink:#f5f5f5; --muted:#bfbfbf;
+      --gold:#C99700; --accent:#2a210c; --line:rgba(255,255,255,.12);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:"Trebuchet MS",Arial,sans-serif}
+    .wrap{width:min(1120px,92vw);margin:0 auto;padding:28px 0 40px}
+    header{display:flex;align-items:center;gap:16px;justify-content:center;margin:8px 0 18px}
+    header img{height:70px;width:auto}
+    h1{margin:6px 0 0;font-size:1.6rem;color:var(--gold);letter-spacing:1px}
+    p.sub{color:var(--muted);margin:0 0 14px;text-align:center}
+
+    /* Search + chips */
+    #acts-search{
+      width:100%;max-width:720px;display:block;margin:10px auto 8px;padding:12px 14px;
+      background:#13131a;border:1px solid var(--line);border-radius:10px;color:#eee;
+    }
+    .chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:8px 0 18px}
+    .chip{
+      padding:.38rem .7rem;border-radius:999px;background:#111;border:1px solid var(--line);color:#ddd;
+      cursor:pointer;user-select:none;font-size:.92rem;
+    }
+    .chip.active{background:var(--accent);border-color:var(--gold);color:#ffd76a}
+
+    /* Cards grid */
+    .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin-top:8px}
+    .card{
+      display:block;text-decoration:none;color:inherit;background:#15151b;border:1px solid var(--line);
+      border-radius:14px;overflow:hidden;transition:transform .18s, box-shadow .18s, border-color .18s;
+    }
+    .card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.35);border-color:rgba(212,175,55,.45)}
+    .card img{width:100%;height:200px;object-fit:cover;display:block}
     .meta{padding:12px 14px}
     .name{font-weight:700}
-    .bio{color:#bfbfbf;margin:6px 0 0;font-size:.95rem}
-    .empty{color:#bfbfbf;padding:22px 0}
-    .breadcrumbs{color:#C99700;font-weight:700;margin:10px 0 6px}
-    .note{color:#bfbfbf;margin:0 0 16px}
+    .tags{margin-top:6px;display:flex;gap:6px;flex-wrap:wrap}
+    .tag{display:inline-block;font-size:.78rem;color:#fdeec0;background:#1b1710;border:1px solid rgba(212,175,55,.45);padding:.18rem .48rem;border-radius:999px}
+
+    .empty{opacity:.7;text-align:center;padding:24px}
+    footer{margin-top:26px;color:#aaa;text-align:center}
   </style>
 </head>
 <body>
-  <header class="hero" style="padding:34px 0 16px;text-align:center;background:transparent">
-    <a href="index.html"><img id="logo" src="logo.png" alt="Geneius Entertainment logo" style="max-width:200px;height:auto"></a>
-  </header>
+  <div class="wrap">
+    <header>
+      <a href="index.html" aria-label="Home">
+        <img src="logo.png" alt="Geneius Entertainment">
+      </a>
+      <h1>Browse all acts</h1>
+    </header>
+    <p class="sub">Use search or tap a category. Acts can appear in multiple categories.</p>
 
-  <main class="acts-wrap">
-    <div class="breadcrumbs">Browse all acts</div>
-    <p class="note">Use search or tap a category chip. Acts can appear in multiple categories.</p>
+    <input id="acts-search" type="search" placeholder="Search by name or tag (e.g. singers, duos, 90s, weddings)…" />
 
-    <div class="searchbar">
-      <input id="q" type="search" placeholder="Search by name or tag (e.g. singers, duos, 90s, weddings)…">
+    <div class="chips">
+      <span class="chip active" data-tag="all">all</span>
+      <span class="chip" data-tag="singers">singers</span>
+      <span class="chip" data-tag="duos">duos</span>
+      <span class="chip" data-tag="trios">trios</span>
+      <span class="chip" data-tag="quartets">quartets</span>
+      <span class="chip" data-tag="bands">bands</span>
+      <span class="chip" data-tag="tributes">tributes</span>
+      <span class="chip" data-tag="djs">djs</span>
+      <span class="chip" data-tag="90s">90s</span>
+      <span class="chip" data-tag="clubs">clubs</span>
+      <span class="chip" data-tag="weddings">weddings</span>
     </div>
 
-    <div class="filters" id="filters">
-      <!-- chips are rendered by JS from list below -->
-    </div>
+    <div id="acts-grid" class="grid"></div>
 
-    <div id="results" class="grid" aria-live="polite"></div>
-    <p id="empty" class="empty" hidden>No acts match your filters.</p>
-  </main>
+    <footer>© <span id="y"></span> Geneius Entertainment</footer>
+  </div>
 
-  <!-- DATA first -->
-  <script src="talent.js"></script>
-  <!-- RENDER/LOGIC -->
-  <script src="main.js"></script>
+  <script>
+    // ---- Inline data (add/edit here) ----
+    const TALENT = [
+      {
+        id:'gemma-andrew',
+        name:'Gemma Andrew',
+        img:'Gemma.jpg',
+        link:'singers.html',
+        bio:'Diverse singer with a strong, soulful voice and high-energy shows.',
+        tags:['singers','soloists','vocalists','weddings','parties']
+      },
+      {
+        id:'meghan-gray',
+        name:'Meghan Gray',
+        img:'MeghanG.jpeg',
+        link:'singers.html',
+        bio:'Modern vocalist with soulful depth, vibrant stage presence.',
+        tags:['singers','soloists','vocalists','weddings','90s']
+      },
+      {
+        id:'gel-duo-spice',
+        name:'Gel Duo – Spice Girls Tribute',
+        img:'Spice.png',
+        link:'tribute.html',
+        bio:'High-impact Spice Girls tribute duo with quick costume changes.',
+        tags:['tributes','duos','90s','parties','clubs']
+      },
+      {
+        id:'elvis-tribute',
+        name:'Elvis Tribute (Placeholder)',
+        img:'Tribute.png',
+        link:'tribute.html',
+        bio:'Classic Elvis tribute – poster placeholder.',
+        tags:['tributes','soloists','weddings']
+      },
+      {
+        id:'dj-geneius',
+        name:'DJ Geneius',
+        img:'logo.png',
+        link:'dj.html',
+        bio:'Wedding, party & club specialist.',
+        tags:['djs','clubs','parties','weddings']
+      }
+    ];
+
+    // ---- Page logic (filter + search + render) ----
+    const grid = document.getElementById('acts-grid');
+    const input = document.getElementById('acts-search');
+    const chips = [...document.querySelectorAll('.chip')];
+    let activeTag = 'all';
+
+    function cardHTML(a){
+      const tags = (a.tags||[]).map(t=>`<span class="tag">${t}</span>`).join('');
+      return `
+        <a class="card" href="${a.link || '#'}" aria-label="${a.name}">
+          <img src="${a.img || 'logo.png'}" alt="${a.name}">
+          <div class="meta">
+            <div class="name">${a.name}</div>
+            <div class="tags">${tags}</div>
+          </div>
+        </a>
+      `;
+    }
+
+    function render(list){
+      grid.innerHTML = list.length
+        ? list.map(cardHTML).join('')
+        : `<div class="empty">No acts match your filters.</div>`;
+    }
+
+    function apply(){
+      const q = (input.value || '').trim().toLowerCase();
+      const out = TALENT.filter(a=>{
+        const hay = [a.name, a.bio, ...(a.tags||[])].join(' ').toLowerCase();
+        const tagOK = activeTag==='all' || (a.tags||[]).includes(activeTag);
+        const qOK = !q || hay.includes(q);
+        return tagOK && qOK;
+      });
+      render(out);
+    }
+
+    input.addEventListener('input', apply);
+    chips.forEach(c=>c.addEventListener('click',()=>{
+      chips.forEach(x=>x.classList.toggle('active', x===c));
+      activeTag = c.dataset.tag;
+      apply();
+    }));
+
+    document.getElementById('y').textContent = new Date().getFullYear();
+    render(TALENT); // initial
+  </script>
 </body>
 </html>
