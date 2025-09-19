@@ -12,10 +12,7 @@
     }
     *{box-sizing:border-box}
     html,body{height:auto}
-    body{
-      margin:0;background:var(--bg);color:var(--ink);
-      font-family:"Trebuchet MS",Arial,sans-serif;overflow-x:hidden;position:relative
-    }
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:"Trebuchet MS",Arial,sans-serif;overflow-x:hidden;position:relative}
 
     .container{width:min(1120px,92vw);margin:0 auto}
     .center{text-align:center}
@@ -33,12 +30,8 @@
     #logo{display:block;margin:12px auto 14px;max-width:320px;height:auto}
     header.hero p{margin:6px 0 0;color:var(--bronze);font-weight:600}
 
-    .btn{
-      display:inline-block;background:var(--gold);color:#000;
-      padding:10px 20px;margin:18px 8px;border-radius:6px;
-      font-weight:bold;text-decoration:none;border:1px solid rgba(255,255,255,.08);
-      transition:filter .25s
-    }
+    .btn{display:inline-block;background:var(--gold);color:#000;padding:10px 20px;margin:18px 8px;border-radius:6px;
+      font-weight:bold;text-decoration:none;border:1px solid rgba(255,255,255,.08);transition:filter .25s}
     .btn:hover{filter:brightness(1.12)}
 
     h1,h2,h3{color:var(--gold);text-transform:uppercase;letter-spacing:2px;margin:0 0 14px;position:relative;z-index:1}
@@ -48,37 +41,28 @@
     section.section{padding:60px 20px;position:relative;z-index:1}
     .section .sub{color:#b6b7c5;margin:0 0 24px;text-align:center}
 
-    /* Featured cards (clickable) */
-    .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+    /* Featured cards */
+    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
     @media (max-width:1200px){.cards{grid-template-columns:repeat(2,1fr)}}
     @media (max-width:700px){.cards{grid-template-columns:1fr}}
     .card-act, a.card-act{
       display:block; overflow:hidden; border-radius:16px; border:1px solid var(--line); background:#121217;
       text-decoration:none; color:inherit; position:relative; transition:transform .18s, box-shadow .18s, border-color .18s;
+      min-height:240px;
     }
     .card-act:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.35);border-color:rgba(212,175,55,.45)}
+    .card-act .media{position:relative;aspect-ratio:16/9;background:#0e0e12}
+    .card-act video,.card-act img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
     .card-act .meta{padding:12px 14px}
     .tag{display:inline-block;font-size:.8rem;color:#fdeec0;background:#1b1710;border:1px solid rgba(212,175,55,.45);padding:.2rem .5rem;border-radius:999px}
-
-    /* Netflix-style video tiles */
-    .card-act video{
-      width:100%;
-      height:260px;           /* adjust card height here */
-      object-fit:cover;
-      display:block;
-      background:#0e0e12;
-      border:0;
-      border-radius:16px 16px 0 0;
-    }
-
     /* Coming soon badge */
     .badge-soon{
       position:absolute; top:10px; right:-24px; transform:rotate(15deg);
       background:#33270a; color:#fdeec0; border:1px solid rgba(212,175,55,.6);
-      padding:6px 16px; font-weight:700; letter-spacing:.5px; border-radius:999px; z-index:2;
+      padding:6px 16px; font-weight:700; letter-spacing:.5px; border-radius:999px;
     }
 
-    /* Category tiles */
+    /* Category tiles (additional links) */
     .grid{display:grid;gap:16px}
     .cols-3{grid-template-columns:repeat(3,1fr)}
     @media (max-width:900px){.cols-3{grid-template-columns:1fr}}
@@ -86,13 +70,46 @@
       display:flex;gap:12px;align-items:flex-start;text-decoration:none;color:inherit;
       background:linear-gradient(180deg,var(--panel1),var(--panel2));
       border:1px solid var(--line);border-radius:14px;padding:16px 18px;
-      transition:transform .18s,box-shadow .18s,border-color .18s
-    }
+      transition:transform .18s,box-shadow .18s,border-color .18s}
     a.tile:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.35);border-color:rgba(212,175,55,.45)}
     .tile .icon{width:44px;height:44px;border-radius:10px;font-size:22px;display:grid;place-items:center;background:#171722;border:1px solid var(--line)}
 
     footer{background:#111;padding:20px;text-align:center;color:#aaa;margin-top:40px;position:relative;z-index:1}
     footer a{color:var(--gold);text-decoration:none}
+
+    /* --- Hamburger & Drawer --- */
+    .hamburger{
+      position:fixed; top:18px; right:18px; z-index:1001;
+      width:42px; height:42px; border-radius:10px;
+      background:rgba(0,0,0,.55); border:1px solid rgba(255,255,255,.08);
+      display:grid; place-items:center; gap:5px; padding:8px; cursor:pointer;
+      backdrop-filter: blur(4px);
+    }
+    .hamburger span{display:block;width:22px;height:2px;background:#C99700;transition:.25s}
+    .hamburger[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+    .hamburger[aria-expanded="true"] span:nth-child(2){opacity:0}
+    .hamburger[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+    .drawer{
+      position:fixed; inset:0 0 0 auto; width:min(300px,85vw);
+      translate: 100% 0; transition:translate .28s ease;
+      background:linear-gradient(180deg,#15151b,#0f0f14); z-index:1000;
+      border-left:1px solid rgba(255,255,255,.08);
+    }
+    .drawer.open{translate: 0 0;}
+    .drawer-inner{padding:20px}
+    .drawer .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:#f5f5f5;margin-bottom:16px}
+    .drawer .brand img{width:38px;height:auto;display:block}
+    .navlink{
+      display:block; padding:12px 10px; border-radius:10px; margin:6px 0;
+      color:#f5f5f5; text-decoration:none; border:1px solid rgba(255,255,255,.06);
+      background:#121217;
+    }
+    .navlink:hover{border-color:rgba(212,175,55,.45); box-shadow:0 6px 18px rgba(0,0,0,.35)}
+    .backdrop{
+      position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:999;
+      backdrop-filter: blur(2px);
+    }
   </style>
 </head>
 <body>
@@ -106,6 +123,24 @@
     <p>Performers You Remember</p>
     <a href="contact.html" class="btn">Contact Us</a>
   </header>
+
+  <!-- HAMBURGER MENU -->
+  <button class="hamburger" id="menuToggle" aria-label="Open menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <nav class="drawer" id="drawer" aria-hidden="true">
+    <div class="drawer-inner">
+      <a class="brand" href="index.html">
+        <img src="logo.png" alt="Geneius Entertainment" />
+        <span>Geneius Entertainment</span>
+      </a>
+      <a class="navlink" href="index.html">Home</a>
+      <a class="navlink" href="#about">About Us</a>
+      <a class="navlink" href="acts.html">Acts</a>
+      <a class="navlink" href="contact.html">Contact Us</a>
+    </div>
+  </nav>
+  <div class="backdrop" id="backdrop" hidden></div>
 
   <!-- Welcome -->
   <section class="section center" id="welcome">
@@ -122,50 +157,46 @@
     </div>
   </section>
 
-  <!-- Featured Acts -->
+  <!-- Featured Acts (Singers, Tributes, Bands[coming soon]) -->
   <section class="section" id="featured">
     <div class="container">
       <h2 class="center">Featured Acts</h2>
       <p class="sub center">Tap to view posters &amp; artist details.</p>
 
       <div class="cards">
-        <!-- Singers -->
-        <a href="singers.html" class="card-act" aria-label="View Singers">
-          <video autoplay loop muted playsinline preload="auto">
-            <source src="Lamps.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-          </video>
+        <!-- Singers (video) -->
+        <a href="singers.html" class="card-act">
+          <div class="media">
+            <video src="Lamps.mp4" autoplay muted loop playsinline></video>
+          </div>
           <div class="meta"><span class="tag">Singers</span></div>
         </a>
 
-        <!-- Tributes -->
-        <a href="tribute.html" class="card-act" aria-label="View Tributes">
-          <video autoplay loop muted playsinline preload="auto">
-            <source src="LampT.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-          </video>
+        <!-- Tributes (video) -->
+        <a href="tribute.html" class="card-act">
+          <div class="media">
+            <video src="Lampt.mp4" autoplay muted loop playsinline></video>
+          </div>
           <div class="meta"><span class="tag">Tributes</span></div>
         </a>
 
-        <!-- Bands -->
-        <a href="bands.html" class="card-act" aria-label="View Bands">
+        <!-- Bands (video, coming soon) -->
+        <a href="bands.html" class="card-act">
           <span class="badge-soon">COMING SOON</span>
-          <video autoplay loop muted playsinline preload="auto">
-            <source src="Lampb.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-          </video>
+          <div class="media">
+            <video src="Lampb.mp4" autoplay muted loop playsinline></video>
+          </div>
           <div class="meta"><span class="tag">Bands</span></div>
         </a>
       </div>
     </div>
   </section>
 
-  <!-- Additional Categories -->
+  <!-- Quick Category tiles (optional extra links) -->
   <section class="section" id="categories">
     <div class="container">
       <h2 class="center">Additional Categories</h2>
       <p class="sub">Click through to see posters &amp; artists.</p>
-
       <div class="grid cols-3">
         <a href="dancers.html" class="tile">
           <div class="icon">🕺</div>
@@ -174,7 +205,6 @@
             <p class="sub">Choreographed shows & walkabout.</p>
           </div>
         </a>
-
         <a href="kids.html" class="tile">
           <div class="icon">🎂</div>
           <div>
@@ -182,7 +212,6 @@
             <p class="sub">Party hosts, magicians & more.</p>
           </div>
         </a>
-
         <a href="dj.html" class="tile">
           <div class="icon">🎧</div>
           <div>
@@ -211,20 +240,27 @@
 
     // Sparkles
     const wrap=document.getElementById('sparkles');const COUNT=120;
-    function seed(){
-      wrap.innerHTML='';
-      for(let i=0;i<COUNT;i++){
-        const s=document.createElement('div');
-        s.className='sparkle';
-        s.style.top=Math.random()*innerHeight+'px';
-        s.style.left=Math.random()*innerWidth+'px';
-        s.style.animationDuration=(3+Math.random()*4)+'s';
-        s.style.animationDelay=(Math.random()*5)+'s';
-        wrap.appendChild(s)
-      }
+    function seed(){wrap.innerHTML='';for(let i=0;i<COUNT;i++){const s=document.createElement('div');
+      s.className='sparkle';s.style.top=Math.random()*innerHeight+'px';
+      s.style.left=Math.random()*innerWidth+'px';
+      s.style.animationDuration=(3+Math.random()*4)+'s';
+      s.style.animationDelay=(Math.random()*5)+'s';wrap.appendChild(s)}}
+    seed();addEventListener('resize',()=>{clearTimeout(window._t);window._t=setTimeout(seed,250)});
+
+    // Hamburger / Drawer
+    const menuBtn = document.getElementById('menuToggle');
+    const drawer = document.getElementById('drawer');
+    const backdrop = document.getElementById('backdrop');
+
+    function openMenu(open){
+      drawer.classList.toggle('open', open);
+      menuBtn.setAttribute('aria-expanded', String(open));
+      backdrop.hidden = !open;
+      drawer.setAttribute('aria-hidden', String(!open));
     }
-    seed();
-    addEventListener('resize',()=>{clearTimeout(window._t);window._t=setTimeout(seed,250)});
+    menuBtn.addEventListener('click', ()=> openMenu(!drawer.classList.contains('open')));
+    backdrop.addEventListener('click', ()=> openMenu(false));
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') openMenu(false); });
   </script>
 </body>
 </html>
