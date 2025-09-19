@@ -1,47 +1,49 @@
 /* talent.js
-   Single source of truth for all acts — add/edit here and they’ll appear
-   everywhere the Acts page is used.
+   Single source of truth for all acts — add/edit here.
+   Acts can live in multiple categories via `tags`.
 */
 window.TALENT = [
   {
-    id: "gemma-andrew",
-    name: "Gemma Andrew",
-    img: "Singer.png",           // use your real image (e.g. "Gemma.jpg") if present
-    poster: "Singer.png",
-    bio: "Diverse singer with a strong, soulful voice and energetic, up-to-date live set.",
-    tags: ["singers", "soloists", "vocalists"]
+    id: 'gemma-andrew',
+    name: 'Gemma Andrew',
+    img: 'Gemma.jpg',
+    poster: 'Singer.png',              // optional separate poster if you want it later
+    link: 'singers.html',              // where the card should go
+    bio: 'Diverse singer with a strong, soulful voice and vibrant, high-energy shows.',
+    tags: ['singers','soloists','vocalists','weddings','parties']
   },
   {
-    id: "meghan-gray",
-    name: "Meghan Gray",
-    img: "MeghanG.jpeg",
-    poster: "MeghanG.jpeg",
-    bio: "Modern vocalist with soulful depth, vibrant delivery and crowd-pleasing repertoire.",
-    tags: ["singers", "soloists", "vocalists"]
+    id: 'meghan-gray',
+    name: 'Meghan Gray',
+    img: 'MeghanG.jpeg',
+    poster: 'Singer.png',
+    link: 'singers.html',
+    bio: 'Modern vocalist with soulful depth and a vibrant stage presence.',
+    tags: ['singers','soloists','vocalists','weddings','90s']
   },
   {
-    id: "gel-duo-spice",
-    name: "Gel Duo — Spice Girls Tribute",
-    img: "Spice.png",
-    poster: "Spice.png",
-    bio: "High-energy Spice Girls tribute with mid-set costume changes and optional 90s add-on.",
-    tags: ["tributes", "duos", "90s"]
+    id: 'gel-duo-spice',
+    name: 'Gel Duo – Spice Girls Tribute',
+    img: 'Spice.png',
+    poster: 'Tribute.png',
+    link: 'tribute.html',
+    bio: 'High-impact Spice Girls tribute duo with quick costume changes.',
+    tags: ['tributes','duos','90s','parties','clubs']
   },
   {
-    id: "the-general-dj",
-    name: "The General",
-    img: "TheGeneral.jpg",
-    poster: "TheGeneral.jpg",
-    bio: "Floor-filling DJ for weddings, parties and clubs — classics to current hits.",
-    tags: ["djs", "weddings", "clubs", "parties"]
+    id: 'elvis-tribute',
+    name: 'Elvis Tribute (Placeholder)',
+    img: 'Tribute.png',
+    link: 'tribute.html',
+    bio: 'Classic Elvis tribute – poster placeholder.',
+    tags: ['tributes','soloists','weddings']
   },
-  // Add more acts below — copy this shape:
-  // {
-  //   id: "unique-id",
-  //   name: "Artist Name",
-  //   img: "image-file.jpg",
-  //   poster: "image-file.jpg",
-  //   bio: "Short bio...",
-  //   tags: ["singers","bands","dancers", ...]
-  // },
+  {
+    id: 'dj-geneius',
+    name: 'DJ Geneius',
+    img: 'logo.png',
+    link: 'dj.html',
+    bio: 'Wedding, party & club specialist.',
+    tags: ['djs','clubs','parties','weddings']
+  }
 ];
