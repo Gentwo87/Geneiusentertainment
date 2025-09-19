@@ -1,34 +1,47 @@
-const talent = [
+/* talent.js
+   Single source of truth for all acts — add/edit here and they’ll appear
+   everywhere the Acts page is used.
+*/
+window.TALENT = [
   {
+    id: "gemma-andrew",
     name: "Gemma Andrew",
-    image: "Singer.png",
+    img: "Singer.png",           // use your real image (e.g. "Gemma.jpg") if present
     poster: "Singer.png",
-    email: "contact@geneiusentertainment.com",
-    bio: "Diverse singer with a strong, soulful voice and energetic stage presence.",
-    tags: ["singers", "soloists"]
+    bio: "Diverse singer with a strong, soulful voice and energetic, up-to-date live set.",
+    tags: ["singers", "soloists", "vocalists"]
   },
   {
+    id: "meghan-gray",
     name: "Meghan Gray",
-    image: "MeghanG.jpeg",
+    img: "MeghanG.jpeg",
     poster: "MeghanG.jpeg",
-    email: "contact@geneiusentertainment.com",
-    bio: "Modern singer with soulful depth and vibrant delivery across genres.",
-    tags: ["singers", "soloists"]
+    bio: "Modern vocalist with soulful depth, vibrant delivery and crowd-pleasing repertoire.",
+    tags: ["singers", "soloists", "vocalists"]
   },
   {
+    id: "gel-duo-spice",
     name: "Gel Duo — Spice Girls Tribute",
-    image: "Spice.png",
+    img: "Spice.png",
     poster: "Spice.png",
-    email: "contact@geneiusentertainment.com",
-    bio: "High-energy tribute with costume changes and a nostalgic 90s set.",
-    tags: ["tributes", "duos"]
+    bio: "High-energy Spice Girls tribute with mid-set costume changes and optional 90s add-on.",
+    tags: ["tributes", "duos", "90s"]
   },
   {
+    id: "the-general-dj",
     name: "The General",
-    image: "TheGeneral.jpg",
+    img: "TheGeneral.jpg",
     poster: "TheGeneral.jpg",
-    email: "contact@geneiusentertainment.com",
-    bio: "Floor-filling DJ with a mix of classics and fresh hits.",
-    tags: ["djs"]
-  }
+    bio: "Floor-filling DJ for weddings, parties and clubs — classics to current hits.",
+    tags: ["djs", "weddings", "clubs", "parties"]
+  },
+  // Add more acts below — copy this shape:
+  // {
+  //   id: "unique-id",
+  //   name: "Artist Name",
+  //   img: "image-file.jpg",
+  //   poster: "image-file.jpg",
+  //   bio: "Short bio...",
+  //   tags: ["singers","bands","dancers", ...]
+  // },
 ];
