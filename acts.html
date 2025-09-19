@@ -76,4 +76,99 @@
       <button class="chip" data-cat="actors">Actors</button>
       <button class="chip" data-cat="actresses">Actresses</button>
       <button class="chip" data-cat="models">Models</button>
-      <button
+      <button class="chip" data-cat="magicians">Magicians</button>
+      <button class="chip" data-cat="kids-family">Kids’ & Family</button>
+      <button class="chip" data-cat="makeup">Makeup Artists</button>
+    </div>
+  </div>
+
+  <div id="grid" class="grid"></div>
+</div>
+
+<footer>© <span id="y"></span> Geneius Entertainment</footer>
+
+<!-- Central data -->
+<script src="talent.js"></script>
+<script>
+  document.getElementById('y').textContent = new Date().getFullYear();
+
+  const TITLEMAP = {
+    "singers":"Singers","duets":"Duos","trios":"Trios","quartets":"Quartets","bands":"Bands","tributes":"Tributes","djs":"DJs",
+    "dancers":"Dancers","actors":"Actors","actresses":"Actresses","models":"Models","magicians":"Magicians",
+    "kids-family":"Kids & Family","makeup":"Makeup Artists"
+  };
+
+  const grid = document.getElementById('grid');
+  const chips = document.getElementById('chips');
+  const search = document.getElementById('q');
+
+  const ALL = (window.TALENT || []);
+  let currentCat = 'all';
+  let q = '';
+
+  function render(){
+    const list = ALL.filter(t=>{
+      // filter by category
+      const byCat = currentCat==='all' ? true : (t.tags||[]).map(s=>s.toLowerCase()).includes(currentCat);
+      if(!byCat) return false;
+      // search by name, bio, tags
+      const hay = (t.name+' '+(t.bio||'')+' '+(t.tags||[]).join(' ')).toLowerCase();
+      return hay.includes(q);
+    });
+
+    if(!list.length){
+      grid.innerHTML = `<p style="color:#ccc">No matching acts yet. <a class="btn-sm" href="contact.html">Enquire</a></p>`;
+      return;
+    }
+
+    grid.innerHTML = list.map(t=>`
+      <div class="card" tabindex="0">
+        <img src="${t.image}" alt="${t.name}">
+        <div class="overlay">
+          <h3>${t.name}</h3>
+          <p>${t.bio || ''}</p>
+          <div class="buttons">
+            <a class="btn-sm" href="mailto:${t.email || 'contact@geneiusentertainment.com'}?subject=Booking%20${encodeURIComponent(t.name)}">Enquire</a>
+            ${t.poster ? `<a class="btn-sm alt" href="${t.poster}" target="_blank" rel="noopener">View Poster</a>` : ``}
+          </div>
+        </div>
+        <div class="meta">
+          <strong>${t.name}</strong>
+          <div class="tags">
+            ${(t.tags||[]).map(x=>`<span class="tag">${TITLEMAP[x] || x}</span>`).join('')}
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // chip handlers
+  chips.addEventListener('click', e=>{
+    const b = e.target.closest('.chip'); if(!b) return;
+    [...chips.querySelectorAll('.chip')].forEach(c=>c.classList.remove('active'));
+    b.classList.add('active');
+    currentCat = b.dataset.cat;
+    render();
+  });
+
+  // search handler
+  search.addEventListener('input', ()=>{
+    q = search.value.trim().toLowerCase();
+    render();
+  });
+
+  // card toggle for mobile/keyboard
+  grid.addEventListener('click', e=>{
+    const card = e.target.closest('.card'); if(!card) return;
+    if(e.target.closest('.buttons')) return;
+    card.classList.toggle('open');
+  });
+  grid.addEventListener('keydown', e=>{
+    const card = e.target.closest('.card'); if(!card) return;
+    if(e.key==='Enter' || e.key===' '){ e.preventDefault(); card.classList.toggle('open'); }
+  });
+
+  render();
+</script>
+</body>
+</html>
