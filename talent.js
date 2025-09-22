@@ -45,8 +45,8 @@ window.TALENT = [
     link: 'dj.html',
     bio: 'Wedding, party & club specialist.',
     tags: ['djs','clubs','parties','weddings']
-  }
-     {
+  }, 
+  {
     id: 'DJ Leon D',
     name: 'DJ Leon D',
     img: 'DJLeon.jpg',
