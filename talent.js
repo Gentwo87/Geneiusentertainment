@@ -49,7 +49,7 @@ window.TALENT = [
      {
     id: 'DJ Leon D',
     name: 'DJ Leon D',
-    img: 'DjLeon.jpg',
+    img: 'DJLeon.jpg',
     link: 'dj.html',
     bio: 'Wedding, party & club specialist.',
     tags: ['djs','clubs','parties','weddings']
