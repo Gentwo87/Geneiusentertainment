@@ -40,8 +40,16 @@ window.TALENT = [
   },
   {
     id: 'dj-geneius',
-    name: 'DJ Geneius',
-    img: 'The General.jpg',
+    name: 'DJ Genie',
+    img: 'TheGeneral.jpg',
+    link: 'dj.html',
+    bio: 'Wedding, party & club specialist.',
+    tags: ['djs','clubs','parties','weddings']
+  }
+     {
+    id: 'DJ Leon D',
+    name: 'DJ Leon D',
+    img: 'DjLeon.jpg',
     link: 'dj.html',
     bio: 'Wedding, party & club specialist.',
     tags: ['djs','clubs','parties','weddings']
