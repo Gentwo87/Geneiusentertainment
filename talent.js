@@ -31,7 +31,7 @@ window.TALENT = [
     tags: ['tributes','duos','90s','parties','clubs']
   },
   {
-    id: 'elvis-tribute',
+    id: 'Abba-tribute',
     name: 'Gel Duo - ABBA Tribute',
     img: 'Abbagels.jpg',
     link: 'tribute.html',
@@ -39,8 +39,8 @@ window.TALENT = [
     tags: ['tributes','soloists','weddings']
   },
   {
-    id: 'dj-geneius',
-    name: 'DJ Genie',
+    id: 'The General/ DJ Genie',
+    name: 'The General/DJ Genie',
     img: 'TheGeneral.jpg',
     link: 'dj.html',
     bio: 'Wedding, party & club specialist.',
