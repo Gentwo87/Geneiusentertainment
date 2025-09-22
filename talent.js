@@ -32,8 +32,8 @@ window.TALENT = [
   },
   {
     id: 'elvis-tribute',
-    name: 'Elvis Tribute (Placeholder)',
-    img: 'Tribute.png',
+    name: 'Gel Duo - ABBA Tribute',
+    img: 'Abbagels',
     link: 'tribute.html',
     bio: 'Classic Elvis tribute – poster placeholder.',
     tags: ['tributes','soloists','weddings']
@@ -41,7 +41,7 @@ window.TALENT = [
   {
     id: 'dj-geneius',
     name: 'DJ Geneius',
-    img: 'logo.png',
+    img: 'The General.jpg',
     link: 'dj.html',
     bio: 'Wedding, party & club specialist.',
     tags: ['djs','clubs','parties','weddings']
