@@ -33,7 +33,7 @@ window.TALENT = [
   {
     id: 'elvis-tribute',
     name: 'Gel Duo - ABBA Tribute',
-    img: 'Abbagels',
+    img: 'Abbagels.jpg',
     link: 'tribute.html',
     bio: 'Classic Elvis tribute – poster placeholder.',
     tags: ['tributes','soloists','weddings']
