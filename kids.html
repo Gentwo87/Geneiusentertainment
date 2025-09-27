@@ -37,7 +37,7 @@
       border:1px solid rgba(212,175,55,.45);padding:.18rem .5rem;border-radius:999px}
 
     /* ---- MINI GALLERY ---- */
-    .art.gallery{position:relative;height:220px;overflow:hidden}
+    .art.gallery{position:relative;height:200px;overflow:hidden} /* match singers etc. */
     .slides{display:flex;width:100%;height:100%;transition:transform .35s ease}
     .slides img{width:100%;height:100%;object-fit:cover;flex:0 0 100%}
     .nav{
@@ -51,7 +51,7 @@
     .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.4)}
     .dot.active{background:#ffd76a;border-color:#C99700}
 
-    /* ---- HOVER BIO OVERLAY (with blur) ---- */
+    /* ---- HOVER BIO OVERLAY ---- */
     .overlay{
       position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;
       background:linear-gradient(180deg,rgba(0,0,0,.0) 40%, rgba(0,0,0,.65) 100%);
@@ -59,7 +59,7 @@
     }
     .art.gallery:hover .overlay{opacity:1; backdrop-filter:blur(2px)}
     .overlay h3{margin:0 0 6px;color:#ffd76a;font-size:1.05rem}
-    .overlay p{margin:0 0 10px;color:#ddd;font-size:.92rem}
+    .overlay p{margin:0 0 10px;color:#ddd;font-size:.92rem;line-height:1.35}
     .actions{display:flex;gap:8px;flex-wrap:wrap}
     .btn{
       display:inline-block;background:var(--gold);color:#000;padding:8px 12px;border-radius:8px;
@@ -68,6 +68,7 @@
     .btn.ghost{
       background:transparent;color:#ffd76a;border:1px solid rgba(201,151,0,.5)
     }
+
     footer{margin-top:28px;color:#aaa;text-align:center}
   </style>
 </head>
@@ -85,18 +86,18 @@
     <p class="sub">High-energy hosts, magicians, discos, balloon artists and more. Hover or tap a card to read the bio; swipe/arrow through images.</p>
 
     <div class="grid">
-      <!-- CARD 1: Party Host -->
+      <!-- CARD 1 -->
       <div class="card">
         <div class="art gallery" tabindex="0">
           <div class="slides">
-            <img src="LivelyP.jpg" alt="Party Host – Lively Squad Entertainment (1)">
-            <img src="Benji.jpg" alt="Party Host – games & disco (2)">
+            <img src="partyhost-1.jpg" alt="Party Host (1)">
+            <img src="partyhost-2.jpg" alt="Party Host (2)">
           </div>
           <button class="nav prev" aria-label="Previous">‹</button>
           <button class="nav next" aria-label="Next">›</button>
           <div class="overlay">
-            <h3>Party Host – Lively Squad Entertainment</h3>
-            <p>Lively Squad, we run dance classes and provide children's dance party entertainment for birthdays and events.</p>
+            <h3>Party Host – Games & Disco</h3>
+            <p>High-energy presenter for kids or mixed-age parties.</p>
             <div class="actions">
               <a class="btn" href="contact.html?subject=Enquiry%20-%20Party%20Host">Enquire</a>
               <a class="btn ghost" href="partyhost-1.jpg" target="_blank">View poster</a>
@@ -104,12 +105,12 @@
           </div>
         </div>
         <div class="meta">
-          <strong>Party Host – Lively Squad Entertainment</strong><br>
+          <strong>Party Host – Games & Disco</strong><br>
           <span class="tag">Kids/Adult Parties</span>
         </div>
       </div>
 
-      <!-- CARD 2: Magician -->
+      <!-- CARD 2 -->
       <div class="card">
         <div class="art gallery" tabindex="0">
           <div class="slides">
@@ -119,27 +120,24 @@
           <button class="nav prev" aria-label="Previous">‹</button>
           <button class="nav next" aria-label="Next">›</button>
           <div class="overlay">
-            <h3>Magician - Magical Bones</h3>
-            <p>Interactive close-up magic, Perfect for birthdays, fairs and corporate fun days.</p>
+            <h3>Magician & Balloon Artist</h3>
+            <p>Interactive close-up magic, balloon models and family entertainment.</p>
             <div class="actions">
-              <a class="btn" href="contact.html?subject=Enquiry%20-%20Magician%20%26%20Balloon%20Artist">Enquire</a>
+              <a class="btn" href="contact.html?subject=Enquiry%20-%20Magician">Enquire</a>
               <a class="btn ghost" href="magician-1.jpg" target="_blank">View poster</a>
             </div>
           </div>
         </div>
         <div class="meta">
-          <strong>Magician - Magical Bones</strong><br>
+          <strong>Magician & Balloon Artist</strong><br>
           <span class="tag">Family / Corporate</span>
         </div>
       </div>
-
-      <!-- DUPLICATE THIS CARD BLOCK FOR MORE ACTS -->
     </div>
 
     <footer>© <span id="y"></span> Geneius Entertainment</footer>
   </div>
 
-  <!-- Mini-gallery logic -->
   <script>
   (function(){
     function setupGallery(root){
@@ -177,7 +175,7 @@
       slides.addEventListener('touchmove',  e=>{dx=e.touches[0].clientX-startX;}, {passive:true});
       slides.addEventListener('touchend',   ()=>{ if(Math.abs(dx)>40) go(index + (dx<0?1:-1)); });
 
-      // keyboard arrows when focused
+      // keyboard
       root.addEventListener('keydown', e=>{
         if(e.key==='ArrowLeft'){ e.preventDefault(); go(index-1); }
         if(e.key==='ArrowRight'){ e.preventDefault(); go(index+1); }
