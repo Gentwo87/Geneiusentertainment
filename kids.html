@@ -5,10 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Kids & Adult Party Entertainment | Geneius Entertainment</title>
   <style>
-    :root{
-      --bg:#000; --ink:#f5f5f5; --muted:#bfbfbf;
-      --gold:#C99700; --accent:#1b1710; --line:rgba(255,255,255,.12);
-    }
+    :root{ --bg:#000; --ink:#f5f5f5; --muted:#bfbfbf; --gold:#C99700; --accent:#1b1710; --line:rgba(255,255,255,.12); }
     *{box-sizing:border-box}
     body{margin:0;background:var(--bg);color:var(--ink);font-family:"Trebuchet MS",Arial,sans-serif}
     .wrap{width:min(1120px,92vw);margin:0 auto;padding:30px 0 46px}
@@ -36,10 +33,10 @@
     .tag{display:inline-block;margin-top:6px;font-size:.78rem;color:#fdeec0;background:var(--accent);
       border:1px solid rgba(212,175,55,.45);padding:.18rem .5rem;border-radius:999px}
 
-    /* ---- MINI GALLERY ---- */
+    /* ===== MINI GALLERY (match singer/tribute image height) ===== */
     .art.gallery{position:relative;height:200px;overflow:hidden}
     .slides{display:flex;width:100%;height:100%;transition:transform .35s ease}
-    .slides img{width:100%;height:100%;object-fit:cover;flex:0 0 100%}
+    .slides img{width:100%;height:200px;object-fit:cover;flex:0 0 100%}  /* <- key line */
     .nav{
       position:absolute;top:50%;transform:translateY(-50%);border:1px solid rgba(255,255,255,.35);
       background:rgba(0,0,0,.45);color:#fff;font-weight:800;line-height:1;padding:.3rem .6rem;border-radius:10px;
@@ -51,10 +48,10 @@
     .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.4)}
     .dot.active{background:#ffd76a;border-color:#C99700}
 
-    /* ---- HOVER BIO OVERLAY (with blur) ---- */
+    /* Hover bio */
     .overlay{
       position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;
-      background:linear-gradient(180deg,rgba(0,0,0,.0) 40%, rgba(0,0,0,.65) 100%);
+      background:linear-gradient(180deg,rgba(0,0,0,0) 40%, rgba(0,0,0,.65) 100%);
       padding:14px;opacity:0;transition:opacity .25s; backdrop-filter:blur(0px)
     }
     .art.gallery:hover .overlay{opacity:1; backdrop-filter:blur(2px)}
@@ -65,9 +62,7 @@
       display:inline-block;background:var(--gold);color:#000;padding:8px 12px;border-radius:8px;
       text-decoration:none;font-weight:800;border:1px solid rgba(255,255,255,.12)
     }
-    .btn.ghost{
-      background:transparent;color:#ffd76a;border:1px solid rgba(201,151,0,.5)
-    }
+    .btn.ghost{background:transparent;color:#ffd76a;border:1px solid rgba(201,151,0,.5)}
 
     footer{margin-top:28px;color:#aaa;text-align:center}
   </style>
@@ -86,12 +81,12 @@
     <p class="sub">High-energy Party hosts, magicians, discos and more. Hover or tap a card to read the bio; swipe/arrow through images.</p>
 
     <div class="grid">
-      <!-- CARD 1: Lively Squad -->
+      <!-- CARD 1 -->
       <div class="card">
         <div class="art gallery" tabindex="0">
           <div class="slides">
             <img src="LivelyP.jpg" alt="Party Hosts – Dance, games & disco (1)">
-            <img src="Benji.jpg" alt="Party Hosts – Dance, games & disco (2)">
+            <img src="Benji.jpg"   alt="Party Hosts – Dance, games & disco (2)">
           </div>
           <button class="nav prev" aria-label="Previous">‹</button>
           <button class="nav next" aria-label="Next">›</button>
@@ -110,20 +105,20 @@
         </div>
       </div>
 
-      <!-- CARD 2: Magical Bones -->
+      <!-- CARD 2 -->
       <div class="card">
         <div class="art gallery" tabindex="0">
           <div class="slides">
-            <img src="magician-1.jpg" alt="magician (1)">
-            <img src="magician-2.jpg" alt="magician (2)">
+            <img src="magician-1.jpg" alt="Magician (1)">
+            <img src="magician-2.jpg" alt="Magician (2)">
           </div>
           <button class="nav prev" aria-label="Previous">‹</button>
           <button class="nav next" aria-label="Next">›</button>
           <div class="overlay">
             <h3>Magician - Magical Bones</h3>
-            <p> Showcase magic, From the Finals of BGT, Perfect for stage shows.</p>
+            <p>Showcase magic from BGT Finals — perfect for stage shows and events.</p>
             <div class="actions">
-              <a class="btn" href="contact.html?subject=Enquiry%20-%20Magician%20%26%20Balloon%20Artist">Enquire</a>
+              <a class="btn" href="contact.html?subject=Enquiry%20-%20Magician">Enquire</a>
               <a class="btn ghost" href="magician-1.jpg" target="_blank">View poster</a>
             </div>
           </div>
@@ -133,8 +128,6 @@
           <span class="tag">Events/Corporate</span>
         </div>
       </div>
-
-      <!-- DUPLICATE THIS CARD BLOCK FOR MORE ACTS -->
     </div>
 
     <footer>© <span id="y"></span> Geneius Entertainment</footer>
@@ -150,7 +143,6 @@
       const next   = root.querySelector('.nav.next');
       let index = 0;
 
-      // dots
       const dotsWrap = document.createElement('div');
       dotsWrap.className = 'dots';
       imgs.forEach((_,i)=>{
@@ -165,10 +157,8 @@
         slides.style.transform = `translateX(-${index*100}%)`;
         [...dotsWrap.children].forEach((d,i)=>d.classList.toggle('active', i===index));
       }
-      function go(i){
-        index = (i+imgs.length)%imgs.length;
-        render();
-      }
+      function go(i){ index = (i+imgs.length)%imgs.length; render(); }
+
       prev.addEventListener('click', ()=>go(index-1));
       next.addEventListener('click', ()=>go(index+1));
 
@@ -178,7 +168,7 @@
       slides.addEventListener('touchmove',  e=>{dx=e.touches[0].clientX-startX;}, {passive:true});
       slides.addEventListener('touchend',   ()=>{ if(Math.abs(dx)>40) go(index + (dx<0?1:-1)); });
 
-      // keyboard arrows when focused
+      // keyboard
       root.addEventListener('keydown', e=>{
         if(e.key==='ArrowLeft'){ e.preventDefault(); go(index-1); }
         if(e.key==='ArrowRight'){ e.preventDefault(); go(index+1); }
