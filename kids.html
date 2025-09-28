@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Kids & Adult Party Entertainment | Geneius Entertainment</title>
   <style>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kids & Adult Party Entertainment | Geneius Entertainment</title>
+  <style>
     :root{ --bg:#000; --ink:#f5f5f5; --muted:#bfbfbf; --gold:#C99700; --accent:#1b1710; --line:rgba(255,255,255,.12); }
     *{box-sizing:border-box}
     body{margin:0;background:var(--bg);color:var(--ink);font-family:"Trebuchet MS",Arial,sans-serif}
@@ -26,7 +33,7 @@
     .btn-mini:hover{background:rgba(201,151,0,.14)}
 
     /* Cards grid */
-    .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+    .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
     .card{background:#15151b;border:1px solid var(--line);border-radius:16px;overflow:hidden;position:relative}
     .meta{padding:12px 14px}
     .meta strong{font-weight:800}
@@ -65,6 +72,124 @@
     .btn.ghost{background:transparent;color:#ffd76a;border:1px solid rgba(201,151,0,.5)}
 
     footer{margin-top:28px;color:#aaa;text-align:center}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="bar">
+      <a class="btn-mini" href="index.html">← Back to Home</a>
+      <a class="btn-mini" href="acts.html">Browse all acts</a>
+    </div>
+
+    <header>
+      <a href="index.html" aria-label="Home"><img id="logo" src="logo.png" alt="Geneius Entertainment logo"></a>
+      <h1>Kids & Adult Party Entertainment</h1>
+    </header>
+    <p class="sub">High-energy Party hosts, magicians, discos and more. Hover or tap a card to read the bio; swipe/arrow through images.</p>
+
+    <div class="grid">
+      <!-- CARD 1 -->
+      <div class="card">
+        <div class="art gallery" tabindex="0">
+          <div class="slides">
+            <img src="LivelyP.jpg" alt="Party Hosts – Dance, games & disco (1)">
+            <img src="Benji.jpg"   alt="Party Hosts – Dance, games & disco (2)">
+          </div>
+          <button class="nav prev" aria-label="Previous">‹</button>
+          <button class="nav next" aria-label="Next">›</button>
+          <div class="overlay">
+            <h3>Party Hosts – Lively Squad</h3>
+            <p>Lively Squad, we run dance classes and provide children's dance party entertainment for birthdays and events.</p>
+            <div class="actions">
+              <a class="btn" href="contact.html?subject=Enquiry%20-%20Party%20Host">Enquire</a>
+              <a class="btn ghost" href="partyhost-1.jpg" target="_blank">View poster</a>
+            </div>
+          </div>
+        </div>
+        <div class="meta">
+          <strong>Party Host – Dance, Games & Disco</strong><br>
+          <span class="tag">Kids/Adult Parties</span>
+        </div>
+      </div>
+
+      <!-- CARD 2 -->
+      <div class="card">
+        <div class="art gallery" tabindex="0">
+          <div class="slides">
+            <img src="magician-1.jpg" alt="Magician (1)">
+            <img src="magician-2.jpg" alt="Magician (2)">
+          </div>
+          <button class="nav prev" aria-label="Previous">‹</button>
+          <button class="nav next" aria-label="Next">›</button>
+          <div class="overlay">
+            <h3>Magician - Magical Bones</h3>
+            <p>Showcase magic from BGT Finals — perfect for stage shows and events.</p>
+            <div class="actions">
+              <a class="btn" href="contact.html?subject=Enquiry%20-%20Magician">Enquire</a>
+              <a class="btn ghost" href="magician-1.jpg" target="_blank">View poster</a>
+            </div>
+          </div>
+        </div>
+        <div class="meta">
+          <strong>Magician</strong><br>
+          <span class="tag">Events/Corporate</span>
+        </div>
+      </div>
+    </div>
+
+    <footer>© <span id="y"></span> Geneius Entertainment</footer>
+  </div>
+
+  <!-- Mini-gallery logic -->
+  <script>
+  (function(){
+    function setupGallery(root){
+      const slides = root.querySelector('.slides');
+      const imgs   = [...slides.querySelectorAll('img')];
+      const prev   = root.querySelector('.nav.prev');
+      const next   = root.querySelector('.nav.next');
+      let index = 0;
+
+      const dotsWrap = document.createElement('div');
+      dotsWrap.className = 'dots';
+      imgs.forEach((_,i)=>{
+        const d=document.createElement('span');
+        d.className = 'dot'+(i===0?' active':'');
+        d.addEventListener('click', ()=>go(i));
+        dotsWrap.appendChild(d);
+      });
+      root.appendChild(dotsWrap);
+
+      function render(){
+        slides.style.transform = `translateX(-${index*100}%)`;
+        [...dotsWrap.children].forEach((d,i)=>d.classList.toggle('active', i===index));
+      }
+      function go(i){ index = (i+imgs.length)%imgs.length; render(); }
+
+      prev.addEventListener('click', ()=>go(index-1));
+      next.addEventListener('click', ()=>go(index+1));
+
+      // swipe
+      let startX=0, dx=0;
+      slides.addEventListener('touchstart', e=>{startX=e.touches[0].clientX; dx=0;}, {passive:true});
+      slides.addEventListener('touchmove',  e=>{dx=e.touches[0].clientX-startX;}, {passive:true});
+      slides.addEventListener('touchend',   ()=>{ if(Math.abs(dx)>40) go(index + (dx<0?1:-1)); });
+
+      // keyboard
+      root.addEventListener('keydown', e=>{
+        if(e.key==='ArrowLeft'){ e.preventDefault(); go(index-1); }
+        if(e.key==='ArrowRight'){ e.preventDefault(); go(index+1); }
+      });
+
+      render();
+    }
+    document.querySelectorAll('.art.gallery').forEach(setupGallery);
+    document.getElementById('y').textContent = new Date().getFullYear();
+  })();
+  </script>
+</body>
+</html>
+
   </style>
 </head>
 <body>
