@@ -39,7 +39,7 @@ window.TALENT = [
     tags: ['tributes','duos','weddings']
   },
    {
-    id: 'Meghan-Gray-Britney',
+    id: 'meghan-gray',
     name: 'Meghan Gray - Britney Tribute',
     img: 'Britney2.jpg',
     link: 'tribute.html',
