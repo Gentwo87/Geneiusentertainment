@@ -38,6 +38,15 @@ window.TALENT = [
     bio: 'Classic Elvis tribute – poster placeholder.',
     tags: ['tributes','soloists','weddings']
   },
+   {
+    id: 'meghan-gray',
+    name: 'Meghan Gray',
+    img: 'MeghanG.jpeg',
+    poster: 'Singer.png',
+    link: 'singers.html',
+    bio: 'Modern vocalist with soulful depth and a vibrant stage presence.',
+    tags: ['singers','soloists','vocalists','weddings','90s']
+  },
   {
     id: 'The General/ DJ Genie',
     name: 'The General/DJ Genie',
