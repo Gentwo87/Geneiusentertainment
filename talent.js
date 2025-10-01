@@ -39,12 +39,12 @@ window.TALENT = [
     tags: ['tributes','soloists','weddings']
   },
    {
-    id: 'meghan-gray',
-    name: 'Meghan Gray',
-    img: 'MeghanG.jpeg',
-    poster: 'Singer.png',
+    id: 'Meghan-Gray-Britney',
+    name: 'Meghan Gray - Britney Tribute',
+    img: 'Britney2.jpeg',
+    poster: 'Britney2.png',
     link: 'singers.html',
-    bio: 'Modern vocalist with soulful depth and a vibrant stage presence.',
+    bio: 'High energy performance, bringing you all the Britney classics.',
     tags: ['singers','soloists','vocalists','weddings','90s']
   },
   {
