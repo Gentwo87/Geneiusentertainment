@@ -10,7 +10,7 @@ window.TALENT = [
     poster: 'Singer.png',              // optional separate poster if you want it later
     link: 'singers.html',              // where the card should go
     bio: 'Diverse singer with a strong, soulful voice and vibrant, high-energy shows.',
-    tags: ['singers','soloists','vocalists','weddings','parties']
+    tags: ['singers','soloists','vocalists','weddings','parties', '90s']
   },
   {
     id: 'meghan-gray',
@@ -36,16 +36,16 @@ window.TALENT = [
     img: 'Abbagels.jpg',
     link: 'tribute.html',
     bio: 'Classic Elvis tribute – poster placeholder.',
-    tags: ['tributes','soloists','weddings']
+    tags: ['tributes','duos','weddings']
   },
    {
     id: 'Meghan-Gray-Britney',
     name: 'Meghan Gray - Britney Tribute',
     img: 'Britney2.jpeg',
     poster: 'Britney2.png',
-    link: 'singers.html',
+    link: 'tribute.html',
     bio: 'High energy performance, bringing you all the Britney classics.',
-    tags: ['singers','soloists','vocalists','weddings','90s']
+    tags: ['tributes','soloists','vocalists','weddings','90s']
   },
   {
     id: 'The General/ DJ Genie',
