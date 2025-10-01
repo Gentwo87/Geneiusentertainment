@@ -42,7 +42,6 @@ window.TALENT = [
     id: 'Meghan-Gray-Britney',
     name: 'Meghan Gray - Britney Tribute',
     img: 'Britney2.jpg',
-    poster: 'Britney2.jpg',
     link: 'tribute.html',
     bio: 'High energy performance, bringing you all the Britney classics.',
     tags: ['tributes','soloists','vocalists','weddings','90s']
