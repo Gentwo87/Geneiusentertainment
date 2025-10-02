@@ -41,7 +41,7 @@ window.TALENT = [
    {
     id: 'meghan-gray',
     name: 'Meghan Gray - Britney Tribute',
-    img: 'Britney2.jpg',
+    img: 'Britney.jpg',
     link: 'tribute.html',
     bio: 'High energy performance, bringing you all the Britney classics.',
     tags: ['tributes','soloists','vocalists','weddings','90s']
@@ -57,7 +57,7 @@ window.TALENT = [
   {
     id: 'DJ Leon D',
     name: 'DJ Leon D',
-    img: 'DJLeon.jpg',
+    img: 'DjLeon.jpg',
     link: 'dj.html',
     bio: 'Wedding, party & club specialist.',
     tags: ['djs','clubs','parties','weddings']
