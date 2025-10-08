@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Geneius Entertainment</title>
+
   <style>
     :root{
       --bg:#000; --ink:#f5f5f5; --muted:#bfbfbf;
@@ -110,6 +111,15 @@
       position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:999;
       backdrop-filter: blur(2px);
     }
+
+    /* ---------- NEW: What's On scrolling banner ---------- */
+    #whats-on{padding:28px 0;background:#0b0b0f;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+    #whats-on .marquee{overflow:hidden;mask-image:linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%)}
+    .ticker{display:flex;gap:16px;width:max-content;animation:scrollX 28s linear infinite}
+    .ticker:hover{animation-play-state:paused}
+    .poster{height:180px;width:auto;border-radius:12px;border:1px solid var(--line);box-shadow:0 6px 14px rgba(0,0,0,.35);background:#0e0e12}
+    @media (max-width:700px){.poster{height:140px}}
+    @keyframes scrollX{from{transform:translateX(0)}to{transform:translateX(-50%)}}
   </style>
 </head>
 <body>
@@ -118,29 +128,56 @@
 
   <!-- HERO -->
   <header class="hero">
+    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
     <img id="logo" src="logo.png" alt="Geneius Entertainment logo">
     <p>Your All-in-One Entertainment Agency</p>
     <p>Performers You Remember</p>
     <a href="contact.html" class="btn">Contact Us</a>
   </header>
 
-  <!-- HAMBURGER MENU -->
-  <button class="hamburger" id="menuToggle" aria-label="Open menu" aria-expanded="false">
-    <span></span><span></span><span></span>
-  </button>
-  <nav class="drawer" id="drawer" aria-hidden="true">
+  <!-- NEW: What's On Banner -->
+  <section class="section" id="whats-on">
+    <div class="container">
+      <h2 class="center">What's On</h2>
+      <p class="sub center">Upcoming shows & fresh posters — hover to pause.</p>
+      <div class="marquee">
+        <div class="ticker" id="wo-track">
+          <a href="tribute.html"><img class="poster" src="Spice.png" alt="Spice Girls Tribute poster"></a>
+          <a href="tribute.html"><img class="poster" src="Abbagels.jpg" alt="ABBA Gels poster"></a>
+          <a href="kids.html"><img class="poster" src="LivelyP.jpg" alt="Lively Squad Parties poster"></a>
+          <a href="dj.html"><img class="poster" src="TheGeneral.jpg" alt="The General DJ poster"></a>
+          <a href="singers.html"><img class="poster" src="MeghanG.jpeg" alt="Meghan Gray poster"></a>
+          <!-- duplicate the same set for seamless scroll -->
+          <a href="tribute.html"><img class="poster" src="Spice.png" alt="" aria-hidden="true"></a>
+          <a href="tribute.html"><img class="poster" src="Abbagels.jpg" alt="" aria-hidden="true"></a>
+          <a href="kids.html"><img class="poster" src="LivelyP.jpg" alt="" aria-hidden="true"></a>
+          <a href="dj.html"><img class="poster" src="TheGeneral.jpg" alt="" aria-hidden="true"></a>
+          <a href="singers.html"><img class="poster" src="MeghanG.jpeg" alt="" aria-hidden="true"></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Drawer -->
+  <div class="drawer" id="drawer" aria-hidden="true">
     <div class="drawer-inner">
-      <a class="brand" href="index.html">
-        <img src="logo.png" alt="Geneius Entertainment" />
-        <span>Geneius Entertainment</span>
-      </a>
+      <a class="brand" href="index.html"><img src="logo.png" alt=""> <strong>Geneius Entertainment</strong></a>
       <a class="navlink" href="index.html">Home</a>
       <a class="navlink" href="#about">About Us</a>
       <a class="navlink" href="acts.html">Acts</a>
       <a class="navlink" href="contact.html">Contact Us</a>
+      <hr style="border-color:rgba(255,255,255,.08)">
+      <a class="navlink" href="singers.html">Singers</a>
+      <a class="navlink" href="tribute.html">Tributes</a>
+      <a class="navlink" href="dj.html">DJs</a>
+      <a class="navlink" href="bands.html">Bands</a>
+      <a class="navlink" href="kids.html">Kids & Adult Parties</a>
     </div>
-  </nav>
-  <div class="backdrop" id="backdrop" hidden></div>
+  </div>
+
+  <!-- Backdrop (created dynamically) -->
 
   <!-- Welcome -->
   <section class="section center" id="welcome">
@@ -157,34 +194,40 @@
     </div>
   </section>
 
-  <!-- Featured Acts (Singers, Tributes, Bands[coming soon]) -->
+  <!-- Featured Acts -->
   <section class="section" id="featured">
     <div class="container">
       <h2 class="center">Featured Acts</h2>
       <p class="sub center">Tap to view posters &amp; artist details.</p>
 
       <div class="cards">
-        <!-- Singers (video) -->
-        <a href="singers.html" class="card-act">
+        <!-- Singers -->
+        <a href="singers.html" class="card-act" aria-label="View Singers">
           <div class="media">
-            <video src="Lamps.mp4" autoplay muted loop playsinline></video>
+            <video autoplay loop muted playsinline preload="auto">
+              <source src="Lamps.mp4" type="video/mp4">
+            </video>
           </div>
           <div class="meta"><span class="tag">Singers</span></div>
         </a>
 
-        <!-- Tributes (video) -->
-        <a href="tribute.html" class="card-act">
+        <!-- Tributes -->
+        <a href="tribute.html" class="card-act" aria-label="View Tributes">
           <div class="media">
-            <video src="LampT.mp4" autoplay muted loop playsinline></video>
+            <video autoplay loop muted playsinline preload="auto">
+              <source src="LampT.mp4" type="video/mp4">
+            </video>
           </div>
           <div class="meta"><span class="tag">Tributes</span></div>
         </a>
 
-        <!-- Bands (video, coming soon) -->
-        <a href="bands.html" class="card-act">
+        <!-- Bands -->
+        <a href="bands.html" class="card-act" aria-label="View Bands">
           <span class="badge-soon">COMING SOON</span>
           <div class="media">
-            <video src="Lampb.mp4" autoplay muted loop playsinline></video>
+            <video autoplay loop muted playsinline preload="auto">
+              <source src="Lampb.mp4" type="video/mp4">
+            </video>
           </div>
           <div class="meta"><span class="tag">Bands</span></div>
         </a>
@@ -192,26 +235,29 @@
     </div>
   </section>
 
-  <!-- Quick Category tiles (optional extra links) -->
+  <!-- Additional Categories -->
   <section class="section" id="categories">
     <div class="container">
       <h2 class="center">Additional Categories</h2>
       <p class="sub">Click through to see posters &amp; artists.</p>
+
       <div class="grid cols-3">
         <a href="dancers.html" class="tile">
           <div class="icon">🕺</div>
           <div>
             <h3>Dancers/Performers</h3>
-            <p class="sub">Choreographed shows/Dancers.</p>
+            <p class="sub">Choreographed shows & walkabout.</p>
           </div>
         </a>
+
         <a href="kids.html" class="tile">
           <div class="icon">🎂</div>
           <div>
-            <h3>Kids/Adult Party Entertainment</h3>
+            <h3>Kids Party Entertainment</h3>
             <p class="sub">Party hosts, magicians & more.</p>
           </div>
         </a>
+
         <a href="dj.html" class="tile">
           <div class="icon">🎧</div>
           <div>
@@ -240,27 +286,50 @@
 
     // Sparkles
     const wrap=document.getElementById('sparkles');const COUNT=120;
-    function seed(){wrap.innerHTML='';for(let i=0;i<COUNT;i++){const s=document.createElement('div');
-      s.className='sparkle';s.style.top=Math.random()*innerHeight+'px';
-      s.style.left=Math.random()*innerWidth+'px';
-      s.style.animationDuration=(3+Math.random()*4)+'s';
-      s.style.animationDelay=(Math.random()*5)+'s';wrap.appendChild(s)}}
-    seed();addEventListener('resize',()=>{clearTimeout(window._t);window._t=setTimeout(seed,250)});
-
-    // Hamburger / Drawer
-    const menuBtn = document.getElementById('menuToggle');
-    const drawer = document.getElementById('drawer');
-    const backdrop = document.getElementById('backdrop');
-
-    function openMenu(open){
-      drawer.classList.toggle('open', open);
-      menuBtn.setAttribute('aria-expanded', String(open));
-      backdrop.hidden = !open;
-      drawer.setAttribute('aria-hidden', String(!open));
+    function seed(){
+      wrap.innerHTML='';
+      for(let i=0;i<COUNT;i++){
+        const s=document.createElement('div');
+        s.className='sparkle';
+        s.style.top=Math.random()*innerHeight+'px';
+        s.style.left=Math.random()*innerWidth+'px';
+        s.style.animationDuration=(3+Math.random()*4)+'s';
+        s.style.animationDelay=(Math.random()*5)+'s';
+        wrap.appendChild(s)
+      }
     }
-    menuBtn.addEventListener('click', ()=> openMenu(!drawer.classList.contains('open')));
-    backdrop.addEventListener('click', ()=> openMenu(false));
-    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') openMenu(false); });
+    seed();
+    addEventListener('resize',()=>{clearTimeout(window._t);window._t=setTimeout(seed,250)});
+
+    // Drawer logic
+    const btn = document.getElementById('hamburger');
+    const drawer = document.getElementById('drawer');
+    let backdrop = null;
+
+    function openDrawer(){
+      drawer.classList.add('open');
+      drawer.setAttribute('aria-hidden','false');
+      btn.setAttribute('aria-expanded','true');
+      backdrop = document.createElement('div');
+      backdrop.className = 'backdrop';
+      backdrop.addEventListener('click', closeDrawer);
+      document.body.appendChild(backdrop);
+    }
+    function closeDrawer(){
+      drawer.classList.remove('open');
+      drawer.setAttribute('aria-hidden','true');
+      btn.setAttribute('aria-expanded','false');
+      if(backdrop){ backdrop.remove(); backdrop = null; }
+    }
+    btn.addEventListener('click', ()=>{
+      const open = btn.getAttribute('aria-expanded') === 'true';
+      open ? closeDrawer() : openDrawer();
+    });
+    document.addEventListener('keydown', (e)=>{
+      if(e.key==='Escape' && drawer.classList.contains('open')) closeDrawer();
+    });
   </script>
 </body>
 </html>
+
+
