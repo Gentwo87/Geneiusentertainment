@@ -125,7 +125,15 @@
     #whats-on .marquee{overflow:hidden;mask-image:linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%)}
     .ticker{display:flex;gap:16px;width:max-content;animation:scrollX 28s linear infinite}
     .ticker:hover{animation-play-state:paused}
-    .poster{height:180px;width:auto;border-radius:12px;border:1px solid var(--line);box-shadow:0 6px 14px rgba(0,0,0,.35);background:#0e0e12}
+    .poster{
+  width:260px;
+  height:180px;
+  object-fit:cover;
+  border-radius:12px;
+  border:1px solid var(--line);
+  box-shadow:0 6px 14px rgba(0,0,0,.35);
+  background:#0e0e12;
+}
     @media (max-width:700px){.poster{height:140px}}
     @keyframes scrollX{from{transform:translateX(0)}to{transform:translateX(-50%)}}
   </style>
