@@ -399,74 +399,47 @@
     });
 
     // ===== Continuous banner init (centered titles, hover pause) =====
-    (function(){
-      document.querySelectorAll('.banner').forEach(setupBanner);
+  <script>
+(function(){
+  document.querySelectorAll('.banner').forEach(setupBanner);
 
-      function setupBanner(root){
-        const track = root.querySelector('.track');
-        const prev  = root.querySelector('.prev');
-        const next  = root.querySelector('.next');
-        const dotsWrap = root.querySelector('.dots');
-        const gap = 12; // must match CSS .track gap
+  function setupBanner(root){
+    const track = root.querySelector('.track');
+    const slides = [...track.children];
+    const gap = 12; // must match CSS gap
+    const SPEED = 0.03; // 🔹 smaller number = slower (try 0.05–0.1)
 
-        // Build seamless loop by cloning the original slides once
-        const originals = [...track.children];
-        originals.forEach(s => track.appendChild(s.cloneNode(true)));
+    // Clone slides twice for a seamless loop
+    slides.forEach(s => track.appendChild(s.cloneNode(true)));
+    slides.forEach(s => track.appendChild(s.cloneNode(true)));
 
-        let unitWidth = 0;
-        function measure(){
-          if(!originals.length) return;
-          const slideRect = track.children[0].getBoundingClientRect();
-          unitWidth = (slideRect.width + gap) * originals.length;
-        }
+    let offset = 0;
+    let stopAuto = false;
+    let lastTs = 0;
 
-        // Optional dots (blank here, can be added if needed)
-        function buildDots(){
-          if(!dotsWrap) return; dotsWrap.innerHTML='';
-        }
+    function tick(ts){
+      if(!lastTs) lastTs = ts;
+      const dt = ts - lastTs;
+      lastTs = ts;
 
-        // Manual page step for arrow buttons
-        function step(move){
-          stopAuto = true;
-          offset += move * (track.children[0].getBoundingClientRect().width + gap);
-          render(true);
-          setTimeout(()=>{ stopAuto = false; }, 1200);
-        }
-
-        let offset = 0;
-        let stopAuto = false;
-        let lastTs = 0;
-        const SPEED = 0.45; // px per ms (0.35–0.6 for slower/faster)
-
-        function render(){
-          if (offset >= unitWidth) offset -= unitWidth;
-          if (offset < 0) offset += unitWidth;
-          track.style.transform = `translateX(${-offset}px)`;
-        }
-
-        function tick(ts){
-          if(!lastTs) lastTs = ts;
-          const dt = ts - lastTs;
-          lastTs = ts;
-          if(!stopAuto){
-            offset += SPEED * dt;
-            render();
-          }
-          requestAnimationFrame(tick);
-        }
-
-        root.addEventListener('mouseenter', ()=> stopAuto = true);
-        root.addEventListener('mouseleave', ()=> stopAuto = false);
-        root.addEventListener('touchstart', ()=> stopAuto = true, {passive:true});
-        root.addEventListener('touchend',   ()=> stopAuto = false);
-
-        if(prev) prev.addEventListener('click', ()=> step(-1));
-        if(next) next.addEventListener('click', ()=> step(+1));
-
-        measure(); buildDots(); requestAnimationFrame(tick);
-        window.addEventListener('resize', measure);
+      if(!stopAuto){
+        offset += SPEED * dt;
+        const totalWidth = track.scrollWidth / 3; // original width before clones
+        if(offset >= totalWidth) offset -= totalWidth;
+        track.style.transform = `translateX(${-offset}px)`;
       }
-    })();
-  </script>
+      requestAnimationFrame(tick);
+    }
+
+    // Pause on hover/touch
+    root.addEventListener('mouseenter', ()=> stopAuto = true);
+    root.addEventListener('mouseleave', ()=> stopAuto = false);
+    root.addEventListener('touchstart', ()=> stopAuto = true, {passive:true});
+    root.addEventListener('touchend', ()=> stopAuto = false);
+
+    requestAnimationFrame(tick);
+  }
+})();
+</script>
 </body>
 </html>
