@@ -4,15 +4,14 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Geneius Entertainment</title>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-MR1NLPH5ZK"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-MR1NLPH5ZK');
-</script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MR1NLPH5ZK"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-MR1NLPH5ZK');
+  </script>
   <style>
     :root{
       --bg:#000; --ink:#f5f5f5; --muted:#bfbfbf;
@@ -120,14 +119,44 @@
       backdrop-filter: blur(2px);
     }
 
-    /* ---------- NEW: What's On scrolling banner ---------- */
-    #whats-on{padding:28px 0;background:#0b0b0f;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-    #whats-on .marquee{overflow:hidden;mask-image:linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%)}
-    .ticker{display:flex;gap:16px;width:max-content;animation:scrollX 28s linear infinite}
-    .ticker:hover{animation-play-state:paused}
-    .poster{height:180px;width:auto;border-radius:12px;border:1px solid var(--line);box-shadow:0 6px 14px rgba(0,0,0,.35);background:#0e0e12}
-    @media (max-width:700px){.poster{height:140px}}
-    @keyframes scrollX{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+    /* ---------- NEW: Uniform Banner Carousels (2 stacked) ---------- */
+    .banner{
+      position:relative;
+      margin:28px auto;
+      width:min(1120px,92vw);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:14px; overflow:hidden; background:#111;
+    }
+    .banner h3{
+      margin:0; padding:10px 14px;
+      color:var(--gold); letter-spacing:.06em; text-transform:uppercase;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      background:linear-gradient(180deg,#0b0b0f,#0f0f14);
+    }
+    .banner .track{display:flex; gap:12px; padding:12px; transition:transform .35s ease; will-change:transform}
+    .banner .slide{
+      flex:0 0 auto;
+      width:clamp(240px,26vw,320px);
+      aspect-ratio:800 / 520; /* <- adjust if Gel Divas uses a different shape */
+      border-radius:12px; overflow:hidden;
+      border:1px solid rgba(255,255,255,.10); background:#0e0e14; position:relative;
+    }
+    .banner .slide img, .banner .slide video{width:100%;height:100%;object-fit:cover;display:block}
+    .banner .cap{
+      position:absolute; left:8px; bottom:8px;
+      background:rgba(0,0,0,.55); color:#ffd76a; padding:4px 8px; font-size:.8rem;
+      border-radius:8px; border:1px solid rgba(201,151,0,.45)
+    }
+    .banner .nav{
+      position:absolute; top:50%; transform:translateY(-50%);
+      background:rgba(0,0,0,.45); color:#fff; border:1px solid rgba(255,255,255,.35);
+      font-weight:800; line-height:1; padding:.45rem .7rem; border-radius:10px; cursor:pointer; z-index:2;
+    }
+    .banner .prev{left:10px} .banner .next{right:10px}
+    .banner .nav:hover{background:rgba(0,0,0,.6)}
+    .banner .dots{position:absolute;left:0;right:0;bottom:8px;display:flex;gap:6px;justify-content:center;pointer-events:none}
+    .banner .dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.4)}
+    .banner .dot.active{background:#ffd76a;border-color:#C99700}
   </style>
 </head>
 <body>
@@ -145,33 +174,70 @@
     <a href="contact.html" class="btn">Contact Us</a>
   </header>
 
-  <!-- NEW: What's On Banner -->
-  <section class="section" id="Coming up">
-    <div class="container">
-      <h2 class="center">Coming up</h2>
-      <p class="sub center">Upcoming shows/fresh posters/New Acts — Hover to pause.</p>
-      <div class="marquee">
-        <div class="ticker" id="wo-track">
-          <img class="poster" src="DJPRose.jpg" alt="DJPRose.JPG"></a>
-          <img class="poster" src="Spice90s.jpg" alt="Spice90s.jpg"></a>
-          <img class="poster" src="POMT2.jpg" alt="POMT2.jpg"></a>
-          <img class="poster" src="DJLevi.jpg" alt="DJLevi.jpg"></a>
-          <img class="poster" src="SoulS2.jpg" alt="SoulS2.jpg"></a>
-          <img class="poster" src="AbbaW1.jpg" alt="Abbaw1.jpg"></a>
-          <img class="poster" src="GelDivas.jpg" alt="GelDivas.jpg"></a>
-          <a href="dj.html"><img class="poster" src="DJGenie3.jpg" alt="The General DJ poster"></a>
-          <!-- duplicate the same set for seamless scroll -->
-          <img class="poster" src="DJPRose.jpg" alt="DJPRose.jpg"></a>
-          <img class="poster" src="Spice90s.jpg" alt="" aria-hidden="true"></a>
-          <img class="poster" src="POMT2.jpg" alt="POMT2.jpg"></a>
-          <img class="poster" src="DJLevi.jpg" alt="DJLevi.jpg"></a>
-          <img class="poster" src="SoulS2.jpg" alt="SoulS2.jpg"></a>
-          <img class="poster" src="AbbaW1.jpg" alt="Abbaw1.jpg"></a>
-          <img class="poster" src="GelDivas.jpg" alt="GelDivas.jpg"></a>
-          <a href="dj.html"><img class="poster" src="DJGenie3.jpg" alt="" aria-hidden="true"></a>
-        </div>
-      </div>
+  <!-- ===== Banner 1: What’s On / Coming Soon ===== -->
+  <section class="banner" id="banner-whatson" aria-label="What's On / Coming Soon">
+    <h3>What’s On / Coming Soon</h3>
+    <button class="nav prev" aria-label="Previous">‹</button>
+    <div class="track">
+      <!-- Replace with your real posters/links; all tiles stay same size -->
+      <a class="slide" href="tributes.html#abba-gels">
+        <img src="AbbaW1.jpg" alt="ABBA Gels Poster">
+        <span class="cap">ABBA Gels</span>
+      </a>
+      <a class="slide" href="tributes.html#spice">
+        <img src="Spice90s.jpg" alt="Spice 90s Poster">
+        <span class="cap">Spice 90s</span>
+      </a>
+      <a class="slide" href="bands.html#pom">
+        <img src="POMT2.jpg" alt="Princes of Motown Poster">
+        <span class="cap">Princes of Motown</span>
+      </a>
+      <a class="slide" href="singers.html#gemma-andrew">
+        <img src="GelDivas.jpg" alt="Gel Divas Poster">
+        <span class="cap">Gel Divas</span>
+      </a>
+      <a class="slide" href="dj.html#dj-levi">
+        <img src="DJLevi.jpg" alt="DJ Levi Poster">
+        <span class="cap">DJ Levi</span>
+      </a>
+      <a class="slide" href="acts.html#dj-genie">
+        <img src="DJGenie3.jpg" alt="DJ Genie Poster">
+        <span class="cap">DJ Genie</span>
+      </a>
+      <a class="slide" href="bands.html#soul-select">
+        <img src="SoulS2.jpg" alt="Soul Select Poster">
+        <span class="cap">Soul Select</span>
+      </a>
     </div>
+    <button class="nav next" aria-label="Next">›</button>
+    <div class="dots" aria-hidden="true"></div>
+  </section>
+
+  <!-- ===== Banner 2: New Acts ===== -->
+  <section class="banner" id="banner-newacts" aria-label="New Acts">
+    <h3>New Acts</h3>
+    <button class="nav prev" aria-label="Previous">‹</button>
+    <div class="track">
+      <!-- Swap these to whatever you want to promote as new -->
+      <a class="slide" href="bands.html#soul-select">
+        <img src="SoulS2.jpg" alt="Soul Select Poster">
+        <span class="cap">Soul Select</span>
+      </a>
+      <a class="slide" href="singers.html#meghan-gray">
+        <img src="Gemma.jpg" alt="Singer Poster">
+        <span class="cap">Singer</span>
+      </a>
+      <a class="slide" href="tributes.html#spice">
+        <img src="Spice.png" alt="Spice Tribute Poster">
+        <span class="cap">Spice Tribute</span>
+      </a>
+      <a class="slide" href="acts.html#dj-genie">
+        <img src="DJPRose.jpg" alt="DJ Poster">
+        <span class="cap">DJ</span>
+      </a>
+    </div>
+    <button class="nav next" aria-label="Next">›</button>
+    <div class="dots" aria-hidden="true"></div>
   </section>
 
   <!-- Drawer -->
@@ -185,8 +251,6 @@
       <hr style="border-color:rgba(255,255,255,.08)">
     </div>
   </div>
-
-  <!-- Backdrop (created dynamically) -->
 
   <!-- Welcome -->
   <section class="section center" id="welcome">
@@ -289,6 +353,7 @@
 
   <footer>© <span id="year"></span> Geneius Entertainment. All rights reserved. <a href="contact.html">Contact</a></footer>
 
+  <!-- Banner logic (shared by both carousels) -->
   <script>
     // Footer year
     document.getElementById('year').textContent = new Date().getFullYear();
@@ -337,6 +402,60 @@
     document.addEventListener('keydown', (e)=>{
       if(e.key==='Escape' && drawer.classList.contains('open')) closeDrawer();
     });
+
+    // ===== Reusable banner init =====
+    (function(){
+      document.querySelectorAll('.banner').forEach(setupBanner);
+
+      function setupBanner(root){
+        const track = root.querySelector('.track');
+        const prev = root.querySelector('.prev');
+        const next = root.querySelector('.next');
+        const dotsWrap = root.querySelector('.dots');
+        const slides = [...track.querySelectorAll('.slide')];
+        const gap = 12; // matches CSS .track gap
+        let page = 0;
+
+        function perView(){
+          if(!slides.length) return 1;
+          const slideW = slides[0].getBoundingClientRect().width + gap;
+          return Math.max(1, Math.floor(track.clientWidth / slideW));
+        }
+        function pagesCount(){
+          return Math.max(1, Math.ceil(slides.length / perView()));
+        }
+        function buildDots(){
+          dotsWrap.innerHTML='';
+          const p = pagesCount();
+          for(let i=0;i<p;i++){
+            const d=document.createElement('span');
+            d.className='dot'+(i===0?' active':'');
+            d.addEventListener('click', ()=>go(i));
+            dotsWrap.appendChild(d);
+          }
+        }
+        function render(){
+          const slideW = slides[0].getBoundingClientRect().width + gap;
+          track.style.transform = `translateX(-${page * slideW}px)`;
+          [...dotsWrap.children].forEach((d,i)=>d.classList.toggle('active', i===page));
+        }
+        function go(i){
+          const p = pagesCount();
+          page = Math.min(Math.max(i,0), p-1);
+          render();
+        }
+        function nextPage(){ go(page+1); }
+        function prevPage(){ go(page-1); }
+
+        buildDots(); render();
+        window.addEventListener('resize', ()=>{ buildDots(); render(); });
+        next.addEventListener('click', nextPage);
+        prev.addEventListener('click', prevPage);
+
+        // Optional auto-scroll per banner:
+        // setInterval(nextPage, 4500);
+      }
+    })();
   </script>
 </body>
 </html>
