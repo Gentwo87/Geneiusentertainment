@@ -4,16 +4,15 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Geneius Entertainment</title>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-MR1NLPH5ZK"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MR1NLPH5ZK"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-MR1NLPH5ZK');
-  </script>
-
+  gtag('config', 'G-MR1NLPH5ZK');
+</script>
   <style>
     :root{
       --bg:#000; --ink:#f5f5f5; --muted:#bfbfbf;
@@ -22,37 +21,36 @@
     }
     *{box-sizing:border-box}
     html,body{height:auto}
-    body{
-      margin:0;background:var(--bg);color:var(--ink);
-      font-family:"Trebuchet MS",Arial,sans-serif;overflow-x:hidden;position:relative
-    }
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:"Trebuchet MS",Arial,sans-serif;overflow-x:hidden;position:relative}
+
     .container{width:min(1120px,92vw);margin:0 auto}
     .center{text-align:center}
 
-    /* Sparkles */
+    /* Sparkles (animated, full page) */
     #sparkles{position:fixed;inset:0;pointer-events:none;z-index:0}
     .sparkle{position:absolute;width:2px;height:2px;background:var(--gold);border-radius:50%;opacity:0;animation:sparkle 4s infinite}
     @keyframes sparkle{0%{opacity:0;transform:scale(0)}50%{opacity:1;transform:scale(1.5)}100%{opacity:0;transform:scale(0)}}
 
-    /* Hero */
+    /* Hero with spotlight glow */
     header.hero{
       position:relative;padding:90px 20px 60px;text-align:center;z-index:1;
       background:radial-gradient(circle at center,rgba(201,151,0,.25) 0%,rgba(0,0,0,1) 70%);
     }
     #logo{display:block;margin:12px auto 14px;max-width:320px;height:auto}
     header.hero p{margin:6px 0 0;color:var(--bronze);font-weight:600}
-    .btn{
-      display:inline-block;background:var(--gold);color:#000;padding:10px 20px;margin:18px 8px;border-radius:6px;
-      font-weight:bold;text-decoration:none;border:1px solid rgba(255,255,255,.08);transition:filter .25s
-    }
+
+    .btn{display:inline-block;background:var(--gold);color:#000;padding:10px 20px;margin:18px 8px;border-radius:6px;
+      font-weight:bold;text-decoration:none;border:1px solid rgba(255,255,255,.08);transition:filter .25s}
     .btn:hover{filter:brightness(1.12)}
+
     h1,h2,h3{color:var(--gold);text-transform:uppercase;letter-spacing:2px;margin:0 0 14px;position:relative;z-index:1}
     p{color:var(--muted);line-height:1.6;margin:8px 0}
     #welcome h2{color:#FFD700}
+
     section.section{padding:60px 20px;position:relative;z-index:1}
     .section .sub{color:#b6b7c5;margin:0 0 24px;text-align:center}
 
-    /* Featured cards (uniform frames like other pages) */
+    /* Featured cards */
     .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
     @media (max-width:1200px){.cards{grid-template-columns:repeat(2,1fr)}}
     @media (max-width:700px){.cards{grid-template-columns:1fr}}
@@ -62,26 +60,18 @@
       min-height:240px;
     }
     .card-act:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.35);border-color:rgba(212,175,55,.45)}
-
-    /* IMPORTANT: same box size everywhere (match site landscape cards) */
-    .card-act .media{
-      position:relative; background:#0e0e12; aspect-ratio:800 / 520; /* <- keep in sync with other pages */
-    }
-    .card-act video,.card-act img{
-      position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block
-    }
+    .card-act .media{position:relative;aspect-ratio:16/9;background:#0e0e12}
+    .card-act video,.card-act img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
     .card-act .meta{padding:12px 14px}
-    .tag{
-      display:inline-block;font-size:.8rem;color:#fdeec0;background:#1b1710;border:1px solid rgba(212,175,55,.45);
-      padding:.2rem .5rem;border-radius:999px
-    }
+    .tag{display:inline-block;font-size:.8rem;color:#fdeec0;background:#1b1710;border:1px solid rgba(212,175,55,.45);padding:.2rem .5rem;border-radius:999px}
+    /* Coming soon badge */
     .badge-soon{
       position:absolute; top:10px; right:-24px; transform:rotate(15deg);
       background:#33270a; color:#fdeec0; border:1px solid rgba(212,175,55,.6);
       padding:6px 16px; font-weight:700; letter-spacing:.5px; border-radius:999px;
     }
 
-    /* Category tiles */
+    /* Category tiles (additional links) */
     .grid{display:grid;gap:16px}
     .cols-3{grid-template-columns:repeat(3,1fr)}
     @media (max-width:900px){.cols-3{grid-template-columns:1fr}}
@@ -89,15 +79,14 @@
       display:flex;gap:12px;align-items:flex-start;text-decoration:none;color:inherit;
       background:linear-gradient(180deg,var(--panel1),var(--panel2));
       border:1px solid var(--line);border-radius:14px;padding:16px 18px;
-      transition:transform .18s,box-shadow .18s,border-color .18s
-    }
+      transition:transform .18s,box-shadow .18s,border-color .18s}
     a.tile:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.35);border-color:rgba(212,175,55,.45)}
     .tile .icon{width:44px;height:44px;border-radius:10px;font-size:22px;display:grid;place-items:center;background:#171722;border:1px solid var(--line)}
 
     footer{background:#111;padding:20px;text-align:center;color:#aaa;margin-top:40px;position:relative;z-index:1}
     footer a{color:var(--gold);text-decoration:none}
 
-    /* Hamburger & Drawer */
+    /* --- Hamburger & Drawer --- */
     .hamburger{
       position:fixed; top:18px; right:18px; z-index:1001;
       width:42px; height:42px; border-radius:10px;
@@ -109,6 +98,7 @@
     .hamburger[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg)}
     .hamburger[aria-expanded="true"] span:nth-child(2){opacity:0}
     .hamburger[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
     .drawer{
       position:fixed; inset:0 0 0 auto; width:min(300px,85vw);
       translate: 100% 0; transition:translate .28s ease;
@@ -130,60 +120,14 @@
       backdrop-filter: blur(2px);
     }
 
-    /* ===== UNIFORM BANNERS ===== */
-    .banner{
-      position:relative; margin:28px auto; width:min(1120px,92vw);
-      border:1px solid rgba(255,255,255,.12); border-radius:14px; overflow:hidden; background:#111;
-      cursor:default;
-    }
-    .banner h3{
-      margin:0; padding:10px 14px; text-align:center;
-      color:var(--gold); letter-spacing:.06em; text-transform:uppercase;
-      border-bottom:1px solid rgba(255,255,255,.08);
-      background:linear-gradient(180deg,#0b0b0f,#0f0f14);
-    }
-    .banner .track{display:flex; gap:12px; padding:12px; will-change:transform}
-    .banner .slide{
-      flex:0 0 auto; width:clamp(240px,26vw,320px);
-      aspect-ratio:800 / 520; /* match Gel Divas; change if needed */
-      border-radius:12px; overflow:hidden; border:1px solid rgba(255,255,255,.10);
-      background:#0e0e14; position:relative;
-    }
-    .banner .slide img,.banner .slide video{width:100%;height:100%;object-fit:cover;display:block}
-    .banner .cap{
-      position:absolute; left:8px; bottom:8px;
-      background:rgba(0,0,0,.55); color:#ffd76a; padding:4px 8px; font-size:.8rem;
-      border-radius:8px; border:1px solid rgba(201,151,0,.45)
-    }
-    .banner .nav{
-      position:absolute; top:50%; transform:translateY(-50%);
-      background:rgba(0,0,0,.45); color:#fff; border:1px solid rgba(255,255,255,.35);
-      font-weight:800; line-height:1; padding:.45rem .7rem; border-radius:10px; cursor:pointer; z-index:2;
-    }
-    .banner .prev{left:10px} .banner .next{right:10px}
-    .banner .nav:hover{background:rgba(0,0,0,.6)}
-
-    /* Looping marquee animation (CSS-driven; JS clones for seamless) */
-    .banner.loop .track{
-      animation: scroll-left var(--duration,60s) linear infinite;
-    }
-    .banner.loop:hover .track{ animation-play-state: paused; }
-    @keyframes scroll-left{
-      0%   { transform: translateX(0); }
-      100% { transform: translateX(-50%); } /* because we’ll duplicate slides once */
-    }
-
-    /* Fading banner (stationary) */
-    .banner.fade .stage{
-      position:relative; height:auto; padding:12px;
-      display:grid; grid-template-columns:1fr; place-items:center;
-      min-height: clamp(200px, 26vw, 320px) * (520/800); /* visual fallback */
-    }
-    .banner.fade .slide{
-      position:absolute; left:12px; right:12px; top:12px; bottom:12px;
-      opacity:0; transition: opacity .9s ease-in-out;
-    }
-    .banner.fade .slide.active{ opacity:1; }
+    /* ---------- NEW: What's On scrolling banner ---------- */
+    #whats-on{padding:28px 0;background:#0b0b0f;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+    #whats-on .marquee{overflow:hidden;mask-image:linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%)}
+    .ticker{display:flex;gap:16px;width:max-content;animation:scrollX 28s linear infinite}
+    .ticker:hover{animation-play-state:paused}
+    .poster{height:180px;width:auto;border-radius:12px;border:1px solid var(--line);box-shadow:0 6px 14px rgba(0,0,0,.35);background:#0e0e12}
+    @media (max-width:700px){.poster{height:140px}}
+    @keyframes scrollX{from{transform:translateX(0)}to{transform:translateX(-50%)}}
   </style>
 </head>
 <body>
@@ -201,36 +145,33 @@
     <a href="contact.html" class="btn">Contact Us</a>
   </header>
 
-  <!-- Banner 1: What’s On / Coming Soon (LOOP) -->
-  <section class="section" id="showcase">
-  <div class="container">
-    <h2>What’s On / Coming Soon / New Acts</h2>
-    <p class="sub">Hover to pause. All posters are a consistent size.</p>
-
-    <div class="marquee">
-      <div class="ticker">
-        <!-- Original run -->
-        <a href="dj.html"><img class="poster" src="DJPRose.jpg" alt="DJ P Rose"></a>
-        <a href="tributes.html#spice"><img class="poster" src="Spice90s.jpg" alt="Spice 90s"></a>
-        <a href="bands.html#pom"><img class="poster" src="POMT2.jpg" alt="Princes of Motown"></a>
-        <a href="dj.html#dj-levi"><img class="poster" src="DJLevi.jpg" alt="DJ Levi"></a>
-        <a href="bands.html#soul-select"><img class="poster" src="SoulS2.jpg" alt="Soul Select"></a>
-        <a href="tributes.html#abba-gels"><img class="poster" src="AbbaW1.jpg" alt="ABBA Gels"></a>
-        <a href="singers.html#gel-divas"><img class="poster" src="GelDivas.jpg" alt="Gel Divas"></a>
-        <a href="acts.html#dj-genie"><img class="poster" src="DJGenie3.jpg" alt="DJ Genie"></a>
-
-        <!-- Duplicate once for seamless loop -->
-        <a href="dj.html"><img class="poster" src="DJPRose.jpg" alt="" aria-hidden="true"></a>
-        <a href="tributes.html#spice"><img class="poster" src="Spice90s.jpg" alt="" aria-hidden="true"></a>
-        <a href="bands.html#pom"><img class="poster" src="POMT2.jpg" alt="" aria-hidden="true"></a>
-        <a href="dj.html#dj-levi"><img class="poster" src="DJLevi.jpg" alt="" aria-hidden="true"></a>
-        <a href="bands.html#soul-select"><img class="poster" src="SoulS2.jpg" alt="" aria-hidden="true"></a>
-        <a href="tributes.html#abba-gels"><img class="poster" src="AbbaW1.jpg" alt="" aria-hidden="true"></a>
-        <a href="singers.html#gel-divas"><img class="poster" src="GelDivas.jpg" alt="" aria-hidden="true"></a>
-        <a href="acts.html#dj-genie"><img class="poster" src="DJGenie3.jpg" alt="" aria-hidden="true"></a>
+  <!-- NEW: What's On Banner -->
+  <section class="section" id="Coming up">
+    <div class="container">
+      <h2 class="center">Coming up</h2>
+      <p class="sub center">Upcoming shows/fresh posters/New Acts — Hover to pause.</p>
+      <div class="marquee">
+        <div class="ticker" id="wo-track">
+          <img class="poster" src="DJPRose.jpg" alt="DJPRose.JPG"></a>
+          <img class="poster" src="Spice90s.jpg" alt="Spice90s.jpg"></a>
+          <img class="poster" src="POMT2.jpg" alt="POMT2.jpg"></a>
+          <img class="poster" src="DJLevi.jpg" alt="DJLevi.jpg"></a>
+          <img class="poster" src="SoulS2.jpg" alt="SoulS2.jpg"></a>
+          <img class="poster" src="AbbaW1.jpg" alt="Abbaw1.jpg"></a>
+          <img class="poster" src="GelDivas.jpg" alt="GelDivas.jpg"></a>
+          <a href="dj.html"><img class="poster" src="DJGenie3.jpg" alt="The General DJ poster"></a>
+          <!-- duplicate the same set for seamless scroll -->
+          <img class="poster" src="DJPRose.jpg" alt="DJPRose.jpg"></a>
+          <img class="poster" src="Spice90s.jpg" alt="" aria-hidden="true"></a>
+          <img class="poster" src="POMT2.jpg" alt="POMT2.jpg"></a>
+          <img class="poster" src="DJLevi.jpg" alt="DJLevi.jpg"></a>
+          <img class="poster" src="SoulS2.jpg" alt="SoulS2.jpg"></a>
+          <img class="poster" src="AbbaW1.jpg" alt="Abbaw1.jpg"></a>
+          <img class="poster" src="GelDivas.jpg" alt="GelDivas.jpg"></a>
+          <a href="dj.html"><img class="poster" src="DJGenie3.jpg" alt="" aria-hidden="true"></a>
+        </div>
       </div>
     </div>
-  </div>
   </section>
 
   <!-- Drawer -->
@@ -244,6 +185,8 @@
       <hr style="border-color:rgba(255,255,255,.08)">
     </div>
   </div>
+
+  <!-- Backdrop (created dynamically) -->
 
   <!-- Welcome -->
   <section class="section center" id="welcome">
@@ -260,7 +203,7 @@
     </div>
   </section>
 
-  <!-- Featured Acts (uniform frames) -->
+  <!-- Featured Acts -->
   <section class="section" id="featured">
     <div class="container">
       <h2 class="center">Featured Acts</h2>
@@ -346,7 +289,6 @@
 
   <footer>© <span id="year"></span> Geneius Entertainment. All rights reserved. <a href="contact.html">Contact</a></footer>
 
-  <!-- Scripts -->
   <script>
     // Footer year
     document.getElementById('year').textContent = new Date().getFullYear();
@@ -372,6 +314,7 @@
     const btn = document.getElementById('hamburger');
     const drawer = document.getElementById('drawer');
     let backdrop = null;
+
     function openDrawer(){
       drawer.classList.add('open');
       drawer.setAttribute('aria-hidden','false');
@@ -394,39 +337,6 @@
     document.addEventListener('keydown', (e)=>{
       if(e.key==='Escape' && drawer.classList.contains('open')) closeDrawer();
     });
-
-    // ===== LOOP banner (clone slides for seamless CSS marquee) =====
-    (function(){
-      const loop = document.querySelector('.banner.loop .track');
-      if(!loop) return;
-      // duplicate slides once for 0% -> -50% animation
-      const kids = [...loop.children];
-      kids.forEach(k => loop.appendChild(k.cloneNode(true)));
-
-      // Optional prev/next nudge
-      const prev = document.querySelector('.banner.loop .prev');
-      const next = document.querySelector('.banner.loop .next');
-      if(prev && next){
-        prev.addEventListener('click', ()=> loop.style.animationDuration = '50s');
-        next.addEventListener('click', ()=> loop.style.animationDuration = '40s');
-      }
-    })();
-
-    // ===== FADE banner (cycle slides every ~5s) =====
-    (function(){
-      const stage = document.querySelector('.banner.fade .stage');
-      if(!stage) return;
-      const slides = [...stage.querySelectorAll('.slide')];
-      if(slides.length <= 1) return;
-
-      const FADE_SECONDS = 5; // 👈 your requested speed
-      let i = 0;
-      setInterval(()=>{
-        slides[i].classList.remove('active');
-        i = (i + 1) % slides.length;
-        slides[i].classList.add('active');
-      }, FADE_SECONDS * 1000);
-    })();
   </script>
 </body>
 </html>
