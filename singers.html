@@ -3,49 +3,68 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Singers | Geneius Entertainment</title>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-MR1NLPH5ZK"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
 
-  gtag('config', 'G-MR1NLPH5ZK');
-</script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MR1NLPH5ZK"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-MR1NLPH5ZK');
+  </script>
+
   <style>
-    body{margin:0;background:#000;color:#f5f5f5;font-family:"Trebuchet MS",Arial,sans-serif;position:relative}
+    :root{
+      --bg:#000; --ink:#f5f5f5; --muted:#bfbfbf;
+      --gold:#C99700; --bronze:#B8860B;
+      --panel:#15151b; --line:rgba(255,255,255,.12);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:"Trebuchet MS",Arial,sans-serif;position:relative}
     #sparkles{position:fixed;inset:0;pointer-events:none;z-index:0}
-    .sparkle{position:absolute;width:2px;height:2px;background:#C99700;border-radius:50%;opacity:0;animation:s 4s infinite}
+    .sparkle{position:absolute;width:2px;height:2px;background:var(--gold);border-radius:50%;opacity:0;animation:s 4s infinite}
     @keyframes s{0%{opacity:0;transform:scale(0)}50%{opacity:1;transform:scale(1.5)}100%{opacity:0;transform:scale(0)}}
 
     header{position:relative;text-align:center;padding:60px 20px;background:radial-gradient(circle at center,rgba(201,151,0,.25),#000 70%);z-index:1}
     #logo{max-width:260px;height:auto;display:block;margin:0 auto 10px}
-    h1,h2{color:#C99700;text-transform:uppercase;letter-spacing:2px;margin:0 0 14px}
-    p.sub{color:#bfbfbf;margin:0 0 24px;text-align:center}
-    .btn{display:inline-block;background:#C99700;color:#000;padding:10px 18px;margin-top:12px;border-radius:6px;text-decoration:none;font-weight:bold}
+    h1,h2{color:var(--gold);text-transform:uppercase;letter-spacing:2px;margin:0 0 14px}
+    p.sub{color:var(--muted);margin:0 0 24px;text-align:center}
+    .btn{display:inline-block;background:var(--gold);color:#000;padding:10px 18px;margin-top:12px;border-radius:6px;text-decoration:none;font-weight:bold}
 
     .container{width:min(1120px,92vw);margin:0 auto}
     .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;padding:30px 20px;position:relative;z-index:1}
 
-    /* Card */
+    /* ====== Artist card (uniform size) ====== */
     .artist-card{
       position:relative; overflow:hidden; border-radius:14px;
-      background:#15151b; border:1px solid rgba(255,255,255,.08);
+      background:var(--panel); border:1px solid var(--line);
       transition:transform .18s, box-shadow .18s, border-color .18s;
     }
     .artist-card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.35);border-color:rgba(212,175,55,.45)}
 
-    /* Image (blur/darken on hover/tap) */
-    .artist-card img{width:100%;display:block;transition:filter .3s ease}
-    .artist-card:hover img,
-    .artist-card.open img,
-    .artist-card:focus-within img{filter:blur(3px) brightness(0.6)}
+    /* Media frame (uniform poster area) */
+    .frame{position:relative; height:220px; overflow:hidden}
+    .slides{display:flex; width:100%; height:100%; transition:transform .35s ease}
+    .slides img{width:100%; height:100%; object-fit:cover; flex:0 0 100%; display:block}
 
-    /* Name strip under image */
+    /* Gallery controls */
+    .nav{
+      position:absolute; top:50%; transform:translateY(-50%);
+      background:rgba(0,0,0,.45); color:#fff; border:1px solid rgba(255,255,255,.35);
+      font-weight:800; line-height:1; padding:.35rem .6rem; border-radius:10px;
+      cursor:pointer; opacity:0; transition:opacity .2s
+    }
+    .artist-card:hover .nav, .artist-card.open .nav{opacity:1}
+    .nav.prev{left:8px} .nav.next{right:8px}
+    .dots{position:absolute; left:0; right:0; bottom:8px; display:flex; gap:6px; justify-content:center}
+    .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.4);cursor:pointer}
+    .dot.active{background:#ffd76a;border-color:var(--gold)}
+
+    /* Meta under image */
     .artist-meta{padding:12px 14px}
-    .artist-meta strong{color:#C99700; text-transform:uppercase; letter-spacing:.06em}
+    .artist-meta strong{color:var(--gold); text-transform:uppercase; letter-spacing:.06em}
 
-    /* Bio overlay */
+    /* Hover bio overlay */
     .bio{
       position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-end;
       padding:16px; gap:10px; opacity:0; pointer-events:none; transition:opacity .2s ease;
@@ -56,17 +75,20 @@
     .artist-card.open .bio,
     .artist-card:focus-within .bio{opacity:1; pointer-events:auto}
 
-    .bio h3{margin:0;color:#B8860B;text-transform:uppercase;letter-spacing:.06em;font-size:1rem}
+    .bio h3{margin:0;color:var(--gold);text-transform:uppercase;letter-spacing:.06em;font-size:1rem}
+    .bio .tags{margin:0;color:#fdeec0;font-size:.9rem}
     .bio p{margin:0;color:#d9d9d9;line-height:1.45}
-    .bio .tags{font-size:.85rem;color:#fdeec0;margin-bottom:6px}
     .bio .actions{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
-    .bio .btn{
-      display:inline-block;background:#C99700;color:#000;padding:8px 12px;border-radius:8px;
-      font-weight:700;text-decoration:none;border:0
-    }
+    .bio .btn{display:inline-block;background:var(--gold);color:#000;padding:8px 12px;border-radius:8px;font-weight:700;text-decoration:none;border:0}
     .bio .btn.alt{background:transparent;color:#f5f5f5;border:1px solid rgba(255,255,255,.25)}
 
     footer{background:#111;color:#aaa;text-align:center;padding:18px;margin-top:30px;position:relative;z-index:1}
+
+    /* Lightbox (full-screen poster) */
+    .lightbox{position:fixed; inset:0; background:rgba(0,0,0,.92); display:none; align-items:center; justify-content:center; z-index:9999}
+    .lightbox.open{display:flex}
+    .lightbox img{max-width:92vw; max-height:92vh; border:1px solid rgba(255,255,255,.15); border-radius:12px}
+    .lightbox .close{position:absolute; top:14px; right:14px; font-size:28px; color:#fff; cursor:pointer}
   </style>
 </head>
 <body>
@@ -78,29 +100,54 @@
     <a class="btn" href="index.html">← Back to Home</a>
   </header>
 
-  <p class="sub">Hover an artist to read their bio. Tap on mobile to toggle.</p>
+  <p class="sub">Hover an artist to read their bio. Use the arrows/dots to view posters. Tap on mobile to toggle.</p>
 
   <div class="container">
     <div class="cards">
-      <!-- Artist 1 -->
-      <div class="artist-card" tabindex="0">
-        <img src="Gemma.jpg" alt="Gemma Andrew promotional poster">
+
+      <!-- Artist 1: Gemma Andrew (multi-poster gallery) -->
+      <div class="artist-card" tabindex="0" data-name="Gemma Andrew">
+        <div class="frame gallery" aria-label="Poster gallery for Gemma Andrew">
+          <div class="slides">
+            <img src="Gemma.jpg" alt="Gemma Andrew – main poster">
+            <!-- Add more images here as you upload them -->
+            <img src="Gemma-70s.jpg" alt="Gemma Andrew – 70s show poster">
+            <img src="Gemma-80s.jpg" alt="Gemma Andrew – 80s show poster">
+            <img src="Gemma-Disco.jpg" alt="Gemma Andrew – Disco show poster">
+            <img src="Gemma-Divas.jpg" alt="Gemma Andrew – Divas show poster">
+            <img src="Gemma-SantaBaby.jpg" alt="Gemma Andrew – Santa Baby poster">
+          </div>
+          <button class="nav prev" aria-label="Previous">‹</button>
+          <button class="nav next" aria-label="Next">›</button>
+          <div class="dots"></div>
+        </div>
+
         <div class="artist-meta"><strong>Gemma Andrew</strong></div>
 
         <div class="bio">
           <h3>Gemma Andrew</h3>
           <p class="tags">Pop • R&amp;B • Wedding / Corporate</p>
-          <p>Gemma Andrew is a diverse singer known for her strong, soulful voice and energetic stage presence. Blending rock-edge grit with vibrant, up-to-date hits, she delivers performances that are as fun and entertaining as they are memorable. Whether fronting a lively party crowd or captivating an intimate audience. </p>
+          <p>Diverse, entertaining and soulful with a modern edge — high-energy sets for parties, weddings and venue nights.</p>
           <div class="actions">
             <a class="btn" href="mailto:contact@geneiusentertainment.com?subject=Booking%20Gemma%20Andrew">Enquire</a>
-            <a class="btn alt" href="Gemma.jpg" target="_blank" rel="noopener">View Poster</a>
+            <a class="btn alt view-poster" href="#" data-target="current">View Poster</a>
           </div>
         </div>
       </div>
 
-      <!-- Artist 2 -->
-      <div class="artist-card" tabindex="0">
-        <img src="MeghanG.jpeg" alt="Meghan Gray promotional poster">
+      <!-- Artist 2: Meghan Gray (multi-poster ready) -->
+      <div class="artist-card" tabindex="0" data-name="Meghan Gray">
+        <div class="frame gallery" aria-label="Poster gallery for Meghan Gray">
+          <div class="slides">
+            <img src="MeghanG.jpeg" alt="Meghan Gray – main poster">
+            <!-- Example extra image (replace when you have more) -->
+            <img src="MeghanG-2.jpg" alt="Meghan Gray – second poster">
+          </div>
+          <button class="nav prev" aria-label="Previous">‹</button>
+          <button class="nav next" aria-label="Next">›</button>
+          <div class="dots"></div>
+        </div>
+
         <div class="artist-meta"><strong>Meghan Gray</strong></div>
 
         <div class="bio">
@@ -109,14 +156,23 @@
           <p>Soulful acoustic performer ideal for cocktail hours and intimate receptions, with bespoke first-dance options available.</p>
           <div class="actions">
             <a class="btn" href="mailto:contact@geneiusentertainment.com?subject=Booking%20Meghan%20Gray">Enquire</a>
-            <a class="btn alt" href="MeghanG.jpeg" target="_blank" rel="noopener">View Poster</a>
+            <a class="btn alt view-poster" href="#" data-target="current">View Poster</a>
           </div>
         </div>
       </div>
 
-      <!-- Artist 3 (placeholder—duplicate & replace as you add more) -->
-      <div class="artist-card" tabindex="0">
-        <img src="https://picsum.photos/800/520?random=501" alt="Artist placeholder">
+      <!-- Artist 3: Placeholder -->
+      <div class="artist-card" tabindex="0" data-name="Artist Name">
+        <div class="frame gallery" aria-label="Poster gallery for Artist Name">
+          <div class="slides">
+            <img src="https://picsum.photos/800/520?random=501" alt="Artist – poster 1">
+            <img src="https://picsum.photos/800/520?random=502" alt="Artist – poster 2">
+          </div>
+          <button class="nav prev" aria-label="Previous">‹</button>
+          <button class="nav next" aria-label="Next">›</button>
+          <div class="dots"></div>
+        </div>
+
         <div class="artist-meta"><strong>Artist Name</strong></div>
 
         <div class="bio">
@@ -125,14 +181,21 @@
           <p>Short intro about the artist, setlist highlights, and the types of events they suit (venues, weddings, corporate, etc.).</p>
           <div class="actions">
             <a class="btn" href="mailto:contact@geneiusentertainment.com?subject=Booking%20Artist%20Name">Enquire</a>
-            <a class="btn alt" href="#" target="_blank" rel="noopener">View Poster</a>
+            <a class="btn alt view-poster" href="#" data-target="current">View Poster</a>
           </div>
         </div>
       </div>
+
     </div>
   </div>
 
   <footer>© <span id="y"></span> Geneius Entertainment</footer>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <span class="close" aria-label="Close">×</span>
+    <img id="lightboxImg" src="" alt="Poster">
+  </div>
 
   <script>
     // year
@@ -149,7 +212,56 @@
       w.appendChild(e)}}
     go();addEventListener('resize',()=>{clearTimeout(window._t);window._t=setTimeout(go,200)});
 
-    // tap-to-toggle bio on touch devices (and allow keyboard toggle)
+    // ===== Gallery setup (arrows, dots, swipe, keyboard) =====
+    document.querySelectorAll('.gallery').forEach(setupGallery);
+
+    function setupGallery(root){
+      const slides = root.querySelector('.slides');
+      const imgs   = [...slides.querySelectorAll('img')];
+      const prev   = root.querySelector('.nav.prev');
+      const next   = root.querySelector('.nav.next');
+      const dotsWrap = root.querySelector('.dots');
+      let index = 0;
+
+      // dots
+      imgs.forEach((_,i)=>{
+        const d=document.createElement('span');
+        d.className='dot'+(i===0?' active':'');
+        d.addEventListener('click',()=>go(i));
+        dotsWrap.appendChild(d);
+      });
+
+      function render(){
+        slides.style.transform = `translateX(-${index*100}%)`;
+        [...dotsWrap.children].forEach((d,i)=>d.classList.toggle('active', i===index));
+      }
+      function go(i){
+        index = (i+imgs.length)%imgs.length;
+        render();
+      }
+
+      prev.addEventListener('click',()=>go(index-1));
+      next.addEventListener('click',()=>go(index+1));
+
+      // swipe
+      let startX=0, dx=0;
+      slides.addEventListener('touchstart', e=>{startX=e.touches[0].clientX; dx=0;}, {passive:true});
+      slides.addEventListener('touchmove',  e=>{dx=e.touches[0].clientX-startX;}, {passive:true});
+      slides.addEventListener('touchend',   ()=>{ if(Math.abs(dx)>40) go(index + (dx<0?1:-1)); });
+
+      // keyboard when card focused
+      root.closest('.artist-card').addEventListener('keydown', e=>{
+        if(e.key==='ArrowLeft'){ e.preventDefault(); go(index-1); }
+        if(e.key==='ArrowRight'){ e.preventDefault(); go(index+1); }
+      });
+
+      // expose a getter for current image on the root element
+      root.getCurrentSrc = ()=> imgs[index].src;
+
+      render();
+    }
+
+    // ===== Tap-to-toggle bio on touch & keyboard =====
     document.querySelectorAll('.artist-card').forEach(card=>{
       card.addEventListener('click', e=>{
         if(e.target.closest('.actions')) return; // ignore clicks on buttons
@@ -159,6 +271,27 @@
         if(e.key==='Enter' || e.key===' '){
           e.preventDefault();
           card.classList.toggle('open');
+        }
+      });
+    });
+
+    // ===== Lightbox for "View Poster" (full screen) =====
+    const lb = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lightboxImg');
+    const closeLb = ()=>{ lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); }
+    lb.addEventListener('click', (e)=>{ if(e.target===lb || e.target.classList.contains('close')) closeLb(); });
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeLb(); });
+
+    document.querySelectorAll('.view-poster').forEach(btn=>{
+      btn.addEventListener('click', e=>{
+        e.preventDefault();
+        const card = btn.closest('.artist-card');
+        const gal  = card.querySelector('.gallery');
+        const src  = gal.getCurrentSrc ? gal.getCurrentSrc() : gal.querySelector('img')?.src;
+        if(src){
+          lbImg.src = src;
+          lb.classList.add('open');
+          lb.setAttribute('aria-hidden','false');
         }
       });
     });
