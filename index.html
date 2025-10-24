@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Geneius Entertainment</title>
+
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-MR1NLPH5ZK"></script>
   <script>
@@ -12,6 +13,7 @@
     gtag('js', new Date());
     gtag('config', 'G-MR1NLPH5ZK');
   </script>
+
   <style>
     :root{
       --bg:#000; --ink:#f5f5f5; --muted:#bfbfbf;
@@ -20,36 +22,37 @@
     }
     *{box-sizing:border-box}
     html,body{height:auto}
-    body{margin:0;background:var(--bg);color:var(--ink);font-family:"Trebuchet MS",Arial,sans-serif;overflow-x:hidden;position:relative}
-
+    body{
+      margin:0;background:var(--bg);color:var(--ink);
+      font-family:"Trebuchet MS",Arial,sans-serif;overflow-x:hidden;position:relative
+    }
     .container{width:min(1120px,92vw);margin:0 auto}
     .center{text-align:center}
 
-    /* Sparkles (animated, full page) */
+    /* Sparkles */
     #sparkles{position:fixed;inset:0;pointer-events:none;z-index:0}
     .sparkle{position:absolute;width:2px;height:2px;background:var(--gold);border-radius:50%;opacity:0;animation:sparkle 4s infinite}
     @keyframes sparkle{0%{opacity:0;transform:scale(0)}50%{opacity:1;transform:scale(1.5)}100%{opacity:0;transform:scale(0)}}
 
-    /* Hero with spotlight glow */
+    /* Hero */
     header.hero{
       position:relative;padding:90px 20px 60px;text-align:center;z-index:1;
       background:radial-gradient(circle at center,rgba(201,151,0,.25) 0%,rgba(0,0,0,1) 70%);
     }
     #logo{display:block;margin:12px auto 14px;max-width:320px;height:auto}
     header.hero p{margin:6px 0 0;color:var(--bronze);font-weight:600}
-
-    .btn{display:inline-block;background:var(--gold);color:#000;padding:10px 20px;margin:18px 8px;border-radius:6px;
-      font-weight:bold;text-decoration:none;border:1px solid rgba(255,255,255,.08);transition:filter .25s}
+    .btn{
+      display:inline-block;background:var(--gold);color:#000;padding:10px 20px;margin:18px 8px;border-radius:6px;
+      font-weight:bold;text-decoration:none;border:1px solid rgba(255,255,255,.08);transition:filter .25s
+    }
     .btn:hover{filter:brightness(1.12)}
-
     h1,h2,h3{color:var(--gold);text-transform:uppercase;letter-spacing:2px;margin:0 0 14px;position:relative;z-index:1}
     p{color:var(--muted);line-height:1.6;margin:8px 0}
     #welcome h2{color:#FFD700}
-
     section.section{padding:60px 20px;position:relative;z-index:1}
     .section .sub{color:#b6b7c5;margin:0 0 24px;text-align:center}
 
-    /* Featured cards */
+    /* Featured cards (uniform frames like other pages) */
     .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
     @media (max-width:1200px){.cards{grid-template-columns:repeat(2,1fr)}}
     @media (max-width:700px){.cards{grid-template-columns:1fr}}
@@ -59,18 +62,26 @@
       min-height:240px;
     }
     .card-act:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.35);border-color:rgba(212,175,55,.45)}
-    .card-act .media{position:relative;aspect-ratio:16/9;background:#0e0e12}
-    .card-act video,.card-act img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+
+    /* IMPORTANT: same box size everywhere (match site landscape cards) */
+    .card-act .media{
+      position:relative; background:#0e0e12; aspect-ratio:800 / 520; /* <- keep in sync with other pages */
+    }
+    .card-act video,.card-act img{
+      position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block
+    }
     .card-act .meta{padding:12px 14px}
-    .tag{display:inline-block;font-size:.8rem;color:#fdeec0;background:#1b1710;border:1px solid rgba(212,175,55,.45);padding:.2rem .5rem;border-radius:999px}
-    /* Coming soon badge */
+    .tag{
+      display:inline-block;font-size:.8rem;color:#fdeec0;background:#1b1710;border:1px solid rgba(212,175,55,.45);
+      padding:.2rem .5rem;border-radius:999px
+    }
     .badge-soon{
       position:absolute; top:10px; right:-24px; transform:rotate(15deg);
       background:#33270a; color:#fdeec0; border:1px solid rgba(212,175,55,.6);
       padding:6px 16px; font-weight:700; letter-spacing:.5px; border-radius:999px;
     }
 
-    /* Category tiles (additional links) */
+    /* Category tiles */
     .grid{display:grid;gap:16px}
     .cols-3{grid-template-columns:repeat(3,1fr)}
     @media (max-width:900px){.cols-3{grid-template-columns:1fr}}
@@ -78,14 +89,15 @@
       display:flex;gap:12px;align-items:flex-start;text-decoration:none;color:inherit;
       background:linear-gradient(180deg,var(--panel1),var(--panel2));
       border:1px solid var(--line);border-radius:14px;padding:16px 18px;
-      transition:transform .18s,box-shadow .18s,border-color .18s}
+      transition:transform .18s,box-shadow .18s,border-color .18s
+    }
     a.tile:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.35);border-color:rgba(212,175,55,.45)}
     .tile .icon{width:44px;height:44px;border-radius:10px;font-size:22px;display:grid;place-items:center;background:#171722;border:1px solid var(--line)}
 
     footer{background:#111;padding:20px;text-align:center;color:#aaa;margin-top:40px;position:relative;z-index:1}
     footer a{color:var(--gold);text-decoration:none}
 
-    /* --- Hamburger & Drawer --- */
+    /* Hamburger & Drawer */
     .hamburger{
       position:fixed; top:18px; right:18px; z-index:1001;
       width:42px; height:42px; border-radius:10px;
@@ -97,7 +109,6 @@
     .hamburger[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg)}
     .hamburger[aria-expanded="true"] span:nth-child(2){opacity:0}
     .hamburger[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
-
     .drawer{
       position:fixed; inset:0 0 0 auto; width:min(300px,85vw);
       translate: 100% 0; transition:translate .28s ease;
@@ -119,29 +130,26 @@
       backdrop-filter: blur(2px);
     }
 
-    /* ---------- NEW: Uniform Banner Carousels (2 stacked) ---------- */
+    /* ========== UNIFORM BANNERS (centered titles, continuous scroll) ========== */
     .banner{
-      position:relative;
-      margin:28px auto;
-      width:min(1120px,92vw);
-      border:1px solid rgba(255,255,255,.12);
-      border-radius:14px; overflow:hidden; background:#111;
+      position:relative; margin:28px auto; width:min(1120px,92vw);
+      border:1px solid rgba(255,255,255,.12); border-radius:14px; overflow:hidden; background:#111;
+      cursor:default;
     }
     .banner h3{
-      margin:0; padding:10px 14px;
+      margin:0; padding:10px 14px; text-align:center;
       color:var(--gold); letter-spacing:.06em; text-transform:uppercase;
       border-bottom:1px solid rgba(255,255,255,.08);
       background:linear-gradient(180deg,#0b0b0f,#0f0f14);
     }
     .banner .track{display:flex; gap:12px; padding:12px; transition:transform .35s ease; will-change:transform}
     .banner .slide{
-      flex:0 0 auto;
-      width:clamp(240px,26vw,320px);
-      aspect-ratio:800 / 520; /* <- adjust if Gel Divas uses a different shape */
-      border-radius:12px; overflow:hidden;
-      border:1px solid rgba(255,255,255,.10); background:#0e0e14; position:relative;
+      flex:0 0 auto; width:clamp(240px,26vw,320px);
+      aspect-ratio:800 / 520; /* <- match Gel Divas frame; change if your posters use a different ratio */
+      border-radius:12px; overflow:hidden; border:1px solid rgba(255,255,255,.10);
+      background:#0e0e14; position:relative;
     }
-    .banner .slide img, .banner .slide video{width:100%;height:100%;object-fit:cover;display:block}
+    .banner .slide img,.banner .slide video{width:100%;height:100%;object-fit:cover;display:block}
     .banner .cap{
       position:absolute; left:8px; bottom:8px;
       background:rgba(0,0,0,.55); color:#ffd76a; padding:4px 8px; font-size:.8rem;
@@ -174,66 +182,54 @@
     <a href="contact.html" class="btn">Contact Us</a>
   </header>
 
-  <!-- ===== Banner 1: What’s On / Coming Soon ===== -->
+  <!-- Banner 1: What’s On / Coming Soon -->
   <section class="banner" id="banner-whatson" aria-label="What's On / Coming Soon">
     <h3>What’s On / Coming Soon</h3>
     <button class="nav prev" aria-label="Previous">‹</button>
     <div class="track">
       <!-- Replace with your real posters/links; all tiles stay same size -->
       <a class="slide" href="tributes.html#abba-gels">
-        <img src="AbbaW1.jpg" alt="ABBA Gels Poster">
-        <span class="cap">ABBA Gels</span>
+        <img src="AbbaW1.jpg" alt="ABBA Gels Poster"><span class="cap">ABBA Gels</span>
       </a>
       <a class="slide" href="tributes.html#spice">
-        <img src="Spice90s.jpg" alt="Spice 90s Poster">
-        <span class="cap">Spice 90s</span>
+        <img src="Spice90s.jpg" alt="Spice 90s Poster"><span class="cap">Spice 90s</span>
       </a>
       <a class="slide" href="bands.html#pom">
-        <img src="POMT2.jpg" alt="Princes of Motown Poster">
-        <span class="cap">Princes of Motown</span>
+        <img src="POMT2.jpg" alt="Princes of Motown Poster"><span class="cap">Princes of Motown</span>
       </a>
       <a class="slide" href="singers.html#gemma-andrew">
-        <img src="GelDivas.jpg" alt="Gel Divas Poster">
-        <span class="cap">Gel Divas</span>
+        <img src="GelDivas.jpg" alt="Gel Divas Poster"><span class="cap">Gel Divas</span>
       </a>
       <a class="slide" href="dj.html#dj-levi">
-        <img src="DJLevi.jpg" alt="DJ Levi Poster">
-        <span class="cap">DJ Levi</span>
+        <img src="DJLevi.jpg" alt="DJ Levi Poster"><span class="cap">DJ Levi</span>
       </a>
       <a class="slide" href="acts.html#dj-genie">
-        <img src="DJGenie3.jpg" alt="DJ Genie Poster">
-        <span class="cap">DJ Genie</span>
+        <img src="DJGenie3.jpg" alt="DJ Genie Poster"><span class="cap">DJ Genie</span>
       </a>
       <a class="slide" href="bands.html#soul-select">
-        <img src="SoulS2.jpg" alt="Soul Select Poster">
-        <span class="cap">Soul Select</span>
+        <img src="SoulS2.jpg" alt="Soul Select Poster"><span class="cap">Soul Select</span>
       </a>
     </div>
     <button class="nav next" aria-label="Next">›</button>
     <div class="dots" aria-hidden="true"></div>
   </section>
 
-  <!-- ===== Banner 2: New Acts ===== -->
+  <!-- Banner 2: New Acts -->
   <section class="banner" id="banner-newacts" aria-label="New Acts">
     <h3>New Acts</h3>
     <button class="nav prev" aria-label="Previous">‹</button>
     <div class="track">
-      <!-- Swap these to whatever you want to promote as new -->
       <a class="slide" href="bands.html#soul-select">
-        <img src="SoulS2.jpg" alt="Soul Select Poster">
-        <span class="cap">Soul Select</span>
+        <img src="SoulS2.jpg" alt="Soul Select Poster"><span class="cap">Soul Select</span>
       </a>
       <a class="slide" href="singers.html#meghan-gray">
-        <img src="Gemma.jpg" alt="Singer Poster">
-        <span class="cap">Singer</span>
+        <img src="Gemma.jpg" alt="Singer Poster"><span class="cap">Singer</span>
       </a>
       <a class="slide" href="tributes.html#spice">
-        <img src="Spice.png" alt="Spice Tribute Poster">
-        <span class="cap">Spice Tribute</span>
+        <img src="Spice.png" alt="Spice Tribute Poster"><span class="cap">Spice Tribute</span>
       </a>
       <a class="slide" href="acts.html#dj-genie">
-        <img src="DJPRose.jpg" alt="DJ Poster">
-        <span class="cap">DJ</span>
+        <img src="DJPRose.jpg" alt="DJ Poster"><span class="cap">DJ</span>
       </a>
     </div>
     <button class="nav next" aria-label="Next">›</button>
@@ -267,7 +263,7 @@
     </div>
   </section>
 
-  <!-- Featured Acts -->
+  <!-- Featured Acts (uniform frames) -->
   <section class="section" id="featured">
     <div class="container">
       <h2 class="center">Featured Acts</h2>
@@ -353,7 +349,7 @@
 
   <footer>© <span id="year"></span> Geneius Entertainment. All rights reserved. <a href="contact.html">Contact</a></footer>
 
-  <!-- Banner logic (shared by both carousels) -->
+  <!-- Scripts -->
   <script>
     // Footer year
     document.getElementById('year').textContent = new Date().getFullYear();
@@ -379,7 +375,6 @@
     const btn = document.getElementById('hamburger');
     const drawer = document.getElementById('drawer');
     let backdrop = null;
-
     function openDrawer(){
       drawer.classList.add('open');
       drawer.setAttribute('aria-hidden','false');
@@ -403,57 +398,73 @@
       if(e.key==='Escape' && drawer.classList.contains('open')) closeDrawer();
     });
 
-    // ===== Reusable banner init =====
+    // ===== Continuous banner init (centered titles, hover pause) =====
     (function(){
       document.querySelectorAll('.banner').forEach(setupBanner);
 
       function setupBanner(root){
         const track = root.querySelector('.track');
-        const prev = root.querySelector('.prev');
-        const next = root.querySelector('.next');
+        const prev  = root.querySelector('.prev');
+        const next  = root.querySelector('.next');
         const dotsWrap = root.querySelector('.dots');
-        const slides = [...track.querySelectorAll('.slide')];
-        const gap = 12; // matches CSS .track gap
-        let page = 0;
+        const gap = 12; // must match CSS .track gap
 
-        function perView(){
-          if(!slides.length) return 1;
-          const slideW = slides[0].getBoundingClientRect().width + gap;
-          return Math.max(1, Math.floor(track.clientWidth / slideW));
+        // Build seamless loop by cloning the original slides once
+        const originals = [...track.children];
+        originals.forEach(s => track.appendChild(s.cloneNode(true)));
+
+        let unitWidth = 0;
+        function measure(){
+          if(!originals.length) return;
+          const slideRect = track.children[0].getBoundingClientRect();
+          unitWidth = (slideRect.width + gap) * originals.length;
         }
-        function pagesCount(){
-          return Math.max(1, Math.ceil(slides.length / perView()));
-        }
+
+        // Optional dots (blank here, can be added if needed)
         function buildDots(){
-          dotsWrap.innerHTML='';
-          const p = pagesCount();
-          for(let i=0;i<p;i++){
-            const d=document.createElement('span');
-            d.className='dot'+(i===0?' active':'');
-            d.addEventListener('click', ()=>go(i));
-            dotsWrap.appendChild(d);
-          }
+          if(!dotsWrap) return; dotsWrap.innerHTML='';
         }
+
+        // Manual page step for arrow buttons
+        function step(move){
+          stopAuto = true;
+          offset += move * (track.children[0].getBoundingClientRect().width + gap);
+          render(true);
+          setTimeout(()=>{ stopAuto = false; }, 1200);
+        }
+
+        let offset = 0;
+        let stopAuto = false;
+        let lastTs = 0;
+        const SPEED = 0.45; // px per ms (0.35–0.6 for slower/faster)
+
         function render(){
-          const slideW = slides[0].getBoundingClientRect().width + gap;
-          track.style.transform = `translateX(-${page * slideW}px)`;
-          [...dotsWrap.children].forEach((d,i)=>d.classList.toggle('active', i===page));
+          if (offset >= unitWidth) offset -= unitWidth;
+          if (offset < 0) offset += unitWidth;
+          track.style.transform = `translateX(${-offset}px)`;
         }
-        function go(i){
-          const p = pagesCount();
-          page = Math.min(Math.max(i,0), p-1);
-          render();
+
+        function tick(ts){
+          if(!lastTs) lastTs = ts;
+          const dt = ts - lastTs;
+          lastTs = ts;
+          if(!stopAuto){
+            offset += SPEED * dt;
+            render();
+          }
+          requestAnimationFrame(tick);
         }
-        function nextPage(){ go(page+1); }
-        function prevPage(){ go(page-1); }
 
-        buildDots(); render();
-        window.addEventListener('resize', ()=>{ buildDots(); render(); });
-        next.addEventListener('click', nextPage);
-        prev.addEventListener('click', prevPage);
+        root.addEventListener('mouseenter', ()=> stopAuto = true);
+        root.addEventListener('mouseleave', ()=> stopAuto = false);
+        root.addEventListener('touchstart', ()=> stopAuto = true, {passive:true});
+        root.addEventListener('touchend',   ()=> stopAuto = false);
 
-        // Optional auto-scroll per banner:
-        // setInterval(nextPage, 4500);
+        if(prev) prev.addEventListener('click', ()=> step(-1));
+        if(next) next.addEventListener('click', ()=> step(+1));
+
+        measure(); buildDots(); requestAnimationFrame(tick);
+        window.addEventListener('resize', measure);
       }
     })();
   </script>
