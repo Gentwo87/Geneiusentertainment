@@ -2,68 +2,93 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tributes | Geneius Entertainment</title>
+  <title>Tribute Acts | Geneius Entertainment</title>
+
   <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-MR1NLPH5ZK"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MR1NLPH5ZK"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-MR1NLPH5ZK');
+  </script>
 
-  gtag('config', 'G-MR1NLPH5ZK');
-</script>
   <style>
-    body {
-      margin:0; background:#000; color:#f5f5f5;
-      font-family:"Trebuchet MS",Arial,sans-serif; position:relative;
+    :root{
+      --bg:#000; --ink:#f5f5f5; --muted:#bfbfbf;
+      --gold:#C99700; --panel:#15151b; --line:rgba(255,255,255,.12);
     }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:"Trebuchet MS",Arial,sans-serif;position:relative}
     #sparkles{position:fixed;inset:0;pointer-events:none;z-index:0}
-    .sparkle{position:absolute;width:2px;height:2px;background:#C99700;
-      border-radius:50%;opacity:0;animation:s 4s infinite}
-    @keyframes s{0%{opacity:0;transform:scale(0)}
-                 50%{opacity:1;transform:scale(1.5)}
-                 100%{opacity:0;transform:scale(0)}}
+    .sparkle{position:absolute;width:2px;height:2px;background:var(--gold);border-radius:50%;opacity:0;animation:s 4s infinite}
+    @keyframes s{0%{opacity:0;transform:scale(0)}50%{opacity:1;transform:scale(1.5)}100%{opacity:0;transform:scale(0)}}
 
-    header{position:relative;text-align:center;padding:60px 20px;
-      background:radial-gradient(circle at center,rgba(201,151,0,.25),#000 70%);
-      z-index:1}
+    header{position:relative;text-align:center;padding:60px 20px;background:radial-gradient(circle at center,rgba(201,151,0,.25),#000 70%);z-index:1}
     #logo{max-width:260px;height:auto;display:block;margin:0 auto 10px}
-    h1{color:#C99700;text-transform:uppercase;letter-spacing:2px;margin:0 0 14px}
-    p.sub{color:#bfbfbf;margin:0 0 24px;text-align:center}
-    .btn{display:inline-block;background:#C99700;color:#000;padding:10px 18px;
-      margin-top:12px;border-radius:6px;text-decoration:none;font-weight:bold}
+    h1{color:var(--gold);text-transform:uppercase;letter-spacing:2px;margin:0 0 14px}
+    p.sub{color:var(--muted);margin:0 0 24px;text-align:center}
+    .btn{display:inline-block;background:var(--gold);color:#000;padding:10px 18px;margin-top:12px;border-radius:6px;text-decoration:none;font-weight:bold}
 
     .container{width:min(1120px,92vw);margin:0 auto}
-    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-      gap:16px;padding:30px 20px;position:relative;z-index:1}
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;padding:30px 20px;position:relative;z-index:1}
 
-    .card{position:relative;overflow:hidden;border-radius:14px;
-      border:1px solid rgba(255,255,255,.08);background:#15151b;cursor:pointer}
-    .card img{
-      width:100%; height:280px; object-fit:cover; display:block;
-      transition:filter .3s ease;
+    /* ===== Card (uniform) ===== */
+    .artist-card{
+      position:relative; overflow:hidden; border-radius:14px;
+      background:var(--panel); border:1px solid var(--line);
+      transition:transform .18s, box-shadow .18s, border-color .18s;
     }
+    .artist-card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.35);border-color:rgba(212,175,55,.45)}
 
-    /* Overlay bio */
-    .overlay{
-      position:absolute;inset:0;background:rgba(0,0,0,.7);
-      backdrop-filter:blur(6px);color:#fff;padding:20px;text-align:center;
-      opacity:0;transition:opacity .3s ease;display:flex;
-      flex-direction:column;justify-content:center;align-items:center;
+    /* Media frame */
+    .frame{position:relative; height:220px; overflow:hidden}
+    .slides{display:flex; width:100%; height:100%; transition:transform .35s ease}
+    .slides img{width:100%; height:100%; object-fit:cover; flex:0 0 100%; display:block}
+
+    /* Gallery controls: always visible */
+    .nav{
+      position:absolute; top:50%; transform:translateY(-50%);
+      background:rgba(0,0,0,.45); color:#fff; border:1px solid rgba(255,255,255,.35);
+      font-weight:800; line-height:1; padding:.35rem .6rem; border-radius:10px;
+      cursor:pointer; opacity:.9;
     }
-    .card:hover img{filter:blur(4px) brightness(.7)}
-    .card:hover .overlay{opacity:1}
+    .nav.prev{left:8px} .nav.next{right:8px}
+    .dots{position:absolute; left:0; right:0; bottom:8px; display:flex; gap:6px; justify-content:center}
+    .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.4);cursor:pointer}
+    .dot.active{background:#ffd76a;border-color:var(--gold)}
 
-    .overlay p{font-size:.9rem;margin-bottom:14px;line-height:1.4}
-    .overlay .btn{margin:6px 4px;padding:8px 14px;font-size:.85rem}
+    /* Meta (name under image) */
+    .artist-meta{padding:12px 14px}
+    .artist-meta .name{
+      color:var(--gold); text-transform:uppercase; letter-spacing:.06em;
+      font-weight:800; cursor:pointer; display:inline-block;
+    }
+    .artist-meta .hint{display:block; color:#888; font-size:.84rem; margin-top:4px}
 
-    .meta{padding:12px 14px;background:#111}
-    .meta strong{color:#C99700;text-transform:uppercase;font-size:.9rem}
-    .tag{display:inline-block;font-size:.8rem;color:#fdeec0;background:#1b1710;
-      border:1px solid rgba(212,175,55,.45);padding:.2rem .5rem;border-radius:999px}
+    /* Bio overlay appears ONLY when hovering the name (or toggled on mobile) */
+    .bio{
+      position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-end;
+      padding:16px; gap:10px; opacity:0; pointer-events:none; transition:opacity .2s ease;
+      background:linear-gradient(to top, rgba(0,0,0,.82) 28%, rgba(0,0,0,.18) 65%, rgba(0,0,0,0));
+      backdrop-filter:saturate(120%) blur(2px);
+    }
+    .artist-meta:hover ~ .bio{opacity:1; pointer-events:auto}
+    .artist-card.bio-open .bio{opacity:1; pointer-events:auto}
 
-    footer{background:#111;color:#aaa;text-align:center;padding:18px;
-      margin-top:30px;position:relative;z-index:1}
+    .bio h3{margin:0;color:var(--gold);text-transform:uppercase;letter-spacing:.06em;font-size:1rem}
+    .bio .tags{margin:0;color:#fdeec0;font-size:.9rem}
+    .bio p{margin:0;color:#d9d9d9;line-height:1.45}
+    .bio .actions{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+    .bio .btn{display:inline-block;background:var(--gold);color:#000;padding:8px 12px;border-radius:8px;font-weight:700;text-decoration:none;border:0}
+    .bio .btn.alt{background:transparent;color:#f5f5f5;border:1px solid rgba(255,255,255,.25)}
+
+    footer{background:#111;color:#aaa;text-align:center;padding:18px;margin-top:30px;position:relative;z-index:1}
+    /* Lightbox */
+    .lightbox{position:fixed; inset:0; background:rgba(0,0,0,.92); display:none; align-items:center; justify-content:center; z-index:9999}
+    .lightbox.open{display:flex}
+    .lightbox img{max-width:92vw; max-height:92vh; border:1px solid rgba(255,255,255,.15); border-radius:12px}
+    .lightbox .close{position:absolute; top:14px; right:14px; font-size:28px; color:#fff; cursor:pointer}
   </style>
 </head>
 <body>
@@ -75,76 +100,219 @@
     <a class="btn" href="index.html">← Back to Home</a>
   </header>
 
-  <p class="sub">Hover an artist to read their bio. Tap on mobile to toggle.</p>
+  <p class="sub">Use arrows to browse posters. Hover/tap the <strong>name</strong> to view the bio and enquiry buttons. “View Poster” opens the current slide full screen.</p>
 
   <div class="container">
     <div class="cards">
-      <!-- Tribute Example 1 -->
-      <div class="card">
-        <img src="Spice.png" alt="Spice Girls Tribute">
-        <div class="overlay">
-          <p>Spice Girl tribute performed by a duo who pose as 4 of the characters during the show, available in 1 hour set or 45 min set alongside other shows. Also a screen show is available where the duo appear as 5 Spice Girls.</p>
-          <a href="contact.html" class="btn">Enquire</a>
-          <a href="Spice.png" target="_blank" class="btn">View Poster</a>
+
+      <!-- 1) Spice Girls Tribute -->
+      <div class="artist-card" tabindex="0" data-name="Spice Girls Tribute">
+        <div class="frame gallery" aria-label="Poster gallery for Spice Girls Tribute">
+          <div class="slides">
+            <img src="Spice.png" alt="Spice Girls Tribute – poster 1">
+            <img src="Spice-2.jpg" alt="Spice Girls Tribute – poster 2">
+          </div>
+          <button class="nav prev" aria-label="Previous">‹</button>
+          <button class="nav next" aria-label="Next">›</button>
+          <div class="dots"></div>
         </div>
-        <div class="meta"><strong>Spice Girls Tribute</strong><br><span class="tag">Tribute</span></div>
+
+        <div class="artist-meta">
+          <span class="name" role="button" tabindex="0">Spice Girls Tribute</span>
+          <span class="hint">Hover/tap name for bio</span>
+        </div>
+
+        <div class="bio">
+          <h3>Spice Girls Tribute</h3>
+          <p class="tags">90s • Girl Power • Party</p>
+          <p>High-energy tribute packed with 90s anthems, choreography and crowd interaction — perfect for venues and festivals.</p>
+          <div class="actions">
+            <a class="btn" href="mailto:contact@geneiusentertainment.com?subject=Booking%20Spice%20Girls%20Tribute">Enquire</a>
+            <a class="btn alt view-poster" href="#" data-target="current">View Poster</a>
+          </div>
+        </div>
       </div>
 
-      <!-- Tribute Example 2 -->
-      <div class="card">
-        <img src="Abbagels.jpg" alt="ABBA Tribute">
-        <div class="overlay">
-          <p>An amazing ABBA tribute, performing all the classics with style and flair.</p>
-          <a href="contact.html" class="btn">Enquire</a>
-          <a href="ABBA.png" target="_blank" class="btn">View Poster</a>
+      <!-- 2) ABBA Gels -->
+      <div class="artist-card" tabindex="0" data-name="ABBA Gels">
+        <div class="frame gallery" aria-label="Poster gallery for ABBA Gels">
+          <div class="slides">
+            <img src="AbbaGels.jpg" alt="ABBA Gels – poster 1">
+            <img src="AbbaGels-2.jpg" alt="ABBA Gels – poster 2">
+          </div>
+          <button class="nav prev" aria-label="Previous">‹</button>
+          <button class="nav next" aria-label="Next">›</button>
+          <div class="dots"></div>
         </div>
-        <div class="meta"><strong>ABBA Tribute</strong><br><span class="tag">Tribute</span></div>
-      </div>
-      
-      <!-- Tribute Example 3 -->
-      <div class="card">
-        <img src="Britney2.jpg" alt="Briney Tribute">
-        <div class="overlay">
-          <p>High energy performance of Britney classics</p>
-          <a href="contact.html" class="btn">Enquire</a>
-          <a href="Britney2.jpg" target="_blank" class="btn">View Poster</a>
+
+        <div class="artist-meta">
+          <span class="name" role="button" tabindex="0">ABBA Gels</span>
+          <span class="hint">Hover/tap name for bio</span>
         </div>
-        <div class="meta"><strong>Britney Tribute</strong><br><span class="tag">Tributes</span></div>
+
+        <div class="bio">
+          <h3>ABBA Gels</h3>
+          <p class="tags">70s • Pop • Disco</p>
+          <p>Glittering ABBA tribute with harmonies, costume changes and all the dancefloor classics — ideal with a 70s party set.</p>
+          <div class="actions">
+            <a class="btn" href="mailto:contact@geneiusentertainment.com?subject=Booking%20ABBA%20Gels">Enquire</a>
+            <a class="btn alt view-poster" href="#" data-target="current">View Poster</a>
+          </div>
+        </div>
       </div>
 
-      <!-- Tribute Example 4 -->
-      <div class="card">
-        <!-- Replace with your poster: e.g. PartyBand.jpg -->
-        <img src="POMT2.jpg" alt="Singing Band">
-        <div class="overlay">
-          <p><strong>Princes of Motown</strong><br>
-          Dynamic vocal group performing timeless Motown hits with slick harmonies and uplifting stage presence,Ideal for weddings/festivals & corporate events.</p>
+      <!-- 3) Britney Tribute -->
+      <div class="artist-card" tabindex="0" data-name="Britney Tribute">
+        <div class="frame gallery" aria-label="Poster gallery for Britney Tribute">
+          <div class="slides">
+            <img src="Britney.jpg" alt="Britney Tribute – poster 1">
+            <img src="Britney-2.jpg" alt="Britney Tribute – poster 2">
+          </div>
+          <button class="nav prev" aria-label="Previous">‹</button>
+          <button class="nav next" aria-label="Next">›</button>
+          <div class="dots"></div>
         </div>
-        <div class="meta"><strong>Princes of Motown</strong><br><span class="tag">Tributes - Band - Motown - Soul</span></div>
+
+        <div class="artist-meta">
+          <span class="name" role="button" tabindex="0">Britney Tribute</span>
+          <span class="hint">Hover/tap name for bio</span>
+        </div>
+
+        <div class="bio">
+          <h3>Britney Tribute</h3>
+          <p class="tags">00s • Pop • Club</p>
+          <p>Iconic looks and chart-topping hits — choreography, vocals and crowd-pleasers for club nights and special events.</p>
+          <div class="actions">
+            <a class="btn" href="mailto:contact@geneiusentertainment.com?subject=Booking%20Britney%20Tribute">Enquire</a>
+            <a class="btn alt view-poster" href="#" data-target="current">View Poster</a>
+          </div>
+        </div>
       </div>
-      
+
+      <!-- 4) Princes of Motown -->
+      <div class="artist-card" tabindex="0" data-name="Princes of Motown">
+        <div class="frame gallery" aria-label="Poster gallery for Princes of Motown">
+          <div class="slides">
+            <img src="PrincesOfMotown.jpg" alt="Princes of Motown – poster 1">
+            <img src="PrincesOfMotown-2.jpg" alt="Princes of Motown – poster 2">
+          </div>
+          <button class="nav prev" aria-label="Previous">‹</button>
+          <button class="nav next" aria-label="Next">›</button>
+          <div class="dots"></div>
+        </div>
+
+        <div class="artist-meta">
+          <span class="name" role="button" tabindex="0">Princes of Motown</span>
+          <span class="hint">Hover/tap name for bio</span>
+        </div>
+
+        <div class="bio">
+          <h3>Princes of Motown</h3>
+          <p class="tags">Motown • Soul • Party</p>
+          <p>Silky harmonies and dance-floor Motown classics — a feel-good set that keeps the crowd singing all night.</p>
+          <div class="actions">
+            <a class="btn" href="mailto:contact@geneiusentertainment.com?subject=Booking%20Princes%20of%20Motown">Enquire</a>
+            <a class="btn alt view-poster" href="#" data-target="current">View Poster</a>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
   <footer>© <span id="y"></span> Geneius Entertainment</footer>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <span class="close" aria-label="Close">×</span>
+    <img id="lightboxImg" src="" alt="Poster">
+  </div>
+
   <script>
+    // year
     document.getElementById('y').textContent=new Date().getFullYear();
+
+    // sparkles
     const w=document.getElementById('sparkles');const N=100;
-    function go(){
-      w.innerHTML='';
-      for(let i=0;i<N;i++){
-        const e=document.createElement('div');
-        e.className='sparkle';
-        e.style.top=Math.random()*innerHeight+'px';
-        e.style.left=Math.random()*innerWidth+'px';
-        e.style.animationDuration=(3+Math.random()*4)+'s';
-        e.style.animationDelay=(Math.random()*5)+'s';
-        w.appendChild(e)
+    function go(){w.innerHTML='';for(let i=0;i<N;i++){const e=document.createElement('div');
+      e.className='sparkle';
+      e.style.top=Math.random()*innerHeight+'px';
+      e.style.left=Math.random()*innerWidth+'px';
+      e.style.animationDuration=(3+Math.random()*4)+'s';
+      e.style.animationDelay=(Math.random()*5)+'s';
+      w.appendChild(e)}}
+    go();addEventListener('resize',()=>{clearTimeout(window._t);window._t=setTimeout(go,200)});
+
+    // ===== Gallery setup =====
+    document.querySelectorAll('.gallery').forEach(setupGallery);
+
+    function setupGallery(root){
+      const slides = root.querySelector('.slides');
+      const imgs = [...slides.querySelectorAll('img')];
+      const prev = root.querySelector('.nav.prev');
+      const next = root.querySelector('.nav.next');
+      const dotsWrap = root.querySelector('.dots');
+      let index = 0;
+
+      imgs.forEach((_,i)=>{
+        const d=document.createElement('span');
+        d.className='dot'+(i===0?' active':'');
+        d.addEventListener('click',()=>go(i));
+        dotsWrap.appendChild(d);
+      });
+
+      function render(){
+        slides.style.transform = `translateX(-${index*100}%)`;
+        [...dotsWrap.children].forEach((d,i)=>d.classList.toggle('active', i===index));
       }
+      function go(i){ index = (i+imgs.length)%imgs.length; render(); }
+
+      prev.addEventListener('click',()=>go(index-1));
+      next.addEventListener('click',()=>go(index+1));
+
+      // swipe
+      let startX=0, dx=0;
+      slides.addEventListener('touchstart', e=>{startX=e.touches[0].clientX; dx=0;}, {passive:true});
+      slides.addEventListener('touchmove', e=>{dx=e.touches[0].clientX-startX;}, {passive:true});
+      slides.addEventListener('touchend', ()=>{ if(Math.abs(dx)>40) go(index + (dx<0?1:-1)); });
+
+      // expose current image getter
+      root.getCurrentSrc = ()=> imgs[index].src;
+
+      render();
     }
-    go();
-    addEventListener('resize',()=>{clearTimeout(window._t);
-      window._t=setTimeout(go,200)});
+
+    // Mobile: tap name to toggle bio
+    document.querySelectorAll('.artist-card').forEach(card=>{
+      const nameEl = card.querySelector('.artist-meta .name');
+      if(nameEl){
+        nameEl.addEventListener('click', ()=>{ card.classList.toggle('bio-open'); });
+        nameEl.addEventListener('keydown', (e)=>{
+          if(e.key==='Enter' || e.key===' '){ e.preventDefault(); card.classList.toggle('bio-open'); }
+        });
+      }
+    });
+
+    // Lightbox for "View Poster"
+    const lb = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lightboxImg');
+    const closeLb = ()=>{ lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); }
+    lb.addEventListener('click', (e)=>{ if(e.target===lb || e.target.classList.contains('close')) closeLb(); });
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeLb(); });
+
+    document.querySelectorAll('.view-poster').forEach(btn=>{
+      btn.addEventListener('click', e=>{
+        e.preventDefault();
+        const card = btn.closest('.artist-card');
+        const gal = card.querySelector('.gallery');
+        const src = gal.getCurrentSrc ? gal.getCurrentSrc() : gal.querySelector('img')?.src;
+        if(src){
+          lbImg.src = src;
+          lb.classList.add('open');
+          lb.setAttribute('aria-hidden','false');
+        }
+      });
+    });
   </script>
 </body>
 </html>
