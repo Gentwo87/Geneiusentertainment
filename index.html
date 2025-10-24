@@ -130,7 +130,7 @@
       backdrop-filter: blur(2px);
     }
 
-    /* ========== UNIFORM BANNERS (centered titles, continuous scroll) ========== */
+    /* ===== UNIFORM BANNERS ===== */
     .banner{
       position:relative; margin:28px auto; width:min(1120px,92vw);
       border:1px solid rgba(255,255,255,.12); border-radius:14px; overflow:hidden; background:#111;
@@ -142,10 +142,10 @@
       border-bottom:1px solid rgba(255,255,255,.08);
       background:linear-gradient(180deg,#0b0b0f,#0f0f14);
     }
-    .banner .track{display:flex; gap:12px; padding:12px; transition:transform .35s ease; will-change:transform}
+    .banner .track{display:flex; gap:12px; padding:12px; will-change:transform}
     .banner .slide{
       flex:0 0 auto; width:clamp(240px,26vw,320px);
-      aspect-ratio:800 / 520; /* <- match Gel Divas frame; change if your posters use a different ratio */
+      aspect-ratio:800 / 520; /* match Gel Divas; change if needed */
       border-radius:12px; overflow:hidden; border:1px solid rgba(255,255,255,.10);
       background:#0e0e14; position:relative;
     }
@@ -162,9 +162,28 @@
     }
     .banner .prev{left:10px} .banner .next{right:10px}
     .banner .nav:hover{background:rgba(0,0,0,.6)}
-    .banner .dots{position:absolute;left:0;right:0;bottom:8px;display:flex;gap:6px;justify-content:center;pointer-events:none}
-    .banner .dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.4)}
-    .banner .dot.active{background:#ffd76a;border-color:#C99700}
+
+    /* Looping marquee animation (CSS-driven; JS clones for seamless) */
+    .banner.loop .track{
+      animation: scroll-left var(--duration,60s) linear infinite;
+    }
+    .banner.loop:hover .track{ animation-play-state: paused; }
+    @keyframes scroll-left{
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); } /* because we’ll duplicate slides once */
+    }
+
+    /* Fading banner (stationary) */
+    .banner.fade .stage{
+      position:relative; height:auto; padding:12px;
+      display:grid; grid-template-columns:1fr; place-items:center;
+      min-height: clamp(200px, 26vw, 320px) * (520/800); /* visual fallback */
+    }
+    .banner.fade .slide{
+      position:absolute; left:12px; right:12px; top:12px; bottom:12px;
+      opacity:0; transition: opacity .9s ease-in-out;
+    }
+    .banner.fade .slide.active{ opacity:1; }
   </style>
 </head>
 <body>
@@ -182,8 +201,8 @@
     <a href="contact.html" class="btn">Contact Us</a>
   </header>
 
-  <!-- Banner 1: What’s On / Coming Soon -->
-  <section class="banner" id="banner-whatson" aria-label="What's On / Coming Soon">
+  <!-- Banner 1: What’s On / Coming Soon (LOOP) -->
+  <section class="banner loop" id="banner-whatson" aria-label="What's On / Coming Soon" style="--duration: 60s;">
     <h3>What’s On / Coming Soon</h3>
     <button class="nav prev" aria-label="Previous">‹</button>
     <div class="track">
@@ -211,15 +230,14 @@
       </a>
     </div>
     <button class="nav next" aria-label="Next">›</button>
-    <div class="dots" aria-hidden="true"></div>
   </section>
 
-  <!-- Banner 2: New Acts -->
-  <section class="banner" id="banner-newacts" aria-label="New Acts">
+  <!-- Banner 2: New Acts (FADE) -->
+  <section class="banner fade" id="banner-newacts" aria-label="New Acts">
     <h3>New Acts</h3>
-    <button class="nav prev" aria-label="Previous">‹</button>
-    <div class="track">
-      <a class="slide" href="bands.html#soul-select">
+    <div class="stage">
+      <!-- Only one visible at a time; JS fades between them -->
+      <a class="slide active" href="bands.html#soul-select">
         <img src="SoulS2.jpg" alt="Soul Select Poster"><span class="cap">Soul Select</span>
       </a>
       <a class="slide" href="singers.html#meghan-gray">
@@ -232,8 +250,6 @@
         <img src="DJPRose.jpg" alt="DJ Poster"><span class="cap">DJ</span>
       </a>
     </div>
-    <button class="nav next" aria-label="Next">›</button>
-    <div class="dots" aria-hidden="true"></div>
   </section>
 
   <!-- Drawer -->
@@ -398,48 +414,38 @@
       if(e.key==='Escape' && drawer.classList.contains('open')) closeDrawer();
     });
 
-    // ===== Continuous banner init (centered titles, hover pause) =====
-  <script>
-(function(){
-  document.querySelectorAll('.banner').forEach(setupBanner);
+    // ===== LOOP banner (clone slides for seamless CSS marquee) =====
+    (function(){
+      const loop = document.querySelector('.banner.loop .track');
+      if(!loop) return;
+      // duplicate slides once for 0% -> -50% animation
+      const kids = [...loop.children];
+      kids.forEach(k => loop.appendChild(k.cloneNode(true)));
 
-  function setupBanner(root){
-    const track = root.querySelector('.track');
-    const slides = [...track.children];
-    const gap = 12; // must match CSS gap
-    const SPEED = 0.05; // 🔹 smaller number = slower (try 0.05–0.1)
-
-    // Clone slides twice for a seamless loop
-    slides.forEach(s => track.appendChild(s.cloneNode(true)));
-    slides.forEach(s => track.appendChild(s.cloneNode(true)));
-
-    let offset = 0;
-    let stopAuto = false;
-    let lastTs = 0;
-
-    function tick(ts){
-      if(!lastTs) lastTs = ts;
-      const dt = ts - lastTs;
-      lastTs = ts;
-
-      if(!stopAuto){
-        offset += SPEED * dt;
-        const totalWidth = track.scrollWidth / 3; // original width before clones
-        if(offset >= totalWidth) offset -= totalWidth;
-        track.style.transform = `translateX(${-offset}px)`;
+      // Optional prev/next nudge
+      const prev = document.querySelector('.banner.loop .prev');
+      const next = document.querySelector('.banner.loop .next');
+      if(prev && next){
+        prev.addEventListener('click', ()=> loop.style.animationDuration = '50s');
+        next.addEventListener('click', ()=> loop.style.animationDuration = '40s');
       }
-      requestAnimationFrame(tick);
-    }
+    })();
 
-    // Pause on hover/touch
-    root.addEventListener('mouseenter', ()=> stopAuto = true);
-    root.addEventListener('mouseleave', ()=> stopAuto = false);
-    root.addEventListener('touchstart', ()=> stopAuto = true, {passive:true});
-    root.addEventListener('touchend', ()=> stopAuto = false);
+    // ===== FADE banner (cycle slides every ~5s) =====
+    (function(){
+      const stage = document.querySelector('.banner.fade .stage');
+      if(!stage) return;
+      const slides = [...stage.querySelectorAll('.slide')];
+      if(slides.length <= 1) return;
 
-    requestAnimationFrame(tick);
-  }
-})();
-</script>
+      const FADE_SECONDS = 5; // 👈 your requested speed
+      let i = 0;
+      setInterval(()=>{
+        slides[i].classList.remove('active');
+        i = (i + 1) % slides.length;
+        slides[i].classList.add('active');
+      }, FADE_SECONDS * 1000);
+    })();
+  </script>
 </body>
 </html>
