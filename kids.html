@@ -1,1 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kids & Adult Party Entertainment | Geneius Entertainment</title>
 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MR1NLPH5ZK"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-MR1NLPH5ZK');
+  </script>
+
+  <style>
+    :root{ --bg:#000; --ink:#f5f5f5; --muted:#bfbfbf; --gold:#C99700; --accent:#1b1710; --line:rgba(255,255,255,.12); }
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Trebuchet MS",Arial,sans-serif}
+    .wrap{width:min(1120px,92vw);margin:0 auto;padding:30px 0 46px}
+
+    /* header + nav */
+    .bar{display:flex;justify-content:space-between;align-items:center;margin:0 0 12px}
+    .btn-mini{display:inline-block;padding:8px 12px;border-radius:10px;color:#ffd76a;background:rgba(201,151,0,.08);
+      border:1px solid rgba(201,151,0,.45);text-decoration:none;font-weight:700}
+    .btn-mini:hover{background:rgba(201,151,0,.14)}
+    header{display:flex;align-items:center;gap:14px;justify-content:center;margin:6px 0 10px}
+    #logo{height:64px;width:auto}
+    h1{margin:4px 0 0;font-size:1.6rem;color:var(--gold);letter-spacing:1px}
+    .sub{color:var(--muted);text-align:center;margin:8px 0 20px}
+
+    /* cards grid — same sizing as singers/tributes/bands */
+    .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));padding:0 2px}
+    .card{background:#15151b;border:1px solid var(--line);border-radius:16px;overflow:hidden;position:relative;
+      transition:transform .18s, box-shadow .18s, border-color .18s}
+    .card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.35);border-color:rgba(212,175,55,.45)}
+
+    /* media area (fixed height so every card matches) */
+    .art{position:relative;height:180px;overflow:hidden;background:#0e0e12}
+    .slides{display:flex;width:100%;height:100%;transition:transform .35s ease}
+    .slides img{width:100%;height:100%;object-fit:cover;flex:0 0 100%}
+
+    /* gallery arrows */
+    .nav{position:absolute;top:50%;transform:translateY(-50%);border:1px solid rgba(255,255,255,.35);
+      background:rgba(0,0,0,.45);color:#fff;font-weight:800;line-height:1;padding:.32rem .6rem;border-radius:10px;
+      cursor:pointer;opacity:0;transition:opacity .2s}
+    .card:hover .nav{opacity:1}
+    .nav.prev{left:8px} .nav.next{right:8px}
+    .dots{position:absolute;left:0;right:0;bottom:8px;display:flex;gap:6px;justify-content:center}
+    .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.4)}
+    .dot.active{background:#ffd76a;border-color:#C99700}
+
+    /* meta + name-hover bio */
+    .meta{padding:12px 14px}
+    .name{font-weight:800;display:inline-block;cursor:pointer;color:#ffd76a}
+    .styles{display:block;color:#cfcfcf;margin:4px 0 0}
+    .tag{display:inline-block;margin-top:8px;font-size:.78rem;color:#fdeec0;background:var(--accent);
+      border:1px solid rgba(212,175,55,.45);padding:.18rem .5rem;border-radius:999px}
+
+    .overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;
+      background:linear-gradient(180deg,rgba(0,0,0,.0) 40%, rgba(0,0,0,.75) 100%);
+      padding:14px;opacity:0;transition:opacity .2s}
+    .card.show-bio .overlay{opacity:1}
+    .overlay h3{margin:0 0 4px;color:#ffd76a;font-size:1.02rem}
+    .overlay p{margin:0 0 8px;color:#eee;font-size:.92rem;line-height:1.35}
+    .actions{display:flex;gap:8px;flex-wrap:wrap}
+    .btn{display:inline-block;background:var(--gold);color:#000;padding:8px 12px;border-radius:8px;
+      text-decoration:none;font-weight:800;border:1px solid rgba(255,255,255,.12)}
+    .btn.ghost{background:transparent;color:#ffd76a;border:1px solid rgba(201,151,0,.5)}
+
+    footer{margin-top:28px;color:#aaa;text-align:center}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <div class="bar">
+      <a class="btn-mini" href="index.html">← Back to Home</a>
+      <a class="btn-mini" href="acts.html">Browse all acts</a>
+    </div>
+
+    <header>
+      <a href="index.html" aria-label="Home"><img id="logo" src="logo.png" alt="Geneius Entertainment"></a>
+      <h1>Kids & Adult Party Entertainment</h1>
+    </header>
+    <p class="sub">Party hosts, magicians, discos and more. Click arrows to see images. Hover/tap the name to read the bio.</p>
+
+    <div class="grid">
+
+      <!-- Lively Squad -->
+      <div class="card" data-bio="Lively Squad run dance classes and bring high-energy party hosting: games, dance routines and mini-discos for birthdays and events.">
+        <div class="art" tabindex="0">
+          <div class="slides">
+            <img src="LivelyP.jpg" alt="Lively Squad 1">
+            <img src="Benji.jpg"   alt="Lively Squad 2">
+          </div>
+          <button class="nav prev" aria-label="Previous">‹</button>
+          <button class="nav next" aria-label="Next">›</button>
+          <div class="dots"></div>
+          <div class="overlay">
+            <h3>Lively Squad</h3>
+            <p></p>
+            <div class="actions">
+              <a class="btn" href="contact.html?subject=Enquiry%20-%20Party%20Host">Enquire</a>
+              <a class="btn ghost" href="LivelyP.jpg" target="_blank">View poster</a>
+            </div>
+          </div>
+        </div>
+        <div class="meta">
+          <span class="name">Lively Squad</span>
+          <span class="styles">Dance • Games • Disco</span>
+          <span class="tag">Kids/Adult Parties</span>
+        </div>
+      </div>
+
+      <!-- Magical Bones -->
+      <div class="card" data-bio="Showstopping magic from a Britain’s Got Talent finalist — perfect for stages, parties and corporate events.">
+        <div class="art" tabindex="0">
+          <div class="slides">
+            <img src="Bones3.jpg" alt="Magical Bones 1">
+            <img src="Bonesflip.jpg" alt="Magical Bones 2">
+          </div>
+          <button class="nav prev" aria-label="Previous">‹</button>
+          <button class="nav next" aria-label="Next">›</button>
+          <div class="dots"></div>
+          <div class="overlay">
+            <h3>Magical Bones</h3>
+            <p></p>
+            <div class="actions">
+              <a class="btn" href="contact.html?subject=Enquiry%20-%20Magician">Enquire</a>
+              <a class="btn ghost" href="Bones3.jpg" target="_blank">View poster</a>
+            </div>
+          </div>
+        </div>
+        <div class="meta">
+          <span class="name">Magical Bones</span>
+          <span class="styles">Magician • Stage & Corporate</span>
+          <span class="tag">Events/Corporate</span>
+        </div>
+      </div>
+
+      <!-- MG Herts -->
+      <div class="card" data-bio="Princess meet-and-greets, party games and dancing — tailored children’s party entertainment.">
+        <div class="art" tabindex="0">
+          <div class="slides">
+            <img src="MGHParties.jpg" alt="MG Herts 1">
+            <img src="MGHParties.jpg" alt="MG Herts 2">
+          </div>
+          <button class="nav prev" aria-label="Previous">‹</button>
+          <button class="nav next" aria-label="Next">›</button>
+          <div class="dots"></div>
+          <div class="overlay">
+            <h3>MG Herts Parties</h3>
+            <p></p>
+            <div class="actions">
+              <a class="btn" href="contact.html?subject=Enquiry%20-%20Kids%20Party">Enquire</a>
+              <a class="btn ghost" href="MGHParties.jpg" target="_blank">View poster</a>
+            </div>
+          </div>
+        </div>
+        <div class="meta">
+          <span class="name">MG Herts – Games & Disco</span>
+          <span class="styles">Kids Parties</span>
+          <span class="tag">Kids Parties</span>
+        </div>
+      </div>
+
+    </div>
+
+    <footer>© <span id="y"></span> Geneius Entertainment</footer>
+  </div>
+
+  <script>
+  // mini gallery + name-hover bio (same behaviour as singers/tributes/bands)
+  (function(){
+    function setupGallery(card){
+      const art    = card.querySelector('.art');
+      const slides = art.querySelector('.slides');
+      const imgs   = [...slides.querySelectorAll('img')];
+      const prev   = art.querySelector('.nav.prev');
+      const next   = art.querySelector('.nav.next');
+      const dots   = art.querySelector('.dots');
+      let i = 0;
+
+      // dots
+      imgs.forEach((_,idx)=>{
+        const d = document.createElement('span');
+        d.className = 'dot' + (idx===0?' active':'');
+        d.addEventListener('click', ()=>go(idx));
+        dots.appendChild(d);
+      });
+
+      function render(){
+        slides.style.transform = `translateX(-${i*100}%)`;
+        [...dots.children].forEach((d,idx)=>d.classList.toggle('active', idx===i));
+      }
+      function go(n){ i = (n + imgs.length) % imgs.length; render(); }
+
+      prev.addEventListener('click', ()=>go(i-1));
+      next.addEventListener('click', ()=>go(i+1));
+
+      // touch
+      let startX=0, dx=0;
+      slides.addEventListener('touchstart', e=>{startX=e.touches[0].clientX; dx=0;},{passive:true});
+      slides.addEventListener('touchmove',  e=>{dx=e.touches[0].clientX-startX;},{passive:true});
+      slides.addEventListener('touchend',   ()=>{ if(Math.abs(dx)>40) go(i + (dx<0?1:-1)); });
+
+      render();
+    }
+
+    // bio: show when name is hovered/tapped
+    function wireBio(card){
+      const name = card.querySelector('.name');
+      const overlay = card.querySelector('.overlay');
+      const p = overlay.querySelector('p');
+      p.textContent = card.dataset.bio || '';
+
+      // hover (desktop)
+      name.addEventListener('mouseenter', ()=>card.classList.add('show-bio'));
+      name.addEventListener('mouseleave', ()=>card.classList.remove('show-bio'));
+      // tap (mobile)
+      name.addEventListener('click', (e)=>{
+        e.preventDefault();
+        card.classList.toggle('show-bio');
+      });
+    }
+
+    document.querySelectorAll('.card').forEach(c=>{
+      setupGallery(c);
+      wireBio(c);
+    });
+    document.getElementById('y').textContent = new Date().getFullYear();
+  })();
+  </script>
+</body>
+</html>
