@@ -34,7 +34,7 @@
     .container{width:min(1120px,92vw);margin:0 auto}
     .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;padding:30px 20px;position:relative;z-index:1}
 
-    /* ====== Artist card (uniform size) ====== */
+    /* ===== Card (uniform) ===== */
     .artist-card{
       position:relative; overflow:hidden; border-radius:14px;
       background:var(--panel); border:1px solid var(--line);
@@ -42,38 +42,42 @@
     }
     .artist-card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.35);border-color:rgba(212,175,55,.45)}
 
-    /* Media frame (uniform poster area) */
+    /* Media frame */
     .frame{position:relative; height:220px; overflow:hidden}
     .slides{display:flex; width:100%; height:100%; transition:transform .35s ease}
     .slides img{width:100%; height:100%; object-fit:cover; flex:0 0 100%; display:block}
 
-    /* Gallery controls */
+    /* Gallery controls: always visible */
     .nav{
       position:absolute; top:50%; transform:translateY(-50%);
       background:rgba(0,0,0,.45); color:#fff; border:1px solid rgba(255,255,255,.35);
       font-weight:800; line-height:1; padding:.35rem .6rem; border-radius:10px;
-      cursor:pointer; opacity:0; transition:opacity .2s
+      cursor:pointer; opacity:.9;
     }
-    .artist-card:hover .nav, .artist-card.open .nav{opacity:1}
     .nav.prev{left:8px} .nav.next{right:8px}
     .dots{position:absolute; left:0; right:0; bottom:8px; display:flex; gap:6px; justify-content:center}
     .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.4);cursor:pointer}
     .dot.active{background:#ffd76a;border-color:var(--gold)}
 
-    /* Meta under image */
+    /* Meta (name under image) */
     .artist-meta{padding:12px 14px}
-    .artist-meta strong{color:var(--gold); text-transform:uppercase; letter-spacing:.06em}
+    .artist-meta .name{
+      color:var(--gold); text-transform:uppercase; letter-spacing:.06em;
+      font-weight:800; cursor:pointer; display:inline-block;
+    }
+    .artist-meta .hint{display:block; color:#888; font-size:.84rem; margin-top:4px}
 
-    /* Hover bio overlay */
+    /* Bio overlay appears ONLY when hovering the name (or toggled on mobile) */
     .bio{
       position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-end;
       padding:16px; gap:10px; opacity:0; pointer-events:none; transition:opacity .2s ease;
-      background:linear-gradient(to top, rgba(0,0,0,.78) 28%, rgba(0,0,0,.15) 65%, rgba(0,0,0,0));
+      background:linear-gradient(to top, rgba(0,0,0,.82) 28%, rgba(0,0,0,.18) 65%, rgba(0,0,0,0));
       backdrop-filter:saturate(120%) blur(2px);
     }
-    .artist-card:hover .bio,
-    .artist-card.open .bio,
-    .artist-card:focus-within .bio{opacity:1; pointer-events:auto}
+    /* Show bio when name hovered (desktop) */
+    .artist-meta:hover ~ .bio{opacity:1; pointer-events:auto}
+    /* Or when card has .bio-open (mobile tap) */
+    .artist-card.bio-open .bio{opacity:1; pointer-events:auto}
 
     .bio h3{margin:0;color:var(--gold);text-transform:uppercase;letter-spacing:.06em;font-size:1rem}
     .bio .tags{margin:0;color:#fdeec0;font-size:.9rem}
@@ -84,7 +88,7 @@
 
     footer{background:#111;color:#aaa;text-align:center;padding:18px;margin-top:30px;position:relative;z-index:1}
 
-    /* Lightbox (full-screen poster) */
+    /* Lightbox */
     .lightbox{position:fixed; inset:0; background:rgba(0,0,0,.92); display:none; align-items:center; justify-content:center; z-index:9999}
     .lightbox.open{display:flex}
     .lightbox img{max-width:92vw; max-height:92vh; border:1px solid rgba(255,255,255,.15); border-radius:12px}
@@ -100,17 +104,16 @@
     <a class="btn" href="index.html">← Back to Home</a>
   </header>
 
-  <p class="sub">Hover an artist to read their bio. Use the arrows/dots to view posters. Tap on mobile to toggle.</p>
+  <p class="sub">Use arrows to browse posters. Hover/tap the <strong>name</strong> to view the bio and enquiry buttons. “View Poster” opens the current slide full screen.</p>
 
   <div class="container">
     <div class="cards">
 
-      <!-- Artist 1: Gemma Andrew (multi-poster gallery) -->
+      <!-- Artist 1: Gemma Andrew -->
       <div class="artist-card" tabindex="0" data-name="Gemma Andrew">
         <div class="frame gallery" aria-label="Poster gallery for Gemma Andrew">
           <div class="slides">
             <img src="Gemma.jpg" alt="Gemma Andrew – main poster">
-            <!-- Add more images here as you upload them -->
             <img src="Gemma-70s.jpg" alt="Gemma Andrew – 70s show poster">
             <img src="Gemma-80s.jpg" alt="Gemma Andrew – 80s show poster">
             <img src="Gemma-Disco.jpg" alt="Gemma Andrew – Disco show poster">
@@ -122,7 +125,10 @@
           <div class="dots"></div>
         </div>
 
-        <div class="artist-meta"><strong>Gemma Andrew</strong></div>
+        <div class="artist-meta">
+          <span class="name" role="button" tabindex="0">Gemma Andrew</span>
+          <span class="hint">Hover/tap name for bio</span>
+        </div>
 
         <div class="bio">
           <h3>Gemma Andrew</h3>
@@ -135,12 +141,11 @@
         </div>
       </div>
 
-      <!-- Artist 2: Meghan Gray (multi-poster ready) -->
+      <!-- Artist 2: Meghan Gray -->
       <div class="artist-card" tabindex="0" data-name="Meghan Gray">
         <div class="frame gallery" aria-label="Poster gallery for Meghan Gray">
           <div class="slides">
             <img src="MeghanG.jpeg" alt="Meghan Gray – main poster">
-            <!-- Example extra image (replace when you have more) -->
             <img src="MeghanG-2.jpg" alt="Meghan Gray – second poster">
           </div>
           <button class="nav prev" aria-label="Previous">‹</button>
@@ -148,7 +153,10 @@
           <div class="dots"></div>
         </div>
 
-        <div class="artist-meta"><strong>Meghan Gray</strong></div>
+        <div class="artist-meta">
+          <span class="name" role="button" tabindex="0">Meghan Gray</span>
+          <span class="hint">Hover/tap name for bio</span>
+        </div>
 
         <div class="bio">
           <h3>Meghan Gray</h3>
@@ -173,7 +181,10 @@
           <div class="dots"></div>
         </div>
 
-        <div class="artist-meta"><strong>Artist Name</strong></div>
+        <div class="artist-meta">
+          <span class="name" role="button" tabindex="0">Artist Name</span>
+          <span class="hint">Hover/tap name for bio</span>
+        </div>
 
         <div class="bio">
           <h3>Artist Name</h3>
@@ -212,18 +223,17 @@
       w.appendChild(e)}}
     go();addEventListener('resize',()=>{clearTimeout(window._t);window._t=setTimeout(go,200)});
 
-    // ===== Gallery setup (arrows, dots, swipe, keyboard) =====
+    // ===== Gallery setup =====
     document.querySelectorAll('.gallery').forEach(setupGallery);
 
     function setupGallery(root){
       const slides = root.querySelector('.slides');
-      const imgs   = [...slides.querySelectorAll('img')];
-      const prev   = root.querySelector('.nav.prev');
-      const next   = root.querySelector('.nav.next');
+      const imgs = [...slides.querySelectorAll('img')];
+      const prev = root.querySelector('.nav.prev');
+      const next = root.querySelector('.nav.next');
       const dotsWrap = root.querySelector('.dots');
       let index = 0;
 
-      // dots
       imgs.forEach((_,i)=>{
         const d=document.createElement('span');
         d.className='dot'+(i===0?' active':'');
@@ -235,10 +245,7 @@
         slides.style.transform = `translateX(-${index*100}%)`;
         [...dotsWrap.children].forEach((d,i)=>d.classList.toggle('active', i===index));
       }
-      function go(i){
-        index = (i+imgs.length)%imgs.length;
-        render();
-      }
+      function go(i){ index = (i+imgs.length)%imgs.length; render(); }
 
       prev.addEventListener('click',()=>go(index-1));
       next.addEventListener('click',()=>go(index+1));
@@ -246,36 +253,32 @@
       // swipe
       let startX=0, dx=0;
       slides.addEventListener('touchstart', e=>{startX=e.touches[0].clientX; dx=0;}, {passive:true});
-      slides.addEventListener('touchmove',  e=>{dx=e.touches[0].clientX-startX;}, {passive:true});
-      slides.addEventListener('touchend',   ()=>{ if(Math.abs(dx)>40) go(index + (dx<0?1:-1)); });
+      slides.addEventListener('touchmove', e=>{dx=e.touches[0].clientX-startX;}, {passive:true});
+      slides.addEventListener('touchend', ()=>{ if(Math.abs(dx)>40) go(index + (dx<0?1:-1)); });
 
-      // keyboard when card focused
-      root.closest('.artist-card').addEventListener('keydown', e=>{
-        if(e.key==='ArrowLeft'){ e.preventDefault(); go(index-1); }
-        if(e.key==='ArrowRight'){ e.preventDefault(); go(index+1); }
-      });
-
-      // expose a getter for current image on the root element
+      // expose current image getter
       root.getCurrentSrc = ()=> imgs[index].src;
 
       render();
     }
 
-    // ===== Tap-to-toggle bio on touch & keyboard =====
+    // ===== Mobile: tap name to toggle bio =====
     document.querySelectorAll('.artist-card').forEach(card=>{
-      card.addEventListener('click', e=>{
-        if(e.target.closest('.actions')) return; // ignore clicks on buttons
-        card.classList.toggle('open');
-      });
-      card.addEventListener('keydown', e=>{
-        if(e.key==='Enter' || e.key===' '){
-          e.preventDefault();
-          card.classList.toggle('open');
-        }
-      });
+      const nameEl = card.querySelector('.artist-meta .name');
+      if(nameEl){
+        nameEl.addEventListener('click', ()=>{
+          card.classList.toggle('bio-open');
+        });
+        nameEl.addEventListener('keydown', (e)=>{
+          if(e.key==='Enter' || e.key===' '){
+            e.preventDefault();
+            card.classList.toggle('bio-open');
+          }
+        });
+      }
     });
 
-    // ===== Lightbox for "View Poster" (full screen) =====
+    // ===== Lightbox for "View Poster" =====
     const lb = document.getElementById('lightbox');
     const lbImg = document.getElementById('lightboxImg');
     const closeLb = ()=>{ lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); }
@@ -286,8 +289,8 @@
       btn.addEventListener('click', e=>{
         e.preventDefault();
         const card = btn.closest('.artist-card');
-        const gal  = card.querySelector('.gallery');
-        const src  = gal.getCurrentSrc ? gal.getCurrentSrc() : gal.querySelector('img')?.src;
+        const gal = card.querySelector('.gallery');
+        const src = gal.getCurrentSrc ? gal.getCurrentSrc() : gal.querySelector('img')?.src;
         if(src){
           lbImg.src = src;
           lb.classList.add('open');
