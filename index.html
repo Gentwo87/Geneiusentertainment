@@ -407,7 +407,7 @@
     const track = root.querySelector('.track');
     const slides = [...track.children];
     const gap = 12; // must match CSS gap
-    const SPEED = 0.03; // 🔹 smaller number = slower (try 0.05–0.1)
+    const SPEED = 0.05; // 🔹 smaller number = slower (try 0.05–0.1)
 
     // Clone slides twice for a seamless loop
     slides.forEach(s => track.appendChild(s.cloneNode(true)));
