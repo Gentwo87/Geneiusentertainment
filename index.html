@@ -134,6 +134,27 @@
   box-shadow:0 6px 14px rgba(0,0,0,.35);
   background:#0e0e12;
 }
+    /* === Fix video cards so they fill the frame evenly === */
+.media {
+  position: relative;
+  background: #000;
+  aspect-ratio: 800 / 520; /* same ratio as your posters */
+  overflow: hidden;
+}
+
+.media video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;      /* fills the box fully */
+  object-position: center;
+  display: block;
+  background: #000;
+  transform: scale(1.03); /* small zoom hides edge gaps */
+}
+/* === End of video card fix === */
+
     @media (max-width:700px){.poster{height:140px}}
     @keyframes scrollX{from{transform:translateX(0)}to{transform:translateX(-50%)}}
   </style>
