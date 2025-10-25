@@ -7,10 +7,10 @@ window.TALENT = [
     id: 'gemma-andrew',
     name: 'Gemma Andrew',
     img: 'Gemma.jpg',
-    poster: 'Singer.png',              // optional separate poster if you want it later
-    link: 'singers.html',              // where the card should go
+    poster: 'Singer.png',
+    link: 'singers.html',
     bio: 'Diverse singer with a strong, soulful voice and vibrant, high-energy shows.',
-    tags: ['singers','soloists','vocalists','weddings','parties', '90s']
+    tags: ['singers','soloists','vocalists','weddings','parties','90s']
   },
   {
     id: 'meghan-gray',
@@ -22,8 +22,16 @@ window.TALENT = [
     tags: ['singers','soloists','vocalists','weddings','90s']
   },
   {
+    id: 'gel-duo-divas',
+    name: 'Gel Duo — Divas',
+    img: 'GelDivas.jpg',
+    link: 'singers.html',
+    bio: 'Classic hits from the divas, perfect for parties and events.',
+    tags: ['duos','singers','classic','parties','weddings']
+  },
+  {
     id: 'gel-duo-spice',
-    name: 'Gel Duo – Spice Girls Tribute',
+    name: 'Gel Duo — Spice Girls Tribute',
     img: 'Spice.png',
     poster: 'Tribute.png',
     link: 'tribute.html',
@@ -31,98 +39,91 @@ window.TALENT = [
     tags: ['tributes','duos','90s','parties','clubs']
   },
   {
-    id: 'Abba-tribute',
-    name: 'Gel Duo - ABBA Tribute',
+    id: 'abba-tribute',
+    name: 'Gel Duo — ABBA Tribute',
     img: 'Abbagels.jpg',
     link: 'tribute.html',
-    bio: 'Classic Elvis tribute – poster placeholder.',
-    tags: ['tributes','duos','weddings']
-   },
-  {
-    id: 'Gel Divas',
-    name: 'Gel Duo - Divas',
-    img: 'GelDivas.jpg',
-    link: 'singers.html',
-    bio: 'Classic hits, Divas.',
-    tags: ['Duo, Divas, Classic']
+    bio: 'ABBA’s biggest hits with harmonies, costumes and choreography.',
+    tags: ['tributes','duos','weddings','parties']
   },
-   {
-    id: 'meghan-gray',
-    name: 'Meghan Gray - Britney Tribute',
+  {
+    id: 'meghan-gray-britney',
+    name: 'Meghan Gray — Britney Tribute',
     img: 'Britney1.jpg',
     link: 'tribute.html',
-    bio: 'High energy performance, bringing you all the Britney classics.',
+    bio: 'High-energy Britney experience with iconic hits and looks.',
     tags: ['tributes','soloists','vocalists','weddings','90s']
   },
   {
-    id: 'The General/ DJ Genie',
-    name: 'The General/DJ Genie',
+    id: 'dj-genie',
+    name: 'The General / DJ Genie',
     img: 'TheGeneral.jpg',
     link: 'dj.html',
     bio: 'Wedding, party & club specialist.',
     tags: ['djs','clubs','parties','weddings']
-  }, 
+  },
   {
-    id: 'DJ Leon D',
+    id: 'dj-leon-d',
     name: 'DJ Leon D',
     img: 'DjLeon.jpg',
     link: 'dj.html',
     bio: 'Wedding, party & club specialist.',
     tags: ['djs','clubs','parties','weddings']
   },
-   {
-    id: 'DJ Porcelain Rose',
+  {
+    id: 'dj-porcelain-rose',
     name: 'DJ Porcelain Rose',
     img: 'DJPROSE.jpg',
     link: 'dj.html',
     bio: 'Wedding, party & club specialist.',
     tags: ['djs','parties','weddings']
   },
-   {
-    id: 'DJ Leevs',
+  {
+    id: 'dj-leevs',
     name: 'DJ Leevs',
     img: 'DJLevi.jpg',
     link: 'dj.html',
     bio: 'Wedding, party & club specialist.',
     tags: ['djs','clubs','parties','weddings']
   },
-   {
-    id: 'Princes Of Motown',
-    name: 'Princes Of Motown',
+  {
+    id: 'princes-of-motown',
+    name: 'Princes of Motown',
     img: 'POMT2.jpg',
-    link: 'tribute.html','bands.html',
-    bio: 'Wedding, Corporate, Festivals.',
-    tags: ['Tribute']
-   },
-   {
-    id: 'Soul Select',
+    link: 'bands.html',
+    bio: 'Motown classics with slick harmonies and choreography.',
+    tags: ['bands','tributes','motown','clubs','parties','weddings','festivals']
+  },
+  {
+    id: 'soul-select',
     name: 'Soul Select',
     img: 'SoulS2.jpg',
     link: 'bands.html',
-    bio: 'Wedding, party, Corporate, Festivals.',
-    tags: ['bands','clubs','parties','weddings']
-   },
-   {
-    id: 'Lively Squad',
+    bio: 'Feel-good R&B, soul and Motown for all events.',
+    tags: ['bands','r&b','soul','motown','clubs','parties','weddings','corporate']
+  },
+  {
+    id: 'lively-squad',
     name: 'Lively Squad',
     img: 'LivelyP.jpg',
     link: 'kids.html',
-    bio: 'Party Hosts/Specialist.',
-    tags: ['Parties, Entertainer, Birthdays, Hosts']
-   },
-   {
-    id: 'MG Herts',
+    bio: 'High-energy dance party hosts for kids events.',
+    tags: ['kids','parties','hosts','entertainers']
+  },
+  {
+    id: 'mg-herts',
     name: 'MG Herts Parties',
     img: 'MGHParties.jpg',
     link: 'kids.html',
-    bio: 'Party Hosts/Specialist.',
-    tags: ['Parties, Entertainer, Birthdays, Hosts']
-   },
-   {
-    id: 'Magical Bones',
+    bio: 'Princess parties, games & disco.',
+    tags: ['kids','parties','hosts','entertainers']
+  },
+  {
+    id: 'magical-bones',
     name: 'Magical Bones',
     img: 'Bones3.jpg',
     link: 'kids.html',
-    bio: 'Wedding, Party, Showcase, Corporate.',
-    tags: ['Magician, Entertainer, ']
+    bio: 'Showstopping magician for stage and corporate events.',
+    tags: ['magicians','entertainers','events','corporate']
+  }
 ];
