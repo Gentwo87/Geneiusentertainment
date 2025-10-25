@@ -73,7 +73,7 @@ window.TALENT = [
   {
     id: 'dj-porcelain-rose',
     name: 'DJ Porcelain Rose',
-    img: 'DJPROSE.jpg',
+    img: 'DJPRose.jpg',
     link: 'dj.html',
     bio: 'Wedding, party & club specialist.',
     tags: ['djs','parties','weddings']
