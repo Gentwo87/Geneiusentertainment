@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dancers & Performers | Geneius Entertainment</title>
+  <style>
+    :root{
+      --bg:#000; --ink:#f5f5f5; --muted:#bfbfbf;
+      --gold:#C99700; --accent:#1b1710; --line:rgba(255,255,255,.12);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Trebuchet MS",Arial,sans-serif}
+    .wrap{width:min(1120px,92vw);margin:0 auto;padding:30px 0 46px}
+
+    /* Back/Home buttons */
+    .bar{display:flex;justify-content:space-between;align-items:center;margin:0 0 12px}
+    .btn-mini{
+      display:inline-block;padding:8px 12px;border-radius:10px;
+      color:#ffd76a;background:rgba(201,151,0,.08);
+      border:1px solid rgba(201,151,0,.45);text-decoration:none;font-weight:700
+    }
+    .btn-mini:hover{background:rgba(201,151,0,.14)}
+
+    /* Header */
+    header{display:flex;align-items:center;gap:14px;justify-content:center;margin:6px 0 10px}
+    #logo{height:64px;width:auto}
+    h1{margin:4px 0 0;font-size:1.6rem;color:var(--gold);letter-spacing:1px}
+    .sub{color:var(--muted);text-align:center;margin:8px 0 20px}
+
+    /* Grid – SAME sizing as Singers/Tributes/Bands */
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:16px;
+    }
+    .card{
+      background:#15151b;border:1px solid var(--line);border-radius:16px;
+      overflow:hidden;position:relative;transition:transform .18s, box-shadow .18s, border-color .18s
+    }
+    .card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.35);border-color:rgba(212,175,55,.45)}
+
+    /* Poster frame + slider */
+    .frame{position:relative; height:240px; overflow:hidden; background:#0e0e12}
+    @media (max-width:700px){ .frame{height:220px} }
+    .slides{display:flex; width:100%; height:100%; transition:transform .35s ease}
+    .slides img, .slides video{
+      width:100%; height:100%; object-fit:cover; flex:0 0 100%; display:block
+    }
+    .nav{
+      position:absolute; top:50%; transform:translateY(-50%);
+      background:rgba(0,0,0,.45); color:#fff; border:1px solid rgba(255,255,255,.35);
+      padding:.35rem .6rem; border-radius:10px; cursor:pointer; opacity:0; transition:opacity .2s
+    }
+    .card:hover .nav{opacity:1}
+    .nav.prev{left:10px} .nav.next{right:10px}
+    .dots{position:absolute; left:0; right:0; bottom:8px; display:flex; gap:6px; justify-content:center}
+    .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.4)}
+    .dot.active{background:#ffd76a;border-color:#C99700}
+
+    /* Meta (name bar) */
+    .meta{padding:12px 14px;background:linear-gradient(0deg,#121217,transparent)}
+    .name{font-weight:800; color:#ffd76a}
+    .hint{color:#bcbcbc; font-size:.92rem; display:block; margin-top:4px}
+
+    /* Bio overlay (opens when clicking/tapping the NAME) */
+    .bio{
+      position:absolute; inset:0; display:none; flex-direction:column; justify-content:flex-end;
+      background:linear-gradient(180deg,rgba(0,0,0,.0) 40%, rgba(0,0,0,.78) 100%);
+      padding:14px;
+    }
+    .bio h3{margin:0 0 6px; color:#ffd76a; font-size:1.05rem}
+    .bio p{margin:0 0 8px; color:#e8e8e8}
+    .tags{font-size:.9rem; color:#d7caa0}
+    .actions{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
+    .btn{
+      display:inline-block;background:var(--gold);color:#000;padding:8px 12px;border-radius:8px;
+      text-decoration:none;font-weight:800;border:1px solid rgba(255,255,255,.12)
+    }
+    .btn.alt{background:transparent;color:#ffd76a;border:1px solid rgba(201,151,0,.5)}
+
+    footer{margin-top:28px;color:#aaa;text-align:center}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <div class="bar">
+      <a class="btn-mini" href="index.html">← Back to Home</a>
+      <a class="btn-mini" href="acts.html">Browse all acts</a>
+    </div>
+
+    <header>
+      <a href="index.html" aria-label="Home"><img id="logo" src="logo.png" alt="Geneius Entertainment"></a>
+      <h1>Dancers & Performers</h1>
+    </header>
+    <p class="sub">High-impact dance crews, Latin showpieces, contemporary fusions and more. Click/tap the <strong>name</strong> for bio. Use arrows to browse posters.</p>
+
+    <div class="grid">
+
+      <!-- Card 1 -->
+      <article class="card" data-name="Street Elite">
+        <div class="frame">
+          <div class="slides">
+            <img src="street-elite-1.jpg" alt="Street Elite – urban dance crew (1)">
+            <img src="street-elite-2.jpg" alt="Street Elite – urban dance crew (2)">
+          </div>
+          <button class="nav prev" aria-label="Previous">‹</button>
+          <button class="nav next" aria-label="Next">›</button>
+          <div class="dots"></div>
+        </div>
+        <div class="meta">
+          <span class="name" role="button" tabindex="0">STREET ELITE</span>
+          <span class="hint">Hover/tap name for bio</span>
+        </div>
+        <div class="bio" aria-hidden="true">
+          <h3>Street Elite</h3>
+          <p class="tags">Hip-hop • Commercial • Corporate/Clubs</p>
+          <p>Explosive urban choreography, tight formations and high-energy crowd moments—perfect for festivals, corporate launches and club takeovers.</p>
+          <div class="actions">
+            <a class="btn" href="contact.html?subject=Enquiry%20-%20Street%20Elite">Enquire</a>
+            <a class="btn alt view-poster" href="street-elite-1.jpg">View poster</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 2 -->
+      <article class="card" data-name="Latin Fire">
+        <div class="frame">
+          <div class="slides">
+            <img src="latinfire-1.jpg" alt="Latin Fire (1)">
+            <img src="latinfire-2.jpg" alt="Latin Fire (2)">
+          </div>
+          <button class="nav prev" aria-label="Previous">‹</button>
+          <button class="nav next" aria-label="Next">›</button>
+          <div class="dots"></div>
+        </div>
+        <div class="meta">
+          <span class="name" role="button" tabindex="0">LATIN FIRE</span>
+          <span class="hint">Hover/tap name for bio</span>
+        </div>
+        <div class="bio" aria-hidden="true">
+          <h3>Latin Fire</h3>
+          <p class="tags">Salsa • Samba • Weddings/Corporate</p>
+          <p>Vibrant Latin showcase with carnival costumes and audience interaction—ideal for weddings, brand parties and summer events.</p>
+          <div class="actions">
+            <a class="btn" href="contact.html?subject=Enquiry%20-%20Latin%20Fire">Enquire</a>
+            <a class="btn alt view-poster" href="latinfire-1.jpg">View poster</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 3 -->
+      <article class="card" data-name="Ballet Fusion">
+        <div class="frame">
+          <div class="slides">
+            <img src="balletfusion-1.jpg" alt="Ballet Fusion (1)">
+            <img src="balletfusion-2.jpg" alt="Ballet Fusion (2)">
+          </div>
+          <button class="nav prev" aria-label="Previous">‹</button>
+          <button class="nav next" aria-label="Next">›</button>
+          <div class="dots"></div>
+        </div>
+        <div class="meta">
+          <span class="name" role="button" tabindex="0">BALLET FUSION</span>
+          <span class="hint">Hover/tap name for bio</span>
+        </div>
+        <div class="bio" aria-hidden="true">
+          <h3>Ballet Fusion</h3>
+          <p class="tags">Contemporary • Classical • Theatres</p>
+          <p>Graceful classical lines blended with modern choreography for a striking stage feature or dinner-show centrepiece.</p>
+          <div class="actions">
+            <a class="btn" href="contact.html?subject=Enquiry%20-%20Ballet%20Fusion">Enquire</a>
+            <a class="btn alt view-poster" href="balletfusion-1.jpg">View poster</a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+    <footer>© <span id="y"></span> Geneius Entertainment</footer>
+  </div>
+
+  <!-- Lightbox (poster full-screen) -->
+  <div id="lightbox" class="bio" style="position:fixed;display:none;inset:0;background:rgba(0,0,0,.9);align-items:center;justify-content:center;z-index:9999;padding:20px">
+    <span id="lbClose" class="btn alt" style="position:absolute;top:16px;right:16px">Close</span>
+    <img id="lbImg" src="" alt="Poster" style="max-width:100%;max-height:90vh;border-radius:12px;border:1px solid rgba(255,255,255,.25)">
+  </div>
+
+  <script>
+  // year
+  document.getElementById('y').textContent = new Date().getFullYear();
+
+  // slider + dots + arrows
+  document.querySelectorAll('.card').forEach(card=>{
+    const slides = card.querySelector('.slides');
+    const items  = [...slides.children];
+    const prev   = card.querySelector('.nav.prev');
+    const next   = card.querySelector('.nav.next');
+    const dots   = card.querySelector('.dots');
+    let i = 0;
+
+    // dots
+    items.forEach((_,idx)=>{
+      const d = document.createElement('span');
+      d.className = 'dot'+(idx===0?' active':'');
+      d.addEventListener('click',()=>go(idx));
+      dots.appendChild(d);
+    });
+
+    function render(){
+      slides.style.transform = `translateX(-${i*100}%)`;
+      [...dots.children].forEach((d,idx)=>d.classList.toggle('active', idx===i));
+    }
+    function go(idx){
+      i = (idx+items.length)%items.length;
+      render();
+    }
+    prev.addEventListener('click', ()=>go(i-1));
+    next.addEventListener('click', ()=>go(i+1));
+
+    // swipe (mobile)
+    let sx=0, dx=0;
+    slides.addEventListener('touchstart', e=>{sx=e.touches[0].clientX; dx=0;},{passive:true});
+    slides.addEventListener('touchmove',  e=>{dx=e.touches[0].clientX-sx;},{passive:true});
+    slides.addEventListener('touchend',   ()=>{ if(Math.abs(dx)>40) go(i + (dx<0?1:-1)); });
+
+    render();
+
+    // name toggles bio
+    const name = card.querySelector('.name');
+    const bio  = card.querySelector('.bio');
+    const closeBio = (e)=>{ if(!card.contains(e.target)) { bio.style.display='none'; document.removeEventListener('click', closeBio); } };
+    name.addEventListener('click', ()=>{
+      bio.style.display = (bio.style.display==='flex') ? 'none' : 'flex';
+      if(bio.style.display==='flex'){ document.addEventListener('click', closeBio); }
+    });
+    name.addEventListener('keydown', e=>{
+      if(e.key==='Enter' || e.key===' '){ e.preventDefault(); name.click(); }
+    });
+
+    // poster lightbox
+    card.querySelectorAll('.view-poster').forEach(a=>{
+      a.addEventListener('click', e=>{
+        e.preventDefault();
+        const href = a.getAttribute('href');
+        const lb = document.getElementById('lightbox');
+        const img = document.getElementById('lbImg');
+        img.src = href;
+        lb.style.display = 'flex';
+      });
+    });
+  });
+
+  // close lightbox
+  document.getElementById('lbClose').addEventListener('click', ()=>{
+    document.getElementById('lightbox').style.display='none';
+    document.getElementById('lbImg').src='';
+  });
+  </script>
+</body>
+</html>
