@@ -37,6 +37,14 @@ window.TALENT = [
     link: 'tribute.html',
     bio: 'Classic Elvis tribute – poster placeholder.',
     tags: ['tributes','duos','weddings']
+   },
+  {
+    id: 'Gel Divas',
+    name: 'Gel Duo - Divas',
+    img: 'GelDivas.jpg',
+    link: 'singers.html',
+    bio: 'Classic hits, Divas.',
+    tags: ['Duo, Divas, Classic']
   },
    {
     id: 'meghan-gray',
