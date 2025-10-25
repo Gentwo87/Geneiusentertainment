@@ -125,5 +125,14 @@ window.TALENT = [
     link: 'kids.html',
     bio: 'Showstopping magician for stage and corporate events.',
     tags: ['magicians','entertainers','events','corporate']
-  }
+  }, 
+  {
+  id: 'slim-shadow',
+  name: 'Slim Shadow - Eminem Tribute',
+  img: 'Slim1.jpg',
+  images: ['Slim1.jpg', 'Slim2.jpg', 'Slim3.jpg'],
+  link: 'tribute.html',
+  bio: 'A high-energy, authentic tribute to the real Slim Shady — packed with hits and crowd interaction.',
+  tags: ['tributes','hiphop','club']
+},
 ];
