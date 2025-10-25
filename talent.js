@@ -61,5 +61,60 @@ window.TALENT = [
     link: 'dj.html',
     bio: 'Wedding, party & club specialist.',
     tags: ['djs','clubs','parties','weddings']
-  }
+  },
+   {
+    id: 'DJ Porcelain Rose',
+    name: 'DJ Porcelain Rose',
+    img: 'DJPROSE.jpg',
+    link: 'dj.html',
+    bio: 'Wedding, party & club specialist.',
+    tags: ['djs','parties','weddings']
+  },
+   {
+    id: 'DJ Leevs',
+    name: 'DJ Leevs',
+    img: 'DJLevi.jpg',
+    link: 'dj.html',
+    bio: 'Wedding, party & club specialist.',
+    tags: ['djs','clubs','parties','weddings']
+  },
+   {
+    id: 'Princes Of Motown',
+    name: 'Princes Of Motown',
+    img: 'POMT2.jpg',
+    link: 'tribute.html','bands.html',
+    bio: 'Wedding, Corporate, Festivals.',
+    tags: ['Tribute']
+   },
+   {
+    id: 'Soul Select',
+    name: 'Soul Select',
+    img: 'SoulS2.jpg',
+    link: 'bands.html',
+    bio: 'Wedding, party, Corporate, Festivals.',
+    tags: ['bands','clubs','parties','weddings']
+   },
+   {
+    id: 'Lively Squad',
+    name: 'Lively Squad',
+    img: 'LivelyP.jpg',
+    link: 'kids.html',
+    bio: 'Party Hosts/Specialist.',
+    tags: ['Parties, Entertainer, Birthdays, Hosts']
+   },
+   {
+    id: 'MG Herts',
+    name: 'MG Herts Parties',
+    img: 'MGHParties.jpg',
+    link: 'kids.html',
+    bio: 'Party Hosts/Specialist.',
+    tags: ['Parties, Entertainer, Birthdays, Hosts']
+   },
+   {
+    id: 'Magical Bones',
+    name: 'Magical Bones',
+    img: 'Bones3.jpg',
+    link: 'kids.html',
+    bio: 'Wedding, Party, Showcase, Corporate.',
+    tags: ['Magician, Entertainer, ']
 ];
