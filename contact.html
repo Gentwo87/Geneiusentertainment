@@ -1,1 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact Us | Geneius Entertainment</title>
 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MR1NLPH5ZK"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date()); gtag('config', 'G-MR1NLPH5ZK');
+  </script>
+
+  <style>
+    :root{
+      --bg:#000; --ink:#f5f5f5; --muted:#bfbfbf;
+      --gold:#C99700; --line:rgba(255,255,255,.12);
+    }
+    *{box-sizing:border-box}
+    html,body{height:auto}
+    body{margin:0;background:var(--bg);color:var(--ink);
+         font-family:"Trebuchet MS",Arial,sans-serif}
+    .wrap{width:min(1120px,92vw);margin:0 auto}
+
+    /* Back button row (kept like your site) */
+    .bar{display:flex;justify-content:center;align-items:center;padding:18px 0 8px}
+    .btn-mini{display:inline-block;padding:8px 12px;border-radius:10px;
+      color:#ffd76a;background:rgba(201,151,0,.08);
+      border:1px solid rgba(201,151,0,.45);text-decoration:none;font-weight:700}
+    .btn-mini:hover{background:rgba(201,151,0,.14)}
+
+    /* Headline + sub exactly like your screenshot */
+    h1{margin:8px 0 10px;text-align:center;font-size:2rem;color:var(--gold);letter-spacing:1px}
+    .sub{color:var(--muted);text-align:center;margin:0 0 18px;font-size:.95rem}
+
+    /* Card panel around the form */
+    .panel{
+      width:min(760px,94vw);margin:18px auto 24px;padding:18px 18px 16px;
+      background:#111319;
+      border:1px solid var(--line);border-radius:18px;
+      box-shadow:0 8px 26px rgba(0,0,0,.35);
+    }
+
+    /* Inputs styled the same as your existing page */
+    label{display:block;margin:0 0 6px;color:#d7d7d7;font-size:.92rem}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .row + .row{margin-top:12px}
+    input, textarea{
+      width:100%;background:#0c0e14;color:#fff;border:1px solid rgba(255,255,255,.15);
+      border-radius:10px;padding:12px 12px;font-size:1rem;outline:none;
+      transition:border-color .2s, box-shadow .2s;
+    }
+    input::placeholder, textarea::placeholder{color:#8d97a6}
+    input:focus, textarea:focus{border-color:rgba(201,151,0,.55);box-shadow:0 0 0 3px rgba(201,151,0,.12)}
+    textarea{min-height:140px;resize:vertical}
+
+    .actions{display:flex;align-items:center;gap:12px;margin-top:14px}
+    .btn{background:var(--gold);color:#000;border:0;border-radius:10px;
+      padding:10px 16px;font-weight:800;cursor:pointer}
+    .btn:disabled{opacity:.55;cursor:not-allowed}
+
+    /* status message below button */
+    #status{margin:0;color:#ffd76a;font-weight:700}
+    #status.error{color:#ff6565}
+
+    footer{margin:26px 0 40px;color:#aaa;text-align:center}
+    @media (max-width:700px){ .row{grid-template-columns:1fr} }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="bar">
+      <a class="btn-mini" href="index.html">← Back to Home</a>
+    </div>
+
+    <h1>Contact Us</h1>
+    <p class="sub">Tell us about your event and the acts you’re interested in.</p>
+
+    <form id="enquiryForm" class="panel" novalidate>
+      <div class="row">
+        <div>
+          <label for="name">Your name</label>
+          <input id="name" name="name" type="text" autocomplete="name" required />
+        </div>
+        <div>
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" autocomplete="email" required />
+        </div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label for="phone">Phone</label>
+          <input id="phone" name="phone" type="tel" autocomplete="tel" />
+        </div>
+        <div>
+          <label for="event_date">Event date (dd/mm/yyyy)</label>
+          <input id="event_date" name="event_date" type="text" placeholder="dd/mm/yyyy" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label for="acts">Act(s) or category</label>
+          <input id="acts" name="acts" type="text" placeholder="e.g. Gel Duo, tributes, MG Hertz…" />
+        </div>
+        <div>
+          <label for="message">Message</label>
+          <textarea id="message" name="message" placeholder="Venue, timings, budget, anything useful…"></textarea>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="sendBtn" class="btn" type="submit">Send enquiry</button>
+        <span id="status" role="status" aria-live="polite"></span>
+      </div>
+    </form>
+
+    <footer>© <span id="y"></span> Geneius Entertainment</footer>
+  </div>
+
+  <script>
+    // ==== CONFIG: paste your Apps Script "Web app" URL here ====
+    const ENDPOINT = 'YOUR_APPS_SCRIPT_URL_HERE';
+    // Example (looks like this): https://script.google.com/macros/s/AKfycbx.../exec
+    // The Apps Script should email the submission to contact@geneiusentertainment.com
+
+    // Prefill the "acts" box from ?subject= in links like contact.html?subject=Gel%20Duo
+    (function prefill(){
+      const q = new URLSearchParams(location.search);
+      const subject = q.get('subject');
+      if(subject){ document.getElementById('acts').value = subject; }
+    })();
+
+    // Year in footer
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    // Submit handler — keeps layout the same, shows status inline
+    document.getElementById('enquiryForm').addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const status = document.getElementById('status');
+      const btn = document.getElementById('sendBtn');
+      status.textContent = ''; status.classList.remove('error');
+
+      if(!ENDPOINT || ENDPOINT.includes('YOUR_APPS_SCRIPT_URL_HERE')){
+        status.textContent = '❌ Setup incomplete. Add your Apps Script URL.';
+        status.classList.add('error');
+        return;
+      }
+
+      btn.disabled = true;
+      status.textContent = 'Sending…';
+
+      // Build payload
+      const fd = new FormData(e.target);
+      // Helpful subject line for your inbox
+      fd.append('subject_line', `New enquiry: ${fd.get('acts') || 'General'} — ${fd.get('name')||''}`);
+
+      try{
+        // Use no-cors so we don’t need special headers; we optimistically show success.
+        await fetch(ENDPOINT, { method:'POST', mode:'no-cors', body: fd });
+
+        status.textContent = '✅ Thank you! Your enquiry has been sent.';
+        e.target.reset();
+      }catch(err){
+        status.textContent = '❌ Something went wrong. Please try again.';
+        status.classList.add('error');
+      }finally{
+        btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
