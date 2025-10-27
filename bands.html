@@ -300,6 +300,14 @@
   // This tells the renderer which tag to show by default
   window.DEFAULT_TAG = 'singers'; // change for tributes, bands, etc.
 </script>
+<script>
+  // Universal Enquire button handler
+  document.querySelectorAll('.btn.enquire').forEach(btn => {
+    const card = btn.closest('[data-name]');
+    const actName = (card?.dataset.name || btn.textContent || '').trim();
+    btn.href = 'contact.html?subject=' + encodeURIComponent(actName);
+  });
+</script>
 <script src="acts-renderer.js"></script>
   
 </body>
