@@ -215,5 +215,13 @@
     apply(); // initial
   })();
   </script>
+  <script>
+  // Universal Enquire button handler
+  document.querySelectorAll('.btn.enquire').forEach(btn => {
+    const card = btn.closest('[data-name]');
+    const actName = (card?.dataset.name || btn.textContent || '').trim();
+    btn.href = 'contact.html?subject=' + encodeURIComponent(actName);
+  });
+  </script>
 </body>
 </html>
