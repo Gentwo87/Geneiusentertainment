@@ -14,44 +14,27 @@
   </script>
 
   <style>
-    :root{
-      --bg:#000; --ink:#f5f5f5; --muted:#bfbfbf;
-      --gold:#C99700; --accent:#1b1710; --line:rgba(255,255,255,.12);
-    }
+    :root{--bg:#000;--ink:#f5f5f5;--muted:#bfbfbf;--gold:#C99700;--line:rgba(255,255,255,.12)}
     *{box-sizing:border-box}
     html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Trebuchet MS",Arial,sans-serif}
     .wrap{width:min(1120px,92vw);margin:0 auto;padding:30px 0 46px}
-
     .bar{display:flex;justify-content:space-between;align-items:center;margin:0 0 12px}
-    .btn-mini{
-      display:inline-block;padding:8px 12px;border-radius:10px;
-      color:#ffd76a;background:rgba(201,151,0,.08);
-      border:1px solid rgba(201,151,0,.45);text-decoration:none;font-weight:700
-    }
+    .btn-mini{display:inline-block;padding:8px 12px;border-radius:10px;color:#ffd76a;background:rgba(201,151,0,.08);border:1px solid rgba(201,151,0,.45);text-decoration:none;font-weight:700}
     .btn-mini:hover{background:rgba(201,151,0,.14)}
-
     header{display:flex;align-items:center;gap:14px;justify-content:center;margin:6px 0 10px}
     #logo{height:64px;width:auto}
-    h1{margin:0;font-size:1.6rem;color:var(--gold);letter-spacing:1px}
+    h1{margin:0;font-size:1.6rem;color:#ffd76a;letter-spacing:1px}
 
-    /* Grid and cards */
     .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
     .card{background:#15151b;border:1px solid var(--line);border-radius:16px;overflow:hidden;position:relative}
-
-    /* Media area (poster) */
-    .media{position:relative;background:#000;aspect-ratio: 800 / 520; overflow:hidden; cursor:pointer}
+    .media{position:relative;background:#000;aspect-ratio:800/520;overflow:hidden;cursor:pointer}
     .slides{display:flex;width:100%;height:100%;transition:transform .35s ease}
     .slides img{width:100%;height:100%;object-fit:cover;flex:0 0 100%}
 
-    /* Carousel controls */
-    .nav{
-      position:absolute;top:50%;transform:translateY(-50%);
-      border:1px solid rgba(255,255,255,.35);background:rgba(0,0,0,.45);
-      color:#fff;font-weight:800;line-height:1;padding:.35rem .6rem;border-radius:10px;
-      cursor:pointer;opacity:0;transition:opacity .2s
-    }
+    .nav{position:absolute;top:50%;transform:translateY(-50%);border:1px solid rgba(255,255,255,.35);background:rgba(0,0,0,.45);color:#fff;
+      font-weight:800;line-height:1;padding:.35rem .6rem;border-radius:10px;cursor:pointer;opacity:0;transition:opacity .2s}
     .media:hover .nav{opacity:1}
-    .nav.prev{left:8px} .nav.next{right:8px}
+    .nav.prev{left:8px}.nav.next{right:8px}
     .dots{position:absolute;left:0;right:0;bottom:8px;display:flex;gap:6px;justify-content:center}
     .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.4)}
     .dot.active{background:#ffd76a;border-color:#C99700}
@@ -60,24 +43,16 @@
     .name{font-weight:800;color:#ffd76a}
 
     .actions{display:flex;gap:10px;margin-top:10px}
-    .btn{
-      display:inline-block;padding:.5rem .9rem;border-radius:12px;text-decoration:none;font-weight:800;
-      color:#111;background:#ffd76a;border:1px solid #C99700
-    }
+    .btn{display:inline-block;padding:.5rem .9rem;border-radius:12px;text-decoration:none;font-weight:800;color:#111;background:#ffd76a;border:1px solid #C99700}
     .btn.alt{background:transparent;color:#ffd76a;border-color:#ffd76a}
 
-    /* Bio overlay shown when poster is clicked */
-    .bio{
-      position:absolute;inset:0;display:flex;align-items:flex-end;
-      background:linear-gradient(180deg,rgba(0,0,0,0) 40%, rgba(0,0,0,.78) 100%);
-      padding:14px;opacity:0;transition:opacity .2s;pointer-events:none
-    }
+    .bio{position:absolute;inset:0;display:flex;align-items:flex-end;background:linear-gradient(180deg,rgba(0,0,0,0) 40%, rgba(0,0,0,.78) 100%);
+      padding:14px;opacity:0;transition:opacity .2s;pointer-events:none}
     .bio p{margin:.3rem 0;color:#eee;font-size:.95rem;line-height:1.35}
     .card.bio-open .bio{opacity:1}
 
     footer{margin-top:28px;color:#aaa;text-align:center}
 
-    /* Lightbox */
     .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:9999}
     .lightbox.open{display:flex}
     .lightbox img{max-width:92vw;max-height:92vh;border-radius:12px;border:1px solid rgba(255,255,255,.25)}
@@ -86,29 +61,25 @@
 </head>
 <body>
   <div class="wrap">
-
     <div class="bar">
       <a class="btn-mini" href="index.html">← Back to Home</a>
       <a class="btn-mini" href="acts.html">Browse all acts</a>
     </div>
-
     <header>
       <a href="index.html" aria-label="Home"><img id="logo" src="logo.png" alt="Geneius Entertainment"></a>
       <h1>DJs</h1>
     </header>
 
     <div class="grid">
-
       <!-- DJ: The General / DJ Genie -->
       <div class="card" data-name="The General / DJ Genie">
         <div class="media gallery" tabindex="0" aria-label="Poster gallery: The General / DJ Genie">
           <div class="slides">
-            <img src="DJGenie3.jpg" alt="The General / DJ Genie — poster 1">
+            <img src="TheGeneral.jpg" alt="The General / DJ Genie — poster 1">
           </div>
           <button class="nav prev" aria-label="Previous">‹</button>
           <button class="nav next" aria-label="Next">›</button>
           <div class="dots"></div>
-
           <div class="bio">
             <div>
               <h3 style="margin:0 0 4px;color:#ffd76a">The General / DJ Genie</h3>
@@ -120,9 +91,7 @@
             </div>
           </div>
         </div>
-        <div class="meta">
-          <div class="name">The General / DJ Genie</div>
-        </div>
+        <div class="meta"><div class="name">The General / DJ Genie</div></div>
       </div>
 
       <!-- DJ: DJ Leon D -->
@@ -134,7 +103,6 @@
           <button class="nav prev" aria-label="Previous">‹</button>
           <button class="nav next" aria-label="Next">›</button>
           <div class="dots"></div>
-
           <div class="bio">
             <div>
               <h3 style="margin:0 0 4px;color:#ffd76a">DJ Leon D</h3>
@@ -146,9 +114,7 @@
             </div>
           </div>
         </div>
-        <div class="meta">
-          <div class="name">DJ Leon D</div>
-        </div>
+        <div class="meta"><div class="name">DJ Leon D</div></div>
       </div>
 
       <!-- DJ: DJ Porcelain Rose -->
@@ -160,7 +126,6 @@
           <button class="nav prev" aria-label="Previous">‹</button>
           <button class="nav next" aria-label="Next">›</button>
           <div class="dots"></div>
-
           <div class="bio">
             <div>
               <h3 style="margin:0 0 4px;color:#ffd76a">DJ Porcelain Rose</h3>
@@ -172,9 +137,7 @@
             </div>
           </div>
         </div>
-        <div class="meta">
-          <div class="name">DJ Porcelain Rose</div>
-        </div>
+        <div class="meta"><div class="name">DJ Porcelain Rose</div></div>
       </div>
 
       <!-- DJ: DJ Leevs -->
@@ -186,7 +149,6 @@
           <button class="nav prev" aria-label="Previous">‹</button>
           <button class="nav next" aria-label="Next">›</button>
           <div class="dots"></div>
-
           <div class="bio">
             <div>
               <h3 style="margin:0 0 4px;color:#ffd76a">DJ Leevs</h3>
@@ -198,11 +160,8 @@
             </div>
           </div>
         </div>
-        <div class="meta">
-          <div class="name">DJ Leevs</div>
-        </div>
+        <div class="meta"><div class="name">DJ Leevs</div></div>
       </div>
-
     </div>
 
     <footer>© <span id="y"></span> Geneius Entertainment</footer>
@@ -215,10 +174,9 @@
   </div>
 
   <script>
-    // Year
     document.getElementById('y').textContent = new Date().getFullYear();
 
-    // Per-card gallery (arrows, dots, swipe)
+    // gallery / bio
     document.querySelectorAll('.gallery').forEach(root=>{
       const slides = root.querySelector('.slides');
       const imgs   = [...slides.querySelectorAll('img')];
@@ -246,47 +204,46 @@
       prev.addEventListener('click', ()=>go(index-1));
       next.addEventListener('click', ()=>go(index+1));
 
-      // Touch swipe
+      // swipe
       let startX=0, dx=0;
       slides.addEventListener('touchstart', e=>{startX=e.touches[0].clientX; dx=0;}, {passive:true});
       slides.addEventListener('touchmove',  e=>{dx=e.touches[0].clientX-startX;}, {passive:true});
       slides.addEventListener('touchend',   ()=>{ if(Math.abs(dx)>40) go(index + (dx<0?1:-1)); });
 
-      // Toggle bio when clicking poster
+      // toggle bio on poster click
       root.addEventListener('click', ()=>{
-        const card = root.closest('.card');
-        card.classList.toggle('bio-open');
+        root.closest('.card').classList.toggle('bio-open');
       });
 
       render();
     });
 
-    // Open poster in lightbox (uses current slide if available)
-    const lb   = document.getElementById('lightbox');
-    const lbIm = document.getElementById('lightboxImg');
+    // Lightbox open on "View poster"
+    const lb = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lightboxImg');
     document.querySelectorAll('.view-poster').forEach(btn=>{
       btn.addEventListener('click', e=>{
         e.preventDefault();
         const card  = btn.closest('.card');
         const slides= card.querySelector('.slides');
         const all   = [...slides.querySelectorAll('img')];
-        // work out which slide is showing from transform
-        const m = /translateX\\(-([0-9.]+)%\\)/.exec(slides.style.transform||'');
+        // FIXED regex here (no double escaping)
+        const m = /translateX\(-([0-9.]+)%\)/.exec(slides.style.transform||'');
         const idx = m ? Math.round(parseFloat(m[1])/100) : 0;
-        lbIm.src = all[idx]?.src || all[0]?.src || '';
-        if(lbIm.src){ lb.classList.add('open'); lb.setAttribute('aria-hidden','false'); }
+        lbImg.src = all[idx]?.src || all[0]?.src || '';
+        if(lbImg.src){ lb.classList.add('open'); lb.setAttribute('aria-hidden','false'); }
       });
     });
     document.getElementById('lbClose').addEventListener('click', ()=>{
-      lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); lbIm.src='';
+      lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); lbImg.src='';
     });
     lb.addEventListener('click', e=>{ if(e.target===lb) document.getElementById('lbClose').click(); });
 
-    // Route Enquire buttons to contact page with subject auto-filled
+    // Enquire → contact with subject
     document.querySelectorAll('.btn.enquire').forEach(btn=>{
       const card = btn.closest('[data-name]');
       const act  = (card?.dataset.name || '').trim();
-      btn.setAttribute('href', 'contact.html?subject='+encodeURIComponent(act));
+      btn.href = 'contact.html?subject='+encodeURIComponent(act);
     });
   </script>
 </body>
