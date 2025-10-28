@@ -44,12 +44,12 @@
     }
     .artist-card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.35);border-color:rgba(212,175,55,.45)}
 
-    /* Poster frame (same size as singers/tributes) */
-    .frame{position:relative; height:220px; overflow:hidden}
+    /* Poster frame (same size as other pages) */
+    .frame{position:relative; height:220px; overflow:hidden; cursor:pointer}
     .slides{display:flex; width:100%; height:100%; transition:transform .35s ease}
     .slides img{width:100%; height:100%; object-fit:cover; flex:0 0 100%; display:block}
 
-    /* Gallery controls: always visible */
+    /* Gallery controls */
     .nav{
       position:absolute; top:50%; transform:translateY(-50%);
       background:rgba(0,0,0,.45); color:#fff; border:1px solid rgba(255,255,255,.35);
@@ -65,18 +65,17 @@
     .artist-meta{padding:12px 14px}
     .artist-meta .name{
       color:var(--gold); text-transform:uppercase; letter-spacing:.06em;
-      font-weight:800; cursor:pointer; display:inline-block;
+      font-weight:800; display:inline-block;
     }
     .artist-meta .hint{display:block; color:#888; font-size:.84rem; margin-top:4px}
 
-    /* Bio overlay appears ONLY when hovering/tapping the name */
+    /* Bio overlay appears when clicking/tapping the poster */
     .bio{
       position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-end;
       padding:16px; gap:10px; opacity:0; pointer-events:none; transition:opacity .2s ease;
       background:linear-gradient(to top, rgba(0,0,0,.82) 28%, rgba(0,0,0,.18) 65%, rgba(0,0,0,0));
       backdrop-filter:saturate(120%) blur(2px);
     }
-    .artist-meta:hover ~ .bio{opacity:1; pointer-events:auto}
     .artist-card.bio-open .bio{opacity:1; pointer-events:auto}
 
     .bio h3{margin:0;color:var(--gold);text-transform:uppercase;letter-spacing:.06em;font-size:1rem}
@@ -104,7 +103,7 @@
     <a class="btn" href="index.html">← Back to Home</a>
   </header>
 
-  <p class="sub">Use arrows to browse posters. Hover/tap the <strong>name</strong> to view the bio and enquiry buttons. “View Poster” opens the current slide full screen.</p>
+  <p class="sub">Tap the poster to view the bio & actions. Use arrows to browse posters. “View Poster” opens the current slide full screen.</p>
 
   <div class="container">
     <div class="cards">
@@ -114,8 +113,8 @@
         <div class="frame gallery" aria-label="Poster gallery for Princes of Motown">
           <div class="slides">
             <img src="POMT2.jpg" alt="Princes of Motown – poster 1">
-            <!-- Add more posters if you have them:
-            <img src="POMT2.jpg" alt="Princes of Motown – poster 2">
+            <!-- Add more posters if you have them
+            <img src="POMT2b.jpg" alt="Princes of Motown – poster 2">
             -->
           </div>
           <button class="nav prev" aria-label="Previous">‹</button>
@@ -124,17 +123,17 @@
         </div>
 
         <div class="artist-meta">
-          <span class="name" role="button" tabindex="0">Princes of Motown</span>
-          <span class="hint">Hover/tap name for bio</span>
+          <span class="name">Princes of Motown</span>
+          <span class="hint">Tap poster for bio</span>
         </div>
 
         <div class="bio">
           <h3>Princes of Motown</h3>
           <p class="tags">Motown • Soul • Party</p>
-          <p>Silky harmonies and crowd-pleasing Motown classics — a feel-good set that keeps the floor full.</p>
+          <p>Silky harmonies and floor-filling Motown classics — a feel-good show that keeps the crowd smiling.</p>
           <div class="actions">
-            <a class="btn" href="mailto:contact@geneiusentertainment.com?subject=Booking%20Princes%20of%20Motown">Enquire</a>
-            <a class="btn alt view-poster" href="#" data-target="current">View Poster</a>
+            <a class="btn enquire" href="#">Enquire</a>
+            <a class="btn alt view-poster" href="#" data-target="current">View poster</a>
           </div>
         </div>
       </div>
@@ -144,9 +143,6 @@
         <div class="frame gallery" aria-label="Poster gallery for Soul Select">
           <div class="slides">
             <img src="SoulS2.jpg" alt="Soul Select – poster 1">
-            <!-- Add more posters if you have them:
-            <img src="SoulS2b.jpg" alt="Soul Select – poster 2">
-            -->
           </div>
           <button class="nav prev" aria-label="Previous">‹</button>
           <button class="nav next" aria-label="Next">›</button>
@@ -154,22 +150,22 @@
         </div>
 
         <div class="artist-meta">
-          <span class="name" role="button" tabindex="0">Soul Select</span>
-          <span class="hint">Hover/tap name for bio</span>
+          <span class="name">Soul Select</span>
+          <span class="hint">Tap poster for bio</span>
         </div>
 
         <div class="bio">
           <h3>Soul Select</h3>
           <p class="tags">Soul • R&amp;B • Motown • Pop</p>
-          <p>Versatile party band delivering smooth vocals and modern energy — perfect for weddings, festivals and corporate events.</p>
+          <p>Versatile party band with smooth vocals and modern energy — ideal for weddings, clubs and corporate events.</p>
           <div class="actions">
-            <a class="btn" href="mailto:contact@geneiusentertainment.com?subject=Booking%20Soul%20Select">Enquire</a>
-            <a class="btn alt view-poster" href="#" data-target="current">View Poster</a>
+            <a class="btn enquire" href="#">Enquire</a>
+            <a class="btn alt view-poster" href="#" data-target="current">View poster</a>
           </div>
         </div>
       </div>
 
-      <!-- Placeholder band -->
+      <!-- Placeholder band (example) -->
       <div class="artist-card" tabindex="0" data-name="Function Collective">
         <div class="frame gallery" aria-label="Poster gallery for Function Collective">
           <div class="slides">
@@ -182,17 +178,17 @@
         </div>
 
         <div class="artist-meta">
-          <span class="name" role="button" tabindex="0">Function Collective</span>
-          <span class="hint">Hover/tap name for bio</span>
+          <span class="name">Function Collective</span>
+          <span class="hint">Tap poster for bio</span>
         </div>
 
         <div class="bio">
           <h3>Function Collective</h3>
           <p class="tags">Pop • Rock • Indie</p>
-          <p>Premium function band covering sing-along hits with optional sax and extra vocals for a larger show.</p>
+          <p>Premium function band covering sing-along hits with optional sax and extra vocals for a bigger show.</p>
           <div class="actions">
-            <a class="btn" href="mailto:contact@geneiusentertainment.com?subject=Booking%20Function%20Collective">Enquire</a>
-            <a class="btn alt view-poster" href="#" data-target="current">View Poster</a>
+            <a class="btn enquire" href="#">Enquire</a>
+            <a class="btn alt view-poster" href="#" data-target="current">View poster</a>
           </div>
         </div>
       </div>
@@ -223,7 +219,7 @@
       w.appendChild(e)}}
     go();addEventListener('resize',()=>{clearTimeout(window._t);window._t=setTimeout(go,200)});
 
-    // ===== Gallery setup =====
+    // ===== Gallery setup (exposes getCurrentSrc) =====
     document.querySelectorAll('.gallery').forEach(setupGallery);
     function setupGallery(root){
       const slides = root.querySelector('.slides');
@@ -261,18 +257,13 @@
       render();
     }
 
-    // Mobile: tap name to toggle bio
+    // Tap/click POSTER to toggle bio
     document.querySelectorAll('.artist-card').forEach(card=>{
-      const nameEl = card.querySelector('.artist-meta .name');
-      if(nameEl){
-        nameEl.addEventListener('click', ()=>{ card.classList.toggle('bio-open'); });
-        nameEl.addEventListener('keydown', (e)=>{
-          if(e.key==='Enter' || e.key===' '){ e.preventDefault(); card.classList.toggle('bio-open'); }
-        });
-      }
+      const frame = card.querySelector('.frame');
+      frame.addEventListener('click', ()=>{ card.classList.toggle('bio-open'); });
     });
 
-    // Lightbox for "View Poster"
+    // Lightbox for "View Poster" (uses current slide)
     const lb = document.getElementById('lightbox');
     const lbImg = document.getElementById('lightboxImg');
     const closeLb = ()=>{ lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); }
@@ -292,23 +283,13 @@
         }
       });
     });
-  </script>
 
-  <!-- load shared data + renderer -->
-<script src="talent.js"></script>
-<script>
-  // This tells the renderer which tag to show by default
-  window.DEFAULT_TAG = 'singers'; // change for tributes, bands, etc.
-</script>
-<script>
-  // Universal Enquire button handler
-  document.querySelectorAll('.btn.enquire').forEach(btn => {
-    const card = btn.closest('[data-name]');
-    const actName = (card?.dataset.name || btn.textContent || '').trim();
-    btn.href = 'contact.html?subject=' + encodeURIComponent(actName);
-  });
-</script>
-<script src="acts-renderer.js"></script>
-  
+    // Universal Enquire → contact page with subject prefilled
+    document.querySelectorAll('.btn.enquire').forEach(btn=>{
+      const card = btn.closest('[data-name]');
+      const actName = (card?.dataset.name || btn.textContent || '').trim();
+      btn.href = 'contact.html?subject=' + encodeURIComponent(actName);
+    });
+  </script>
 </body>
 </html>
