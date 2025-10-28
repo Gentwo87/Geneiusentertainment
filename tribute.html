@@ -24,6 +24,16 @@
     .sparkle{position:absolute;width:2px;height:2px;background:var(--gold);border-radius:50%;opacity:0;animation:s 4s infinite}
     @keyframes s{0%{opacity:0;transform:scale(0)}50%{opacity:1;transform:scale(1.5)}100%{opacity:0;transform:scale(0)}}
 
+    /* === TOP BAR buttons copied from Singers page === */
+    .wrap{width:min(1120px,92vw);margin:0 auto;padding:30px 0 0}
+    .bar{display:flex;justify-content:space-between;align-items:center;margin:0 0 12px}
+    .btn-mini{
+      display:inline-block;padding:8px 12px;border-radius:10px;
+      color:#ffd76a;background:rgba(201,151,0,.08);
+      border:1px solid rgba(201,151,0,.45);text-decoration:none;font-weight:700
+    }
+    .btn-mini:hover{background:rgba(201,151,0,.14)}
+
     header{position:relative;text-align:center;padding:60px 20px;background:radial-gradient(circle at center,rgba(201,151,0,.25),#000 70%);z-index:1}
     #logo{max-width:260px;height:auto;display:block;margin:0 auto 10px}
     h1{color:var(--gold);text-transform:uppercase;letter-spacing:2px;margin:0 0 14px}
@@ -94,16 +104,17 @@
 <body>
   <div id="sparkles"></div>
 
-  <header>
-  <a href="index.html"><img id="logo" src="logo.png" alt="Geneius Entertainment"></a>
-  <h1>Tribute Acts</h1>
-</header>
+  <!-- New matching top bar -->
+  <div class="wrap">
+    <div class="bar">
+      <a class="btn-mini" href="index.html">← Back to Home</a>
+      <a class="btn-mini" href="acts.html">Browse all acts</a>
+    </div>
+  </div>
 
-<div class="bar">
-  <a class="btn-mini" href="index.html">← Back to Home</a>
-  <a class="btn-mini" href="acts.html">Browse all acts</a>
-</div>
-    
+  <header>
+    <a href="index.html"><img id="logo" src="logo.png" alt="Geneius Entertainment"></a>
+    <h1>Tribute Acts</h1>
   </header>
 
   <p class="sub">Use arrows to browse posters. Hover/tap the <strong>name</strong> to view the bio and enquiry buttons. “View Poster” opens the current slide full screen.</p>
@@ -431,4 +442,4 @@ style.textContent = `
 document.head.appendChild(style);
 </script>    
 </body>
-</html>
+    </html>
