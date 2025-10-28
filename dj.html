@@ -247,5 +247,40 @@
     });
   })();
   </script>
+  <style>
+  /* Make overlay stack above the poster and become visible on hover or when opened */
+  .media { position: relative; }
+  .slides { position: absolute; inset: 0; } /* ensure slides sit behind the overlay */
+
+  .bio{
+    position:absolute; inset:0; display:flex; align-items:flex-end;
+    background:linear-gradient(180deg,rgba(0,0,0,0) 40%, rgba(0,0,0,.78) 100%);
+    padding:14px; opacity:0; pointer-events:none; transition:opacity .2s;
+    z-index:2; /* <-- most important: make it visible above the image */
+  }
+
+  /* show the overlay either on hover OR when we toggle the card open */
+  .media:hover .bio,
+  .card.bio-open .bio{
+    opacity:1 !important; pointer-events:auto;
+  }
+  </style>
+  <script>
+  // Toggle overlay only when clicking empty poster area (not the buttons)
+  document.querySelectorAll('.media').forEach(media=>{
+    const card = media.closest('.card');
+    const bio  = media.querySelector('.bio');
+
+    media.addEventListener('click', e=>{
+      if (bio && bio.contains(e.target)) return; // don't close if clicking inside overlay
+      card.classList.toggle('bio-open');
+    });
+  });
+
+  // Stop clicks on overlay/buttons from bubbling up and closing it
+  document.querySelectorAll('.bio, .bio *').forEach(el=>{
+    el.addEventListener('click', e=> e.stopPropagation());
+  });
+  </script>
 </body>
               </html>
