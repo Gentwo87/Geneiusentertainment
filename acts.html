@@ -115,30 +115,30 @@
     <footer>© <span id="y"></span> Geneius Entertainment</footer>
   </div>
 
-  <!-- Shared data FIRST -->
+  <!-- Shared data -->
   <script src="talent.js"></script>
 
   <!-- Inline renderer -->
   <script>
   (function(){
-    const TALENT = (window.TALENT || []); // from talent.js
-
+    const TALENT = (window.TALENT || []);
     const grid  = document.getElementById('acts-grid');
     const input = document.getElementById('acts-search');
     const chips = [...document.querySelectorAll('.chip')];
-
     let activeTag = 'all';
 
-    function contactHref(actName){
-      return 'contact.html?subject=' + encodeURIComponent(actName);
-    }
+    function contactHref(name){ return 'contact.html?subject=' + encodeURIComponent(name); }
 
     function cardHTML(a){
       const tagsRow = (a.tags||[]).map(t=>`<span class="tag">${t}</span>`).join('');
-      const safeBio  = a.bio ? `<p>${a.bio}</p>` : '';
-      const safeTags = a.tags && a.tags.length ? `<p class="tagsline">${a.tags.join(' • ')}</p>` : '';
+      const safeBio = a.bio ? `<p>${a.bio}</p>` : '';
+      const safeTags = a.tags?.length ? `<p class="tagsline">${a.tags.join(' • ')}</p>` : '';
+
+      // fallback poster: use image if poster not defined
+      const posterURL = a.poster || a.img || 'logo.png';
+
       return `
-        <article class="card" data-name="${a.name}" aria-label="${a.name}">
+        <article class="card" data-name="${a.name}">
           <div class="media" role="button" tabindex="0" aria-label="Open bio for ${a.name}">
             <img src="${a.img || 'logo.png'}" alt="${a.name}">
             <div class="bio" aria-hidden="true">
@@ -147,14 +147,14 @@
               ${safeBio}
               <div class="actions">
                 <a class="btn enquire" href="${contactHref(a.name)}">Enquire</a>
-                ${a.poster ? `<a class="btn alt view-poster" href="${a.poster}" target="_blank" rel="noopener">View poster</a>` : ``}
+                <a class="btn alt view-poster" href="${posterURL}" target="_blank" rel="noopener">View poster</a>
               </div>
             </div>
           </div>
           <div class="meta">
             <span class="name">${a.name}</span>
             <span class="hint">Tap poster for bio</span>
-            ${tagsRow ? `<div class="tags" aria-hidden="true">${tagsRow}</div>` : ''}
+            ${tagsRow ? `<div class="tags">${tagsRow}</div>` : ''}
           </div>
         </article>
       `;
@@ -165,26 +165,25 @@
         ? list.map(cardHTML).join('')
         : `<div class="empty">No acts match your filters.</div>`;
 
-      // Wire up interactions per card
       grid.querySelectorAll('.card').forEach(card=>{
         const media = card.querySelector('.media');
         const bio   = card.querySelector('.bio');
+        const actName = (card.dataset.name||'').trim();
 
-        // Toggle bio when POSTER clicked or Enter/Space pressed
         function toggle(){
           const open = card.classList.toggle('bio-open');
           bio.setAttribute('aria-hidden', open ? 'false' : 'true');
         }
         media.addEventListener('click', toggle);
         media.addEventListener('keydown', e=>{
-          if(e.key==='Enter' || e.key===' '){ e.preventDefault(); toggle(); }
+          if(e.key==='Enter'||e.key===' '){ e.preventDefault(); toggle(); }
         });
-        card.addEventListener('mouseleave', ()=>{ card.classList.remove('bio-open'); bio.setAttribute('aria-hidden','true'); });
+        card.addEventListener('mouseleave', ()=>{
+          card.classList.remove('bio-open'); bio.setAttribute('aria-hidden','true');
+        });
 
-        // Make sure enquire always points to contact with subject
-        const actName = (card.dataset.name||'').trim();
         const enquire = card.querySelector('.btn.enquire');
-        if (enquire) enquire.href = contactHref(actName);
+        if(enquire) enquire.href = contactHref(actName);
       });
     }
 
@@ -199,15 +198,15 @@
       render(out);
     }
 
-    if (input) input.addEventListener('input', apply);
+    if(input) input.addEventListener('input', apply);
     chips.forEach(c=>c.addEventListener('click',()=>{
-      chips.forEach(x=>x.classList.toggle('active', x===c));
+      chips.forEach(x=>x.classList.toggle('active',x===c));
       activeTag = c.dataset.tag;
       apply();
     }));
 
     document.getElementById('y').textContent = new Date().getFullYear();
-    apply(); // initial
+    apply();
   })();
   </script>
 </body>
