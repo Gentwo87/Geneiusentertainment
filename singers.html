@@ -198,16 +198,7 @@
     });
   </script>
   <script>
-  // Auto-convert any mailto enquiry links to use the contact page instead
-  document.querySelectorAll('a[href^="mailto:"], .btn.enquire').forEach(btn => {
-    const card = btn.closest('[data-name]');
-    const actName = (card?.dataset.name || btn.textContent || '').trim();
-    btn.classList.add('enquire');
-    btn.removeAttribute('target'); // remove mail client behaviour
-    btn.href = 'contact.html?subject=' + encodeURIComponent(actName);
-  });
-  </script>
-  <script>
+  
 // === OVERRIDE: Toggle bio on POSTER click/hover ===
 
 // Desktop hover
