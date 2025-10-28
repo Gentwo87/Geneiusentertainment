@@ -211,5 +211,41 @@
     lb.addEventListener('click', e=>{ if(e.target===lb) document.getElementById('lbClose').click(); });
   });
   </script>
+  <style>
+  /* ensure the bio overlay actually receives clicks */
+  .bio{ pointer-events:auto; }
+  </style>
+  <script>
+  (function(){
+    // Only toggle overlay when clicking empty poster area (not the overlay/buttons)
+    document.querySelectorAll('.media').forEach(media=>{
+      const card = media.closest('.card');
+      const bio  = media.querySelector('.bio');
+
+      media.addEventListener('click', (e)=>{
+        if (bio && bio.contains(e.target)) return;  // ignore clicks on overlay/buttons
+        card.classList.toggle('bio-open');
+      });
+    });
+
+    // Prevent overlay/button clicks from bubbling up and closing overlay
+    document.querySelectorAll('.bio, .bio *').forEach(el=>{
+      el.addEventListener('click', e=> e.stopPropagation());
+    });
+
+    // Force Enquire buttons to go to contact.html?subject=ACT
+    document.querySelectorAll('.card').forEach(card=>{
+      const name = card.getAttribute('data-name') || card.querySelector('.name')?.textContent?.trim() || '';
+      const enquire = card.querySelector('.btn,enquire, a.enquire') || card.querySelector('a.btn.enquire');
+      if (enquire) enquire.setAttribute('href', 'contact.html?subject=' + encodeURIComponent(name));
+    });
+
+    // Make sure View Poster anchors open directly even if JS errors (also stop bubbling)
+    document.querySelectorAll('a.view, a.view-poster, a.btn.alt').forEach(a=>{
+      a.addEventListener('click', e=> e.stopPropagation());
+      // no changes to href here—use whatever filename you already set
+    });
+  })();
+  </script>
 </body>
               </html>
