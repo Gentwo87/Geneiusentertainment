@@ -197,5 +197,73 @@
       btn.href = 'contact.html?subject=' + encodeURIComponent(actName);
     });
   </script>
+  <script>
+  // Auto-convert any mailto enquiry links to use the contact page instead
+  document.querySelectorAll('a[href^="mailto:"], .btn.enquire').forEach(btn => {
+    const card = btn.closest('[data-name]');
+    const actName = (card?.dataset.name || btn.textContent || '').trim();
+    btn.classList.add('enquire');
+    btn.removeAttribute('target'); // remove mail client behaviour
+    btn.href = 'contact.html?subject=' + encodeURIComponent(actName);
+  });
+  </script>
+  <script>
+// === OVERRIDE: Toggle bio on POSTER click/hover ===
+
+// Desktop hover
+document.querySelectorAll('.artist-card').forEach(card => {
+  const bio = card.querySelector('.bio');
+  const frame = card.querySelector('.frame');
+  
+  // Show bio on hover (desktop)
+  card.addEventListener('mouseenter', () => {
+    if (window.innerWidth > 768) {
+      bio.style.opacity = '1';
+      bio.style.pointerEvents = 'auto';
+    }
+  });
+
+  card.addEventListener('mouseleave', () => {
+    if (window.innerWidth > 768) {
+      bio.style.opacity = '';
+      bio.style.pointerEvents = '';
+    }
+  });
+
+  // Mobile tap toggle
+  if (frame) {
+    frame.addEventListener('click', (e) => {
+      e.stopPropagation();
+      card.classList.toggle('bio-open');
+    });
+  }
+
+  // Prevent nav or buttons inside frame from closing/opening bio
+  card.querySelectorAll('.nav, .dot, .view-poster, .btn').forEach(el => {
+    el.addEventListener('click', e => e.stopPropagation());
+  });
+
+  // Allow clicking on the dark area to close bio
+  if (bio) {
+    bio.addEventListener('click', (e) => {
+      if (e.target === bio) card.classList.remove('bio-open');
+    });
+  }
+});
+
+// Add a CSS override to ensure bio hover/toggle looks correct
+const style = document.createElement('style');
+style.textContent = `
+  .artist-card .bio {
+    transition: opacity 0.3s ease;
+  }
+  .artist-card.bio-open .bio,
+  .artist-card:hover .bio {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+`;
+document.head.appendChild(style);
+  </script>
 </body>
 </html>
