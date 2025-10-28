@@ -23,8 +23,8 @@
     html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Trebuchet MS",Arial,sans-serif}
     .wrap{width:min(1120px,92vw);margin:0 auto;padding:28px 0 40px}
 
-    /* Top utility bar */
-    .bar{display:flex;justify-content:flex-start;align-items:center;margin:0 0 10px}
+    /* Top bar */
+    .bar{display:flex;align-items:center;margin:0 0 10px}
     .btn-mini{
       display:inline-block;padding:8px 12px;border-radius:10px;
       color:#ffd76a;background:rgba(201,151,0,.08);
@@ -49,20 +49,21 @@
     .card{background:#15151b;border:1px solid var(--line);border-radius:16px;overflow:hidden;position:relative;transition:transform .18s, box-shadow .18s, border-color .18s}
     .card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.35);border-color:rgba(212,175,55,.45)}
 
-    .media{position:relative;height:240px;overflow:hidden;background:#0e0e12}
+    .media{position:relative;height:240px;overflow:hidden;background:#0e0e12;cursor:pointer}
     @media (max-width:700px){ .media{height:220px} }
     .media img{width:100%;height:100%;object-fit:cover;display:block}
 
     .meta{padding:12px 14px;background:linear-gradient(0deg,#121217,transparent)}
-    .meta .name{font-weight:800;color:#ffd76a;cursor:pointer;display:inline-block}
+    .meta .name{font-weight:800;color:#ffd76a;display:inline-block}
     .meta .hint{color:#bcbcbc;font-size:.92rem;display:block;margin-top:4px}
 
-    /* Hidden bio overlay */
+    /* Bio overlay (hidden until poster is tapped/hovered) */
     .bio{
-      position:absolute;inset:0;display:none;flex-direction:column;justify-content:flex-end;
+      position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;
       background:linear-gradient(180deg,rgba(0,0,0,.0) 40%, rgba(0,0,0,.82) 100%);
-      padding:14px
+      padding:14px;opacity:0;pointer-events:none;transition:opacity .22s ease;
     }
+    .card.bio-open .bio{opacity:1;pointer-events:auto}
     .bio h3{margin:0 0 6px;color:#ffd76a;font-size:1.05rem}
     .bio .tagsline{margin:0 0 8px;color:#d7caa0}
     .bio p{margin:0 0 10px;color:#e8e8e8}
@@ -74,7 +75,6 @@
     }
     .btn.alt{background:transparent;color:#ffd76a;border:1px solid rgba(201,151,0,.5)}
 
-    /* tag chips under name (optional, hidden from a11y when bio is open) */
     .tags{margin-top:6px;display:flex;gap:6px;flex-wrap:wrap}
     .tag{display:inline-block;font-size:.78rem;color:#fdeec0;background:#1b1710;border:1px solid rgba(212,175,55,.45);padding:.18rem .48rem;border-radius:999px}
 
@@ -96,18 +96,18 @@
 
     <input id="acts-search" type="search" placeholder="Search by name or tag (e.g. singers, duos, 90s, weddings)…" />
 
-    <div class="chips">
-      <span class="chip active" data-tag="all">all</span>
-      <span class="chip" data-tag="singers">singers</span>
-      <span class="chip" data-tag="duos">duos</span>
-      <span class="chip" data-tag="trios">trios</span>
-      <span class="chip" data-tag="quartets">quartets</span>
-      <span class="chip" data-tag="bands">bands</span>
-      <span class="chip" data-tag="tributes">tributes</span>
-      <span class="chip" data-tag="djs">djs</span>
-      <span class="chip" data-tag="90s">90s</span>
-      <span class="chip" data-tag="clubs">clubs</span>
-      <span class="chip" data-tag="weddings">weddings</span>
+    <div class="chips" role="tablist" aria-label="Categories">
+      <span class="chip active" data-tag="all" role="tab" aria-selected="true">all</span>
+      <span class="chip" data-tag="singers"  role="tab">singers</span>
+      <span class="chip" data-tag="duos"     role="tab">duos</span>
+      <span class="chip" data-tag="trios"    role="tab">trios</span>
+      <span class="chip" data-tag="quartets" role="tab">quartets</span>
+      <span class="chip" data-tag="bands"    role="tab">bands</span>
+      <span class="chip" data-tag="tributes" role="tab">tributes</span>
+      <span class="chip" data-tag="djs"      role="tab">djs</span>
+      <span class="chip" data-tag="90s"      role="tab">90s</span>
+      <span class="chip" data-tag="clubs"    role="tab">clubs</span>
+      <span class="chip" data-tag="weddings" role="tab">weddings</span>
     </div>
 
     <div id="acts-grid" class="grid" aria-live="polite"></div>
@@ -115,7 +115,7 @@
     <footer>© <span id="y"></span> Geneius Entertainment</footer>
   </div>
 
-  <!-- Load the shared data FIRST -->
+  <!-- Shared data FIRST -->
   <script src="talent.js"></script>
 
   <!-- Inline renderer -->
@@ -129,13 +129,8 @@
 
     let activeTag = 'all';
 
-    function mailtoHref(actName){
-      const subject = encodeURIComponent(`Enquiry - ${actName}`);
-      const body = encodeURIComponent(
-        `Hi Geneius Entertainment,%0A%0AI'm interested in ${actName}.%0A` +
-        `Event date:%0AVenue/location:%0ABudget (approx):%0AAny details:%0A%0AThanks!`
-      );
-      return `mailto:contact@geneiusentertainment.com?subject=${subject}&body=${body}`;
+    function contactHref(actName){
+      return 'contact.html?subject=' + encodeURIComponent(actName);
     }
 
     function cardHTML(a){
@@ -143,22 +138,22 @@
       const safeBio  = a.bio ? `<p>${a.bio}</p>` : '';
       const safeTags = a.tags && a.tags.length ? `<p class="tagsline">${a.tags.join(' • ')}</p>` : '';
       return `
-        <article class="card" aria-label="${a.name}">
-          <div class="media">
+        <article class="card" data-name="${a.name}" aria-label="${a.name}">
+          <div class="media" role="button" tabindex="0" aria-label="Open bio for ${a.name}">
             <img src="${a.img || 'logo.png'}" alt="${a.name}">
             <div class="bio" aria-hidden="true">
               <h3>${a.name}</h3>
               ${safeTags}
               ${safeBio}
               <div class="actions">
-                <a class="btn" href="${mailtoHref(a.name)}">Enquire</a>
-                ${a.poster ? `<a class="btn alt" href="${a.poster}" target="_blank" rel="noopener">View poster</a>` : ``}
+                <a class="btn enquire" href="${contactHref(a.name)}">Enquire</a>
+                ${a.poster ? `<a class="btn alt view-poster" href="${a.poster}" target="_blank" rel="noopener">View poster</a>` : ``}
               </div>
             </div>
           </div>
           <div class="meta">
-            <span class="name" role="button" tabindex="0">${a.name}</span>
-            <span class="hint">Hover/tap name for bio</span>
+            <span class="name">${a.name}</span>
+            <span class="hint">Tap poster for bio</span>
             ${tagsRow ? `<div class="tags" aria-hidden="true">${tagsRow}</div>` : ''}
           </div>
         </article>
@@ -170,26 +165,26 @@
         ? list.map(cardHTML).join('')
         : `<div class="empty">No acts match your filters.</div>`;
 
-      // Wire up name -> bio toggle per card
+      // Wire up interactions per card
       grid.querySelectorAll('.card').forEach(card=>{
-        const name = card.querySelector('.name');
-        const bio  = card.querySelector('.bio');
+        const media = card.querySelector('.media');
+        const bio   = card.querySelector('.bio');
 
-        const closeAll = ()=> grid.querySelectorAll('.card .bio').forEach(b=>b.style.display='none');
-        const toggle = ()=>{
-          const open = bio.style.display === 'flex';
-          closeAll();
-          bio.style.display = open ? 'none' : 'flex';
-        };
-
-        // Click/keyboard
-        name.addEventListener('click', toggle);
-        name.addEventListener('keydown', e=>{
+        // Toggle bio when POSTER clicked or Enter/Space pressed
+        function toggle(){
+          const open = card.classList.toggle('bio-open');
+          bio.setAttribute('aria-hidden', open ? 'false' : 'true');
+        }
+        media.addEventListener('click', toggle);
+        media.addEventListener('keydown', e=>{
           if(e.key==='Enter' || e.key===' '){ e.preventDefault(); toggle(); }
         });
+        card.addEventListener('mouseleave', ()=>{ card.classList.remove('bio-open'); bio.setAttribute('aria-hidden','true'); });
 
-        // Optional: close bio if you click outside the media
-        card.addEventListener('mouseleave', ()=>{ bio.style.display='none'; });
+        // Make sure enquire always points to contact with subject
+        const actName = (card.dataset.name||'').trim();
+        const enquire = card.querySelector('.btn.enquire');
+        if (enquire) enquire.href = contactHref(actName);
       });
     }
 
@@ -215,73 +210,5 @@
     apply(); // initial
   })();
   </script>
-  <script>
-  // Universal Enquire button handler
-  document.querySelectorAll('.btn.enquire').forEach(btn => {
-    const card = btn.closest('[data-name]');
-    const actName = (card?.dataset.name || btn.textContent || '').trim();
-    btn.href = 'contact.html?subject=' + encodeURIComponent(actName);
-  });
-  </script>
-  <!-- OVERRIDE: show bio on POSTER hover/tap (not on name) -->
-<script>
-(function () {
-  document.querySelectorAll('.artist-card').forEach(card => {
-    const bio   = card.querySelector('.bio');
-    const frame = card.querySelector('.frame');
-    const name  = card.querySelector('.name');
-
-    // Ensure the overlay can actually show (Singers had display:none)
-    if (bio) {
-      bio.style.display = 'flex';
-      bio.style.opacity = '0';
-      bio.style.pointerEvents = 'none';
-      bio.style.transition = 'opacity .25s ease';
-    }
-
-    // Disable any previous name-click toggle so taps on the name don't fire
-    if (name) name.onclick = e => e.preventDefault();
-
-    // Desktop: show bio when hovering the card
-    card.addEventListener('mouseenter', () => {
-      if (window.innerWidth > 768 && bio) {
-        bio.style.opacity = '1';
-        bio.style.pointerEvents = 'auto';
-      }
-    });
-    card.addEventListener('mouseleave', () => {
-      if (window.innerWidth > 768 && bio) {
-        bio.style.opacity = '0';
-        bio.style.pointerEvents = 'none';
-      }
-    });
-
-    // Mobile + desktop: tap/click the POSTER (frame) to toggle the bio
-    if (frame) {
-      frame.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const open = card.classList.toggle('bio-open');
-        if (bio) {
-          bio.style.opacity = open ? '1' : '0';
-          bio.style.pointerEvents = open ? 'auto' : 'none';
-        }
-      });
-    }
-
-    // Don’t let clicks on controls bubble and accidentally toggle the bio
-    card.querySelectorAll('.nav, .dot, .view-poster, .btn').forEach(el => {
-      el.addEventListener('click', e => e.stopPropagation());
-    });
-  });
-
-  // Tiny CSS override injected so it wins without editing your main styles
-  const s = document.createElement('style');
-  s.textContent = `
-    .artist-card .bio{display:flex !important;opacity:0;pointer-events:none}
-    .artist-card.bio-open .bio{opacity:1;pointer-events:auto}
-  `;
-  document.head.appendChild(s);
-})();
-</script>
 </body>
 </html>
