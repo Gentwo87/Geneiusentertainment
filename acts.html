@@ -184,6 +184,14 @@
 
         const enquire = card.querySelector('.btn.enquire');
         if(enquire) enquire.href = contactHref(actName);
+    // Poster fallback: if poster 404s, use main image
+const view = card.querySelector('.view-poster');
+const mainImg = card.querySelector('.media img')?.src;
+if (view && view.href) {
+  const test = new Image();
+  test.onerror = () => { if (mainImg) view.href = mainImg; };
+  test.src = view.href;
+}
       });
     }
 
