@@ -256,5 +256,65 @@ style.textContent = `
 `;
 document.head.appendChild(style);
   </script>
+<!-- OVERRIDE: show bio on POSTER hover/tap (not on name) -->
+<script>
+(function () {
+  document.querySelectorAll('.artist-card').forEach(card => {
+    const bio   = card.querySelector('.bio');
+    const frame = card.querySelector('.frame');
+    const name  = card.querySelector('.name');
+
+    // Ensure the overlay can actually show (Singers had display:none)
+    if (bio) {
+      bio.style.display = 'flex';
+      bio.style.opacity = '0';
+      bio.style.pointerEvents = 'none';
+      bio.style.transition = 'opacity .25s ease';
+    }
+
+    // Disable any previous name-click toggle so taps on the name don't fire
+    if (name) name.onclick = e => e.preventDefault();
+
+    // Desktop: show bio when hovering the card
+    card.addEventListener('mouseenter', () => {
+      if (window.innerWidth > 768 && bio) {
+        bio.style.opacity = '1';
+        bio.style.pointerEvents = 'auto';
+      }
+    });
+    card.addEventListener('mouseleave', () => {
+      if (window.innerWidth > 768 && bio) {
+        bio.style.opacity = '0';
+        bio.style.pointerEvents = 'none';
+      }
+    });
+
+    // Mobile + desktop: tap/click the POSTER (frame) to toggle the bio
+    if (frame) {
+      frame.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const open = card.classList.toggle('bio-open');
+        if (bio) {
+          bio.style.opacity = open ? '1' : '0';
+          bio.style.pointerEvents = open ? 'auto' : 'none';
+        }
+      });
+    }
+
+    // Don’t let clicks on controls bubble and accidentally toggle the bio
+    card.querySelectorAll('.nav, .dot, .view-poster, .btn').forEach(el => {
+      el.addEventListener('click', e => e.stopPropagation());
+    });
+  });
+
+  // Tiny CSS override injected so it wins without editing your main styles
+  const s = document.createElement('style');
+  s.textContent = `
+    .artist-card .bio{display:flex !important;opacity:0;pointer-events:none}
+    .artist-card.bio-open .bio{opacity:1;pointer-events:auto}
+  `;
+  document.head.appendChild(s);
+})();
+</script>
 </body>
 </html>
