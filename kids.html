@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Kids & Adult Party Entertainment | Geneius Entertainment</title>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kids Parties | Geneius Entertainment</title>
 
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-MR1NLPH5ZK"></script>
@@ -16,267 +15,298 @@
 
   <style>
     :root{
-      --bg:#000; --ink:#f5f5f5; --muted:#bfbfbf; --gold:#C99700;
-      --card:#15151b; --line:rgba(255,255,255,.12)
+      --bg:#000; --ink:#f5f5f5; --muted:#bfbfbf;
+      --gold:#C99700; --panel:#15151b; --line:rgba(255,255,255,.12);
     }
     *{box-sizing:border-box}
-    html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Trebuchet MS",Arial,sans-serif}
-    .wrap{width:min(1120px,92vw);margin:0 auto;padding:30px 0 46px}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:"Trebuchet MS",Arial,sans-serif;position:relative}
 
-    /* header + nav */
+    #sparkles{position:fixed;inset:0;pointer-events:none;z-index:0}
+    .sparkle{position:absolute;width:2px;height:2px;background:var(--gold);border-radius:50%;opacity:0;animation:s 4s infinite}
+    @keyframes s{0%{opacity:0;transform:scale(0)}50%{opacity:1;transform:scale(1.5)}100%{opacity:0;transform:scale(0)}}
+
+    /* === TOP BAR buttons (same as Tribute page) === */
+    .wrap{width:min(1120px,92vw);margin:0 auto;padding:30px 0 0}
     .bar{display:flex;justify-content:space-between;align-items:center;margin:0 0 12px}
-    .btn-mini{display:inline-block;padding:8px 12px;border-radius:10px;color:#ffd76a;background:rgba(201,151,0,.08);
-      border:1px solid rgba(201,151,0,.45);text-decoration:none;font-weight:700}
+    .btn-mini{
+      display:inline-block;padding:8px 12px;border-radius:10px;
+      color:#ffd76a;background:rgba(201,151,0,.08);
+      border:1px solid rgba(201,151,0,.45);text-decoration:none;font-weight:700
+    }
     .btn-mini:hover{background:rgba(201,151,0,.14)}
-    header{display:flex;align-items:center;gap:14px;justify-content:center;margin:6px 0 10px}
-    #logo{height:64px;width:auto}
-    h1{margin:4px 0 0;font-size:1.6rem;color:var(--gold);letter-spacing:1px}
-    .sub{color:var(--muted);text-align:center;margin:8px 0 20px}
 
-    /* grid + cards (same sizing as other pages) */
-    .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));padding:0 2px}
-    .card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;position:relative;
-      transition:transform .18s, box-shadow .18s, border-color .18s}
-    .card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.35);border-color:rgba(212,175,55,.45)}
+    header{position:relative;text-align:center;padding:60px 20px;background:radial-gradient(circle at center,rgba(201,151,0,.25),#000 70%);z-index:1}
+    #logo{max-width:260px;height:auto;display:block;margin:0 auto 10px}
+    h1{color:var(--gold);text-transform:uppercase;letter-spacing:2px;margin:0 0 14px}
+    p.sub{color:var(--muted);margin:0 0 24px;text-align:center}
+    .btn{display:inline-block;background:var(--gold);color:#000;padding:10px 18px;margin-top:12px;border-radius:6px;text-decoration:none;font-weight:bold}
 
-    /* poster area (fixed height so all cards match) */
-    .art{position:relative;height:180px;overflow:hidden;background:#0e0e12;cursor:pointer}
-    .slides{display:flex;width:100%;height:100%;transition:transform .35s ease}
-    .slides img{width:100%;height:100%;object-fit:cover;flex:0 0 100%}
+    .container{width:min(1120px,92vw);margin:0 auto}
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;padding:30px 20px;position:relative;z-index:1}
 
-    /* gallery arrows */
-    .nav{position:absolute;top:50%;transform:translateY(-50%);border:1px solid rgba(255,255,255,.35);
-      background:rgba(0,0,0,.45);color:#fff;font-weight:800;line-height:1;padding:.32rem .6rem;border-radius:10px;
-      cursor:pointer;opacity:0;transition:opacity .2s}
-    .card:hover .nav{opacity:1}
+    .artist-card{
+      position:relative; overflow:hidden; border-radius:14px;
+      background:var(--panel); border:1px solid var(--line);
+      transition:transform .18s, box-shadow .18s, border-color .18s;
+    }
+    .artist-card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.35);border-color:rgba(212,175,55,.45)}
+
+    .frame{position:relative; height:220px; overflow:hidden; cursor:pointer}
+    .slides{display:flex; width:100%; height:100%; transition:transform .35s ease}
+    .slides img{width:100%; height:100%; object-fit:cover; flex:0 0 100%; display:block}
+
+    .nav{
+      position:absolute; top:50%; transform:translateY(-50%);
+      background:rgba(0,0,0,.45); color:#fff; border:1px solid rgba(255,255,255,.35);
+      font-weight:800; line-height:1; padding:.35rem .6rem; border-radius:10px;
+      cursor:pointer; opacity:.9;
+    }
     .nav.prev{left:8px} .nav.next{right:8px}
-    .dots{position:absolute;left:0;right:0;bottom:8px;display:flex;gap:6px;justify-content:center}
-    .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.4)}
-    .dot.active{background:#ffd76a;border-color:#C99700}
+    .dots{position:absolute; left:0; right:0; bottom:8px; display:flex; gap:6px; justify-content:center}
+    .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.4);cursor:pointer}
+    .dot.active{background:#ffd76a;border-color:var(--gold)}
 
-    /* meta + overlay bio */
-    .meta{padding:12px 14px}
-    .name{font-weight:800;display:inline-block;color:#ffd76a}
-    .styles{display:block;color:#cfcfcf;margin:4px 0 0}
-    .tag{display:inline-block;margin-top:8px;font-size:.78rem;color:#fdeec0;background:#1b1710;
-      border:1px solid rgba(212,175,55,.45);padding:.18rem .5rem;border-radius:999px}
+    .artist-meta{padding:12px 14px}
+    .artist-meta .name{
+      color:var(--gold); text-transform:uppercase; letter-spacing:.06em;
+      font-weight:800; display:inline-block;
+    }
+    .artist-meta .hint{display:block; color:#888; font-size:.84rem; margin-top:4px}
 
-    .overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;
-      background:linear-gradient(180deg,rgba(0,0,0,.0) 40%, rgba(0,0,0,.75) 100%);
-      padding:14px;opacity:0;transition:opacity .2s}
-    .card.show-bio .overlay{opacity:1}
-    .overlay h3{margin:0 0 4px;color:#ffd76a;font-size:1.02rem}
-    .overlay p{margin:0 0 8px;color:#eee;font-size:.92rem;line-height:1.35}
-    .actions{display:flex;gap:8px;flex-wrap:wrap}
-    .btn{display:inline-block;background:var(--gold);color:#000;padding:8px 12px;border-radius:8px;
-      text-decoration:none;font-weight:800;border:1px solid rgba(255,255,255,.12)}
-    .btn.ghost{background:transparent;color:#ffd76a;border:1px solid rgba(201,151,0,.5)}
+    .bio{
+      position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-end;
+      padding:16px; gap:10px; opacity:0; pointer-events:none; transition:opacity .2s ease;
+      background:linear-gradient(to top, rgba(0,0,0,.82) 28%, rgba(0,0,0,.18) 65%, rgba(0,0,0,0));
+      backdrop-filter:saturate(120%) blur(2px);
+    }
+    .artist-card.bio-open .bio{opacity:1; pointer-events:auto}
 
-    footer{margin-top:28px;color:#aaa;text-align:center}
+    .bio h3{margin:0;color:var(--gold);text-transform:uppercase;letter-spacing:.06em;font-size:1rem}
+    .bio .tags{margin:0;color:#fdeec0;font-size:.9rem}
+    .bio p{margin:0;color:#d9d9d9;line-height:1.45}
+    .bio .actions{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+    .bio .btn{display:inline-block;background:var(--gold);color:#000;padding:8px 12px;border-radius:8px;font-weight:700;text-decoration:none;border:0}
+    .bio .btn.alt{background:transparent;color:#f5f5f5;border:1px solid rgba(255,255,255,.25)}
+
+    footer{background:#111;color:#aaa;text-align:center;padding:18px;margin-top:30px;position:relative;z-index:1}
+
+    .lightbox{position:fixed; inset:0; background:rgba(0,0,0,.92); display:none; align-items:center; justify-content:center; z-index:9999}
+    .lightbox.open{display:flex}
+    .lightbox img{max-width:92vw; max-height:92vh; border:1px solid rgba(255,255,255,.15); border-radius:12px}
+    .lightbox .close{position:absolute; top:14px; right:14px; font-size:28px; color:#fff; cursor:pointer}
   </style>
 </head>
 <body>
-  <div class="wrap">
+  <div id="sparkles"></div>
 
+  <div class="wrap">
     <div class="bar">
       <a class="btn-mini" href="index.html">← Back to Home</a>
       <a class="btn-mini" href="acts.html">Browse all acts</a>
     </div>
+  </div>
 
-    <header>
-      <a href="index.html" aria-label="Home"><img id="logo" src="logo.png" alt="Geneius Entertainment"></a>
-      <h1>Kids & Adult Party Entertainment</h1>
-    </header>
-    <p class="sub">Tap the poster to read the bio. Use arrows to browse images.</p>
+  <header>
+    <a href="index.html"><img id="logo" src="logo.png" alt="Geneius Entertainment"></a>
+    <h1>Kids Parties</h1>
+  </header>
 
-    <div class="grid">
+  <p class="sub">Use arrows to browse posters. Hover/tap the name to view the bio and enquiry buttons. “View Poster” opens the current slide full screen.</p>
+
+  <div class="container">
+    <div class="cards">
 
       <!-- Lively Squad -->
-      <article class="card" data-name="Lively Squad" data-bio="High-energy party hosting: games, dance routines and mini-discos for birthdays and events.">
-        <div class="art" tabindex="0" aria-label="Open bio for Lively Squad">
+      <div class="artist-card" tabindex="0" data-name="Lively Squad">
+        <div class="frame gallery">
           <div class="slides">
-            <img src="LivelyP.jpg" alt="Lively Squad – poster 1">
-            <img src="Benji.jpg"   alt="Lively Squad – poster 2">
+            <img src="Lively1.jpg" alt="Lively Squad – poster 1">
+            <img src="Lively2.jpg" alt="Lively Squad – poster 2">
           </div>
-          <button class="nav prev" aria-label="Previous">‹</button>
-          <button class="nav next" aria-label="Next">›</button>
+          <button class="nav prev">‹</button>
+          <button class="nav next">›</button>
           <div class="dots"></div>
+        </div>
 
-          <div class="overlay">
-            <h3>Lively Squad</h3>
-            <p></p>
-            <div class="actions">
-              <a class="btn enquire" href="#">Enquire</a>
-              <a class="btn ghost view-poster" href="LivelyP.jpg" target="_blank" rel="noopener">View poster</a>
-            </div>
+        <div class="artist-meta">
+          <span class="name">Lively Squad</span>
+          <span class="hint">Hover/tap name for bio</span>
+        </div>
+
+        <div class="bio">
+          <h3>Lively Squad</h3>
+          <p class="tags">Dance • Games • Disco</p>
+          <p>Energetic party hosts bringing dance, games, and fun for all ages. Perfect for kids and adult events alike!</p>
+          <div class="actions">
+            <a class="btn" href="contact.html?subject=Lively Squad">Enquire</a>
+            <a class="btn alt view-poster" href="#">View poster</a>
           </div>
         </div>
-        <div class="meta">
-          <span class="name">Lively Squad</span>
-          <span class="styles">Dance • Games • Disco</span>
-          <span class="tag">Kids/Adult Parties</span>
-        </div>
-      </article>
+      </div>
 
       <!-- Magical Bones -->
-      <article class="card" data-name="Magical Bones" data-bio="Show-stopping magic from a Britain’s Got Talent finalist — perfect for stages, parties and corporate events.">
-        <div class="art" tabindex="0" aria-label="Open bio for Magical Bones">
+      <div class="artist-card" tabindex="0" data-name="Magical Bones">
+        <div class="frame gallery">
           <div class="slides">
-            <img src="Bones3.jpg" alt="Magical Bones – poster 1">
-            <img src="Bonesflip.jpg" alt="Magical Bones – poster 2">
+            <img src="MagicalBones.jpg" alt="Magical Bones – poster 1">
           </div>
-          <button class="nav prev" aria-label="Previous">‹</button>
-          <button class="nav next" aria-label="Next">›</button>
+          <button class="nav prev">‹</button>
+          <button class="nav next">›</button>
           <div class="dots"></div>
-
-          <div class="overlay">
-            <h3>Magical Bones</h3>
-            <p></p>
-            <div class="actions">
-              <a class="btn enquire" href="#">Enquire</a>
-              <a class="btn ghost view-poster" href="Bones3.jpg" target="_blank" rel="noopener">View poster</a>
-            </div>
-          </div>
         </div>
-        <div class="meta">
+
+        <div class="artist-meta">
           <span class="name">Magical Bones</span>
-          <span class="styles">Magician • Stage & Corporate</span>
-          <span class="tag">Events/Corporate</span>
+          <span class="hint">Hover/tap name for bio</span>
         </div>
-      </article>
 
-      <!-- MG Herts Parties -->
-      <article class="card" data-name="MG Herts Parties" data-bio="Princess meet-and-greets, party games and dancing — tailored children’s party entertainment.">
-        <div class="art" tabindex="0" aria-label="Open bio for MG Herts Parties">
+        <div class="bio">
+          <h3>Magical Bones</h3>
+          <p class="tags">Magician • Stage & Corporate</p>
+          <p>Britain’s Got Talent finalist bringing next-level magic to family events, schools, and corporate shows.</p>
+          <div class="actions">
+            <a class="btn" href="contact.html?subject=Magical Bones">Enquire</a>
+            <a class="btn alt view-poster" href="#">View poster</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- MG Herts -->
+      <div class="artist-card" tabindex="0" data-name="MG Herts – Games & Disco">
+        <div class="frame gallery">
           <div class="slides">
-            <img src="MGHParties.jpg" alt="MG Herts Parties – poster 1">
-            <img src="MGHParties.jpg" alt="MG Herts Parties – poster 2">
+            <img src="MGHerts1.jpg" alt="MG Herts – poster 1">
           </div>
-          <button class="nav prev" aria-label="Previous">‹</button>
-          <button class="nav next" aria-label="Next">›</button>
+          <button class="nav prev">‹</button>
+          <button class="nav next">›</button>
           <div class="dots"></div>
+        </div>
 
-          <div class="overlay">
-            <h3>MG Herts Parties</h3>
-            <p></p>
-            <div class="actions">
-              <a class="btn enquire" href="#">Enquire</a>
-              <a class="btn ghost view-poster" href="MGHParties.jpg" target="_blank" rel="noopener">View poster</a>
-            </div>
+        <div class="artist-meta">
+          <span class="name">MG Herts – Games & Disco</span>
+          <span class="hint">Hover/tap name for bio</span>
+        </div>
+
+        <div class="bio">
+          <h3>MG Herts – Games & Disco</h3>
+          <p class="tags">Kids Parties</p>
+          <p>Interactive games, music, and dancing to keep kids laughing and moving from start to finish!</p>
+          <div class="actions">
+            <a class="btn" href="contact.html?subject=MG Herts – Games & Disco">Enquire</a>
+            <a class="btn alt view-poster" href="#">View poster</a>
           </div>
         </div>
-        <div class="meta">
-          <span class="name">MG Herts – Games & Disco</span>
-          <span class="styles">Kids Parties</span>
-          <span class="tag">Kids Parties</span>
+      </div>
+
+      <!-- Fae & Flurry -->
+      <div class="artist-card" tabindex="0" data-name="Fae & Flurry">
+        <div class="frame gallery">
+          <div class="slides">
+            <img src="Ff1.jpg" alt="Fae & Flurry – poster 1">
+            <img src="Ff2.jpg" alt="Fae & Flurry – poster 2">
+            <img src="Ff3.jpg" alt="Fae & Flurry – poster 3">
+            <img src="Ff4.jpg" alt="Fae & Flurry – poster 4">
+            <img src="Ff5.jpg" alt="Fae & Flurry – poster 5">
+          </div>
+          <button class="nav prev">‹</button>
+          <button class="nav next">›</button>
+          <div class="dots"></div>
         </div>
-      </article>
 
-<!-- Fae & Flurry (Kids Parties) -->
-<div class="artist-card" tabindex="0" data-name="Fae & Flurry">
-  <div class="frame gallery" aria-label="Poster gallery for Fae & Flurry">
-    <div class="slides">
-      <img src="Ff1.jpg" alt="Fae & Flurry – poster 1">
-      <img src="Ff2.jpg" alt="Fae & Flurry – poster 2">
-      <!-- add more images here if you have them -->
-    </div>
-    <button class="nav prev" aria-label="Previous">‹</button>
-    <button class="nav next" aria-label="Next">›</button>
-    <div class="dots"></div>
-  </div>
+        <div class="artist-meta">
+          <span class="name">Fae & Flurry</span>
+          <span class="hint">Hover/tap name for bio</span>
+        </div>
 
-  <div class="artist-meta">
-    <span class="name" role="button" tabindex="0">Fae &amp; Flurry</span>
-    <span class="hint">Hover/tap name for bio</span>
-  </div>
-
-  <div class="bio" aria-hidden="true">
-    <h3>Fae &amp; Flurry</h3>
-    <p class="tags">Kids • Parties • Entertainment</p>
-    <p>
-      Interactive themed shows that are fun, educational, and full of heart —
-      perfect for young audiences and their families. Storytelling, music, games,
-      and magical creature moments wrapped into a dragon-training adventure.
-    </p>
-    <div class="actions">
-      <!-- Enquiry goes to Contact page with act prefilled -->
-      <a class="btn enquire" href="#">Enquire</a>
-      <!-- Opens the current slide full screen -->
-      <a class="btn alt view-poster" href="FaeFlurry1.jpg" data-target="current">View poster</a>
-    </div>
-  </div>
-</div>
+        <div class="bio">
+          <h3>Fae & Flurry</h3>
+          <p class="tags">Kids • Parties • Entertainment</p>
+          <p>Interactive themed shows that are fun, educational, and full of heart — perfect for young audiences and their families. Storytelling, music, games, and magical creature moments wrapped into a dragon-training adventure.</p>
+          <div class="actions">
+            <a class="btn" href="contact.html?subject=Fae & Flurry">Enquire</a>
+            <a class="btn alt view-poster" href="#">View poster</a>
+          </div>
+        </div>
+      </div>
 
     </div>
+  </div>
 
-    <footer>© <span id="y"></span> Geneius Entertainment</footer>
+  <footer>© <span id="y"></span> Geneius Entertainment</footer>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <span class="close" aria-label="Close">×</span>
+    <img id="lightboxImg" src="" alt="Poster">
   </div>
 
   <script>
-  // ==== Shared interactions (same as your other pages) ====
-  (function(){
-    function setupGallery(card){
-      const art    = card.querySelector('.art');
-      const slides = art.querySelector('.slides');
-      const imgs   = [...slides.querySelectorAll('img')];
-      const prev   = art.querySelector('.nav.prev');
-      const next   = art.querySelector('.nav.next');
-      const dots   = art.querySelector('.dots');
-      let i = 0;
+    document.getElementById('y').textContent=new Date().getFullYear();
 
-      // dots
-      imgs.forEach((_,idx)=>{
-        const d = document.createElement('span');
-        d.className = 'dot' + (idx===0?' active':'');
-        d.addEventListener('click', ()=>go(idx));
-        dots.appendChild(d);
+    const w=document.getElementById('sparkles');const N=100;
+    function go(){w.innerHTML='';for(let i=0;i<N;i++){const e=document.createElement('div');
+      e.className='sparkle';
+      e.style.top=Math.random()*innerHeight+'px';
+      e.style.left=Math.random()*innerWidth+'px';
+      e.style.animationDuration=(3+Math.random()*4)+'s';
+      e.style.animationDelay=(Math.random()*5)+'s';
+      w.appendChild(e)}}
+    go();addEventListener('resize',()=>{clearTimeout(window._t);window._t=setTimeout(go,200)});
+
+    document.querySelectorAll('.gallery').forEach(setupGallery);
+    function setupGallery(root){
+      const slides = root.querySelector('.slides');
+      const imgs = [...slides.querySelectorAll('img')];
+      const prev = root.querySelector('.nav.prev');
+      const next = root.querySelector('.nav.next');
+      const dotsWrap = root.querySelector('.dots');
+      let index = 0;
+      imgs.forEach((_,i)=>{
+        const d=document.createElement('span');
+        d.className='dot'+(i===0?' active':'');
+        d.addEventListener('click',()=>go(i));
+        dotsWrap.appendChild(d);
       });
-
       function render(){
-        slides.style.transform = `translateX(-${i*100}%)`;
-        [...dots.children].forEach((d,idx)=>d.classList.toggle('active', idx===i));
+        slides.style.transform = `translateX(-${index*100}%)`;
+        [...dotsWrap.children].forEach((d,i)=>d.classList.toggle('active', i===index));
       }
-      function go(n){ i = (n + imgs.length) % imgs.length; render(); }
-
-      prev.addEventListener('click', e=>{ e.stopPropagation(); go(i-1); });
-      next.addEventListener('click', e=>{ e.stopPropagation(); go(i+1); });
-
-      // swipe
-      let sx=0, dx=0;
-      slides.addEventListener('touchstart', e=>{sx=e.touches[0].clientX; dx=0;},{passive:true});
-      slides.addEventListener('touchmove',  e=>{dx=e.touches[0].clientX-sx;},{passive:true});
-      slides.addEventListener('touchend',   ()=>{ if(Math.abs(dx)>40) go(i + (dx<0?1:-1)); });
-
+      function go(i){ index = (i+imgs.length)%imgs.length; render(); }
+      prev.addEventListener('click',()=>go(index-1));
+      next.addEventListener('click',()=>go(index+1));
+      let startX=0, dx=0;
+      slides.addEventListener('touchstart', e=>{startX=e.touches[0].clientX; dx=0;}, {passive:true});
+      slides.addEventListener('touchmove', e=>{dx=e.touches[0].clientX-startX;}, {passive:true});
+      slides.addEventListener('touchend', ()=>{ if(Math.abs(dx)>40) go(index + (dx<0?1:-1)); });
+      root.getCurrentSrc = ()=> imgs[index].src;
       render();
-
-      // Poster click toggles bio overlay (mobile-friendly)
-      const toggleBio = ()=>card.classList.toggle('show-bio');
-      art.addEventListener('click', toggleBio);
-      art.addEventListener('keypress', e=>{ if(e.key==='Enter' || e.key===' ') { e.preventDefault(); toggleBio(); }});
     }
 
-    // Fill bio text from data-bio
-    function wireBio(card){
-      const p = card.querySelector('.overlay p');
-      p.textContent = card.dataset.bio || '';
-    }
-
-    // Enquire links → contact.html?subject=<Act Name>
-    function wireEnquire(card){
-      const a = card.querySelector('.btn.enquire');
-      if(!a) return;
-      const actName = card.dataset.name || '';
-      a.href = 'contact.html?subject=' + encodeURIComponent(actName);
-    }
-
-    document.querySelectorAll('.card').forEach(c=>{
-      setupGallery(c);
-      wireBio(c);
-      wireEnquire(c);
+    document.querySelectorAll('.artist-card').forEach(card=>{
+      const frame = card.querySelector('.frame');
+      frame.addEventListener('click', ()=>{ card.classList.toggle('bio-open'); });
     });
 
-    document.getElementById('y').textContent = new Date().getFullYear();
-  })();
+    const lb=document.getElementById('lightbox');
+    const lbImg=document.getElementById('lightboxImg');
+    const closeLb=()=>{lb.classList.remove('open');lb.setAttribute('aria-hidden','true');}
+    lb.addEventListener('click',e=>{if(e.target===lb||e.target.classList.contains('close'))closeLb();});
+    document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLb();});
+
+    document.querySelectorAll('.view-poster').forEach(btn=>{
+      btn.addEventListener('click',e=>{
+        e.preventDefault();
+        const card=btn.closest('.artist-card');
+        const gal=card.querySelector('.gallery');
+        const src=gal.getCurrentSrc?gal.getCurrentSrc():gal.querySelector('img')?.src;
+        if(src){lbImg.src=src;lb.classList.add('open');lb.setAttribute('aria-hidden','false');}
+      });
+    });
+
+    document.querySelectorAll('.btn.enquire').forEach(btn=>{
+      const card=btn.closest('[data-name]');
+      const actName=(card?.dataset.name||btn.textContent||'').trim();
+      btn.href='contact.html?subject='+encodeURIComponent(actName);
+    });
   </script>
 </body>
-</html>
+  </html>
