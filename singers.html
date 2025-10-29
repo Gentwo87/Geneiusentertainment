@@ -197,5 +197,149 @@
       btn.href = 'contact.html?subject=' + encodeURIComponent(actName);
     });
 </script>
+<style>
+/* ============ UNIVERSAL CARD BEHAVIOUR (hover bio + meta arrows) ============ */
+
+/* Hide any old on-image arrows */
+.artist-card .frame .nav{display:none !important}
+
+/* Frame / slides */
+.artist-card .frame{position:relative; overflow:hidden; border-radius:14px}
+.artist-card .slides{display:flex; width:100%; height:100%; transform:translateX(0); transition:transform .35s ease}
+.artist-card .slides img{flex:0 0 100%; width:100%; height:100%; object-fit:cover; display:block}
+
+/* Unify poster height so pages match */
+.artist-card .frame{height:220px}
+@media (max-width:700px){ .artist-card .frame{height:200px} }
+
+/* Grey “meta” bar with centred name and arrows at the ends */
+.artist-card .artist-meta{
+  position:relative;
+  display:flex; align-items:center; justify-content:center;
+  gap:8px;
+}
+.artist-card .artist-meta .name{font-weight:700; letter-spacing:.5px; text-align:center; width:100%}
+
+/* Arrow buttons inside the meta bar (left/right ends) */
+.artist-card .artist-meta .meta-arrow{
+  position:absolute; top:50%; transform:translateY(-50%);
+  width:34px; height:34px; border-radius:999px;
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(0,0,0,.45); color:#fff;
+  font-size:18px; line-height:1; cursor:pointer;
+}
+.artist-card .artist-meta .meta-prev{left:10px}
+.artist-card .artist-meta .meta-next{right:10px}
+.artist-card .artist-meta .meta-arrow:focus{outline:2px solid var(--gold,#c99700)}
+
+/* Dots (if your card has them) */
+.artist-card .dots{position:absolute; inset:auto 0 8px 0; display:flex; gap:6px; justify-content:center; z-index:5}
+.artist-card .dots button{width:8px; height:8px; border-radius:50%; border:0; background:#777; opacity:.7}
+.artist-card .dots button.on{opacity:1; background:#fff}
+
+/* Bio overlay: show on hover; keep buttons clickable */
+.artist-card{position:relative}
+.artist-card .bio{
+  position:absolute; left:0; right:0; bottom:0;
+  background:rgba(0,0,0,.72); padding:12px;
+  border-radius:0 0 14px 14px;
+  transform:translateY(100%); transition:transform .22s ease;
+  pointer-events:auto;
+}
+@media (hover:hover){
+  .artist-card:hover .bio{transform:translateY(0)}
+}
+/* Touch: allow script to open it */
+.artist-card.bio-open .bio{transform:translateY(0)}
+</style>
+
+<script>
+/* ============ UNIVERSAL LOGIC (add meta arrows, keep hover bio) ============ */
+(() => {
+  const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+  document.querySelectorAll('.artist-card').forEach(card => {
+    const slides = card.querySelector('.slides');
+    if (!slides) return;
+    const imgs = slides.querySelectorAll('img');
+    if (!imgs.length) return;
+
+    // Ensure meta exists
+    let meta = card.querySelector('.artist-meta');
+    if (!meta){
+      meta = document.createElement('div');
+      meta.className = 'artist-meta';
+      meta.innerHTML = '<span class="name" role="button" tabindex="0">' + (card.dataset.name || 'Act') + '</span><span class="hint">Hover/tap for bio</span>';
+      card.appendChild(meta);
+    }
+
+    // Insert meta arrows at the ends if missing
+    if (!meta.querySelector('.meta-prev')){
+      const prev = document.createElement('button');
+      prev.className = 'meta-arrow meta-prev';
+      prev.setAttribute('aria-label','Previous poster');
+      prev.textContent = '‹';
+      meta.appendChild(prev);
+    }
+    if (!meta.querySelector('.meta-next')){
+      const next = document.createElement('button');
+      next.className = 'meta-arrow meta-next';
+      next.setAttribute('aria-label','Next poster');
+      next.textContent = '›';
+      meta.appendChild(next);
+    }
+    const prevBtn = meta.querySelector('.meta-prev');
+    const nextBtn = meta.querySelector('.meta-next');
+
+    // Dots: build if container exists and empty
+    const dots = card.querySelector('.dots');
+    if (dots && dots.children.length === 0 && imgs.length > 1){
+      imgs.forEach((_, idx) => {
+        const b = document.createElement('button');
+        b.setAttribute('aria-label','Go to slide ' + (idx+1));
+        b.addEventListener('click', e => { e.stopPropagation(); go(idx); });
+        dots.appendChild(b);
+      });
+    }
+
+    let i = 0;
+    const go = (n) => {
+      i = (n + imgs.length) % imgs.length;
+      slides.style.transform = 'translateX(' + (-i*100) + '%)';
+      if (dots) dots.querySelectorAll('button').forEach((b,bi)=>b.classList.toggle('on', bi===i));
+    };
+    go(0);
+
+    // Arrow handlers (don’t trigger bio)
+    prevBtn.addEventListener('click', e => { e.stopPropagation(); go(i-1); });
+    nextBtn.addEventListener('click', e => { e.stopPropagation(); go(i+1); });
+
+    // Touch support: tap image/name toggles bio; tapping outside closes
+    if (isTouch){
+      const togglers = [card.querySelector('.frame'), card.querySelector('.name')].filter(Boolean);
+      togglers.forEach(el=>{
+        el.addEventListener('click', e=>{
+          if (e.target.closest('.meta-arrow')) return;
+          card.classList.toggle('bio-open');
+        });
+      });
+    }
+  });
+
+  // Enquire → contact with subject=<act name>
+  document.querySelectorAll('.btn.enquire').forEach(btn=>{
+    const card = btn.closest('[data-name]');
+    const actName = (card?.dataset.name || btn.dataset.act || 'General').trim();
+    btn.removeAttribute('target');
+    btn.href = 'contact.html?subject=' + encodeURIComponent(actName);
+  });
+
+  // Close any open bio on click outside (mobile)
+  document.addEventListener('click', e=>{
+    if (e.target.closest('.artist-card')) return;
+    document.querySelectorAll('.artist-card.bio-open').forEach(c=>c.classList.remove('bio-open'));
+  });
+})();
+</script>
 </body>
 </html>
