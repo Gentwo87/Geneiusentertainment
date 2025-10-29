@@ -375,5 +375,51 @@
   letter-spacing: 0.06em;
 }
   </style>
+  <style>
+/* ==== FORCE Kids cards to match Singers layout/sizing ==== */
+
+/* 1) One-column card layout with consistent spacing */
+.container .cards{
+  display:grid !important;
+  grid-template-columns: 1fr !important;
+  gap:24px !important;
+}
+
+/* 2) Card shell */
+.cards .artist-card{
+  max-width: 720px !important;   /* adjust to 720–760 if you prefer */
+  margin: 0 auto 28px !important;
+  border-radius: 20px !important;
+}
+
+/* 3) Media frame (same aspect as Singers) */
+.cards .artist-card .frame{
+  position: relative !important;
+  width: 100% !important;
+  aspect-ratio: 16 / 9 !important;     /* was inconsistent on Kids */
+  background:#000 !important;
+  overflow: hidden !important;
+  border-radius: 16px !important;
+}
+
+/* 4) Slides & images fully fill the frame */
+.cards .artist-card .slides{
+  display:block !important;            /* avoid stray flex widths */
+  width:100% !important; height:100% !important;
+}
+
+.cards .artist-card .slides img{
+  width:100% !important;
+  height:100% !important;
+  object-fit:cover !important;         /* no letterboxing */
+  display:block !important;
+  flex:0 0 100% !important;            /* fixes “image floating at right” */
+}
+
+/* 5) Keep bio area tidy */
+.cards .artist-card .bio{
+  min-height:auto !important;
+}
+  </style>
 </body>
 </html>
