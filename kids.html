@@ -21,17 +21,18 @@
     *{box-sizing:border-box}
     body{margin:0;background:var(--bg);color:var(--ink);font-family:"Trebuchet MS",Arial,sans-serif;position:relative}
 
+    /* sparkles */
     #sparkles{position:fixed;inset:0;pointer-events:none;z-index:0}
     .sparkle{position:absolute;width:2px;height:2px;background:var(--gold);border-radius:50%;opacity:0;animation:s 4s infinite}
     @keyframes s{0%{opacity:0;transform:scale(0)}50%{opacity:1;transform:scale(1.5)}100%{opacity:0;transform:scale(0)}}
 
-    /* === TOP BAR buttons (same as Tribute page) === */
+    /* Top bar buttons (match Singers page) */
     .wrap{width:min(1120px,92vw);margin:0 auto;padding:30px 0 0}
     .bar{display:flex;justify-content:space-between;align-items:center;margin:0 0 12px}
     .btn-mini{
-      display:inline-block;padding:8px 12px;border-radius:10px;
+      display:inline-block;padding:10px 16px;border-radius:12px;
       color:#ffd76a;background:rgba(201,151,0,.08);
-      border:1px solid rgba(201,151,0,.45);text-decoration:none;font-weight:700
+      border:1px solid rgba(201,151,0,.45);text-decoration:none;font-weight:800
     }
     .btn-mini:hover{background:rgba(201,151,0,.14)}
 
@@ -39,11 +40,11 @@
     #logo{max-width:260px;height:auto;display:block;margin:0 auto 10px}
     h1{color:var(--gold);text-transform:uppercase;letter-spacing:2px;margin:0 0 14px}
     p.sub{color:var(--muted);margin:0 0 24px;text-align:center}
-    .btn{display:inline-block;background:var(--gold);color:#000;padding:10px 18px;margin-top:12px;border-radius:6px;text-decoration:none;font-weight:bold}
 
     .container{width:min(1120px,92vw);margin:0 auto}
-    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;padding:30px 20px;position:relative;z-index:1}
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;padding:30px 20px;position:relative;z-index:1}
 
+    /* Card */
     .artist-card{
       position:relative; overflow:hidden; border-radius:14px;
       background:var(--panel); border:1px solid var(--line);
@@ -51,7 +52,8 @@
     }
     .artist-card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.35);border-color:rgba(212,175,55,.45)}
 
-    .frame{position:relative; height:220px; overflow:hidden; cursor:pointer}
+    /* Frame size — standardised to match other pages */
+    .frame{position:relative; height:260px; overflow:hidden; cursor:pointer}
     .slides{display:flex; width:100%; height:100%; transition:transform .35s ease}
     .slides img{width:100%; height:100%; object-fit:cover; flex:0 0 100%; display:block}
 
@@ -90,6 +92,7 @@
 
     footer{background:#111;color:#aaa;text-align:center;padding:18px;margin-top:30px;position:relative;z-index:1}
 
+    /* Lightbox */
     .lightbox{position:fixed; inset:0; background:rgba(0,0,0,.92); display:none; align-items:center; justify-content:center; z-index:9999}
     .lightbox.open{display:flex}
     .lightbox img{max-width:92vw; max-height:92vh; border:1px solid rgba(255,255,255,.15); border-radius:12px}
@@ -111,7 +114,7 @@
     <h1>Kids Parties</h1>
   </header>
 
-  <p class="sub">Use arrows to browse posters. Hover/tap the name to view the bio and enquiry buttons. “View Poster” opens the current slide full screen.</p>
+  <p class="sub">Use arrows to browse posters. Tap the poster to show the bio and buttons. “View poster” opens full screen.</p>
 
   <div class="container">
     <div class="cards">
@@ -123,8 +126,8 @@
             <img src="LivelyP.jpg" alt="Lively Squad – poster 1">
             <img src="Lively2.jpg" alt="Lively Squad – poster 2">
           </div>
-          <button class="nav prev">‹</button>
-          <button class="nav next">›</button>
+          <button class="nav prev" aria-label="Previous">‹</button>
+          <button class="nav next" aria-label="Next">›</button>
           <div class="dots"></div>
         </div>
 
@@ -138,7 +141,7 @@
           <p class="tags">Dance • Games • Disco</p>
           <p>Energetic party hosts bringing dance, games, and fun for all ages. Perfect for kids and adult events alike!</p>
           <div class="actions">
-            <a class="btn" href="contact.html?subject=Lively Squad">Enquire</a>
+            <a class="btn enquire" href="#">Enquire</a>
             <a class="btn alt view-poster" href="#">View poster</a>
           </div>
         </div>
@@ -149,10 +152,10 @@
         <div class="frame gallery">
           <div class="slides">
             <img src="Bones3.jpg" alt="Magical Bones – poster 1">
-            <img src="Bonesflip.jpg" alt="Magical Bones – poster 1">
+            <img src="Bonesflip.jpg" alt="Magical Bones – poster 2">
           </div>
-          <button class="nav prev">‹</button>
-          <button class="nav next">›</button>
+          <button class="nav prev" aria-label="Previous">‹</button>
+          <button class="nav next" aria-label="Next">›</button>
           <div class="dots"></div>
         </div>
 
@@ -166,7 +169,7 @@
           <p class="tags">Magician • Stage & Corporate</p>
           <p>Britain’s Got Talent finalist bringing next-level magic to family events, schools, and corporate shows.</p>
           <div class="actions">
-            <a class="btn" href="contact.html?subject=Magical Bones">Enquire</a>
+            <a class="btn enquire" href="#">Enquire</a>
             <a class="btn alt view-poster" href="#">View poster</a>
           </div>
         </div>
@@ -178,8 +181,8 @@
           <div class="slides">
             <img src="MGHParties.jpg" alt="MG Herts – poster 1">
           </div>
-          <button class="nav prev">‹</button>
-          <button class="nav next">›</button>
+          <button class="nav prev" aria-label="Previous">‹</button>
+          <button class="nav next" aria-label="Next">›</button>
           <div class="dots"></div>
         </div>
 
@@ -193,7 +196,7 @@
           <p class="tags">Kids Parties</p>
           <p>Interactive games, music, and dancing to keep kids laughing and moving from start to finish!</p>
           <div class="actions">
-            <a class="btn" href="contact.html?subject=MG Herts – Games & Disco">Enquire</a>
+            <a class="btn enquire" href="#">Enquire</a>
             <a class="btn alt view-poster" href="#">View poster</a>
           </div>
         </div>
@@ -209,8 +212,8 @@
             <img src="Ff4.jpg" alt="Fae & Flurry – poster 4">
             <img src="Ff5.jpg" alt="Fae & Flurry – poster 5">
           </div>
-          <button class="nav prev">‹</button>
-          <button class="nav next">›</button>
+          <button class="nav prev" aria-label="Previous">‹</button>
+          <button class="nav next" aria-label="Next">›</button>
           <div class="dots"></div>
         </div>
 
@@ -224,7 +227,7 @@
           <p class="tags">Kids • Parties • Entertainment</p>
           <p>Interactive themed shows that are fun, educational, and full of heart — perfect for young audiences and their families. Storytelling, music, games, and magical creature moments wrapped into a dragon-training adventure.</p>
           <div class="actions">
-            <a class="btn" href="contact.html?subject=Fae & Flurry">Enquire</a>
+            <a class="btn enquire" href="#">Enquire</a>
             <a class="btn alt view-poster" href="#">View poster</a>
           </div>
         </div>
@@ -235,14 +238,17 @@
 
   <footer>© <span id="y"></span> Geneius Entertainment</footer>
 
+  <!-- Lightbox -->
   <div class="lightbox" id="lightbox" aria-hidden="true">
     <span class="close" aria-label="Close">×</span>
     <img id="lightboxImg" src="" alt="Poster">
   </div>
 
   <script>
+    // year
     document.getElementById('y').textContent=new Date().getFullYear();
 
+    // sparkles
     const w=document.getElementById('sparkles');const N=100;
     function go(){w.innerHTML='';for(let i=0;i<N;i++){const e=document.createElement('div');
       e.className='sparkle';
@@ -253,6 +259,7 @@
       w.appendChild(e)}}
     go();addEventListener('resize',()=>{clearTimeout(window._t);window._t=setTimeout(go,200)});
 
+    // galleries
     document.querySelectorAll('.gallery').forEach(setupGallery);
     function setupGallery(root){
       const slides = root.querySelector('.slides');
@@ -261,12 +268,14 @@
       const next = root.querySelector('.nav.next');
       const dotsWrap = root.querySelector('.dots');
       let index = 0;
+
       imgs.forEach((_,i)=>{
         const d=document.createElement('span');
         d.className='dot'+(i===0?' active':'');
         d.addEventListener('click',()=>go(i));
         dotsWrap.appendChild(d);
       });
+
       function render(){
         slides.style.transform = `translateX(-${index*100}%)`;
         [...dotsWrap.children].forEach((d,i)=>d.classList.toggle('active', i===index));
@@ -274,25 +283,29 @@
       function go(i){ index = (i+imgs.length)%imgs.length; render(); }
       prev.addEventListener('click',()=>go(index-1));
       next.addEventListener('click',()=>go(index+1));
+
+      // swipe
       let startX=0, dx=0;
       slides.addEventListener('touchstart', e=>{startX=e.touches[0].clientX; dx=0;}, {passive:true});
       slides.addEventListener('touchmove', e=>{dx=e.touches[0].clientX-startX;}, {passive:true});
       slides.addEventListener('touchend', ()=>{ if(Math.abs(dx)>40) go(index + (dx<0?1:-1)); });
+
       root.getCurrentSrc = ()=> imgs[index].src;
       render();
     }
 
+    // click poster to toggle bio
     document.querySelectorAll('.artist-card').forEach(card=>{
       const frame = card.querySelector('.frame');
       frame.addEventListener('click', ()=>{ card.classList.toggle('bio-open'); });
     });
 
+    // lightbox open on "View poster"
     const lb=document.getElementById('lightbox');
     const lbImg=document.getElementById('lightboxImg');
     const closeLb=()=>{lb.classList.remove('open');lb.setAttribute('aria-hidden','true');}
     lb.addEventListener('click',e=>{if(e.target===lb||e.target.classList.contains('close'))closeLb();});
     document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLb();});
-
     document.querySelectorAll('.view-poster').forEach(btn=>{
       btn.addEventListener('click',e=>{
         e.preventDefault();
@@ -303,6 +316,7 @@
       });
     });
 
+    // universal enquire → contact with subject prefilled
     document.querySelectorAll('.btn.enquire').forEach(btn=>{
       const card=btn.closest('[data-name]');
       const actName=(card?.dataset.name||btn.textContent||'').trim();
@@ -310,4 +324,4 @@
     });
   </script>
 </body>
-  </html>
+</html>
