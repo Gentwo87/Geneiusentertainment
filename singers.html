@@ -316,5 +316,116 @@ document.head.appendChild(style);
   document.head.appendChild(s);
 })();
 </script>
+<style>
+/* ---- Universal card behaviour & layering (works on all pages) ---- */
+.artist-card{position:relative}
+
+.artist-card .frame{position:relative; overflow:hidden}
+.artist-card .slides{
+  display:flex; width:100%; height:100%; transform:translateX(0); transition:transform .35s ease;
+}
+.artist-card .slides img{flex:0 0 100%; width:100%; height:100%; object-fit:cover; display:block}
+
+/* Arrows always above overlays so they stay clickable */
+.artist-card .nav{position:absolute; top:50%; transform:translateY(-50%); z-index:5;
+  border:none; width:36px; height:36px; border-radius:50%; background:rgba(0,0,0,.45); color:#fff;
+}
+.artist-card .nav.prev{left:8px}
+.artist-card .nav.next{right:8px}
+
+/* Dots builder (if you use them) */
+.artist-card .dots{position:absolute; inset:auto 0 8px 0; display:flex; gap:6px; justify-content:center; z-index:5}
+.artist-card .dots button{width:8px; height:8px; border-radius:50%; border:0; background:#777; opacity:.7}
+.artist-card .dots button.on{opacity:1; background:#fff}
+
+/* Bio overlay sits on the bottom; doesn't block arrow clicks */
+.artist-card .bio{
+  position:absolute; left:0; right:0; bottom:0;
+  background:rgba(0,0,0,.72); padding:12px;
+  border-radius:0 0 14px 14px;
+  transform:translateY(100%); transition:transform .25s ease;
+  pointer-events:none; /* pass clicks through by default */
+}
+.artist-card.bio-open .bio,
+.artist-card .artist-meta:hover + .bio,
+.artist-card .artist-meta:focus-within + .bio{ transform:translateY(0) }
+.artist-card .bio .btn{pointer-events:auto} /* buttons still clickable */
+
+/* Optional: standardise card/frame height if pages differ */
+.artist-card .frame{height:220px}
+@media (max-width:700px){ .artist-card .frame{height:200px} }
+</style>
+
+<script>
+/* ---- Universal slider + bio + enquire routing ---- */
+(() => {
+  // Toggle bio by clicking NAME (desktop & mobile)
+  document.querySelectorAll('.artist-card .name').forEach(name => {
+    name.addEventListener('click', e => {
+      const card = name.closest('.artist-card');
+      card?.classList.toggle('bio-open');
+    });
+  });
+
+  // Toggle bio by clicking POSTER (but not when clicking arrows/dots)
+  document.querySelectorAll('.artist-card .frame').forEach(frame => {
+    frame.addEventListener('click', e => {
+      if (e.target.closest('.nav') || e.target.closest('.dots')) return;
+      const card = frame.closest('.artist-card');
+      card?.classList.toggle('bio-open');
+    });
+  });
+
+  // Make Enquire buttons go to Contact with ?subject=<act name>
+  document.querySelectorAll('.btn.enquire').forEach(btn => {
+    const card = btn.closest('[data-name]');
+    const actName = (card?.dataset.name || btn.dataset.act || 'General').trim();
+    btn.removeAttribute('target'); // avoid new tab
+    btn.href = 'contact.html?subject=' + encodeURIComponent(actName);
+  });
+
+  // Initialise sliders (prev/next/dots); works even with bio open
+  document.querySelectorAll('.artist-card').forEach(card => {
+    const slides = card.querySelector('.slides');
+    if (!slides) return;
+    const imgs = slides.querySelectorAll('img');
+    let i = 0;
+
+    const prev = card.querySelector('.nav.prev');
+    const next = card.querySelector('.nav.next');
+    const dots = card.querySelector('.dots');
+
+    const go = (n) => {
+      if (!imgs.length) return;
+      i = (n + imgs.length) % imgs.length;
+      slides.style.transform = 'translateX(' + (-i * 100) + '%)';
+      if (dots) dots.querySelectorAll('button').forEach((b, bi) => b.classList.toggle('on', bi === i));
+    };
+
+    // Build dots if present but empty
+    if (dots && dots.children.length === 0 && imgs.length > 1) {
+      imgs.forEach((_, idx) => {
+        const b = document.createElement('button');
+        b.setAttribute('aria-label', 'Go to slide ' + (idx + 1));
+        b.addEventListener('click', (e) => { e.stopPropagation(); go(idx); });
+        dots.appendChild(b);
+      });
+    }
+
+    prev && prev.addEventListener('click', (e) => { e.stopPropagation(); go(i - 1); });
+    next && next.addEventListener('click', (e) => { e.stopPropagation(); go(i + 1); });
+
+    go(0);
+  });
+
+  // Close any open bio when clicking outside a card (desktop nicety)
+  document.addEventListener('click', (e) => {
+    const card = e.target.closest?.('.artist-card');
+    document.querySelectorAll('.artist-card.bio-open').forEach(c => {
+      if (c !== card) c.classList.remove('bio-open');
+    });
+  });
+})();
+</script>
 </body>
 </html>
