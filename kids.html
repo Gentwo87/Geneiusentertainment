@@ -421,5 +421,43 @@
   min-height:auto !important;
 }
   </style>
+  <!-- === KIDS LAYOUT FIX: make it match Tribute page === -->
+<style>
+  /* Grid like Tribute */
+  .container .cards{
+    display:grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+    gap:16px !important;
+    padding:30px 20px !important;
+    width: min(1120px, 92vw) !important;
+    margin: 0 auto !important;
+  }
+
+  /* Remove one-column/max-width constraints */
+  .cards .artist-card{
+    max-width: none !important;
+    width: 100% !important;
+    margin: 0 !important;
+    border-radius:14px !important;
+  }
+
+  /* Match Tribute frame height and fill behavior */
+  .cards .artist-card .frame{
+    height:220px !important;           /* Tribute uses ~220px */
+    aspect-ratio:auto !important;       /* cancel any forced 16:9 */
+    overflow:hidden !important;
+  }
+  .cards .artist-card .slides{
+    display:flex !important;
+    width:100% !important; height:100% !important;
+    transition:transform .35s ease !important;
+  }
+  .cards .artist-card .slides img{
+    width:100% !important; height:100% !important;
+    object-fit:cover !important; flex:0 0 100% !important;
+    display:block !important;
+  }
+</style>
+<!-- === /KIDS LAYOUT FIX === -->
 </body>
 </html>
