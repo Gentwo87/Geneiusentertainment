@@ -193,16 +193,20 @@
       const actName = btn.closest('.artist-card').dataset.name;
       btn.href = 'contact.html?subject=' + encodeURIComponent(actName);
     });
-</script>
-// Hover over card to show bio instead of clicking name
+// Toggle bio when clicking the artist's name
 document.querySelectorAll('.artist-card').forEach(card => {
+  const name = card.querySelector('.artist-meta .name');
   const bio = card.querySelector('.bio');
-  card.addEventListener('mouseenter', () => {
-    bio.style.display = 'flex';
-  });
-  card.addEventListener('mouseleave', () => {
-    bio.style.display = 'none';
-  });
+  if (name && bio) {
+    name.addEventListener('click', e => {
+      e.stopPropagation();
+      const isVisible = bio.style.display === 'flex';
+      document.querySelectorAll('.artist-card .bio').forEach(b => b.style.display = 'none');
+      bio.style.display = isVisible ? 'none' : 'flex';
+    });
+  }
 });
+</script>
+
 </body>
 </html>
