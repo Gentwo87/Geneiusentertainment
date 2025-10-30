@@ -194,6 +194,15 @@
       btn.href = 'contact.html?subject=' + encodeURIComponent(actName);
     });
 </script>
-
+// Hover over card to show bio instead of clicking name
+document.querySelectorAll('.artist-card').forEach(card => {
+  const bio = card.querySelector('.bio');
+  card.addEventListener('mouseenter', () => {
+    bio.style.display = 'flex';
+  });
+  card.addEventListener('mouseleave', () => {
+    bio.style.display = 'none';
+  });
+});
 </body>
 </html>
