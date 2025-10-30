@@ -1,1 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tribute Acts | Geneius Entertainment</title>
 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MR1NLPH5ZK"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-MR1NLPH5ZK');
+  </script>
+
+  <style>
+    :root{
+      --bg:#000; --ink:#f5f5f5; --muted:#bfbfbf;
+      --gold:#C99700; --panel:#15151b; --line:rgba(255,255,255,.12);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:"Trebuchet MS",Arial,sans-serif;position:relative}
+    #sparkles{position:fixed;inset:0;pointer-events:none;z-index:0}
+    .sparkle{position:absolute;width:2px;height:2px;background:var(--gold);border-radius:50%;opacity:0;animation:s 4s infinite}
+    @keyframes s{0%{opacity:0;transform:scale(0)}50%{opacity:1;transform:scale(1.5)}100%{opacity:0;transform:scale(0)}}
+
+    .wrap{width:min(1120px,92vw);margin:0 auto;padding:30px 0 0}
+    .bar{display:flex;justify-content:space-between;align-items:center;margin:0 0 12px}
+    .btn-mini{
+      display:inline-block;padding:8px 12px;border-radius:10px;
+      color:#ffd76a;background:rgba(201,151,0,.08);
+      border:1px solid rgba(201,151,0,.45);text-decoration:none;font-weight:700
+    }
+    .btn-mini:hover{background:rgba(201,151,0,.14)}
+
+    header{position:relative;text-align:center;padding:40px 20px;background:radial-gradient(circle at center,rgba(201,151,0,.18),#000 70%);z-index:1}
+    #logo{max-width:200px;height:auto;display:block;margin:0 auto 6px}
+    h1{color:var(--gold);text-transform:uppercase;letter-spacing:2px;margin:0 0 8px;font-size:1.6rem}
+    .container{width:min(1120px,92vw);margin:0 auto}
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;padding:0 20px 30px;position:relative;z-index:1}
+
+    .artist-card{
+      position:relative; overflow:hidden; border-radius:16px;
+      background:var(--panel); border:1px solid var(--line);
+      transition:transform .18s, box-shadow .18s, border-color .18s;
+    }
+    .artist-card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.35);border-color:rgba(212,175,55,.45)}
+
+    .frame{position:relative; height:240px; overflow:hidden; background:#0e0e12}
+    @media (max-width:700px){ .frame{height:220px} }
+    .slides{display:flex; width:100%; height:100%; transition:transform .35s ease}
+    .slides img{width:100%; height:100%; object-fit:cover; flex:0 0 100%; display:block}
+
+    .nav{
+      position:absolute; top:50%; transform:translateY(-50%);
+      background:rgba(0,0,0,.45); color:#fff; border:1px solid rgba(255,255,255,.35);
+      font-weight:800; line-height:1; padding:.35rem .6rem; border-radius:10px;
+      cursor:pointer; opacity:0; transition:opacity .2s;
+    }
+    .artist-card:hover .nav{opacity:1}
+    .nav.prev{left:10px} .nav.next{right:10px}
+
+    .artist-meta{padding:12px 14px;background:linear-gradient(0deg,#121217,transparent);text-align:center}
+    .artist-meta .name{
+      color:#ffd76a; text-transform:uppercase; letter-spacing:.06em;
+      font-weight:800; cursor:pointer; display:inline-block;
+    }
+
+    .bio{
+      position:absolute; inset:0; display:none; flex-direction:column; justify-content:flex-end;
+      padding:16px; gap:10px;
+      background:linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,.86) 100%);
+    }
+    .artist-card.bio-open .bio{display:flex}
+    .bio h3{margin:0;color:#ffd76a;text-transform:uppercase;letter-spacing:.06em;font-size:1rem}
+    .bio .tags{margin:0;color:#fdeec0;font-size:.9rem}
+    .bio p{margin:0;color:#d9d9d9;line-height:1.45}
+    .bio .actions{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+    .bio .btn{display:inline-block;background:var(--gold);color:#000;padding:8px 12px;border-radius:8px;font-weight:800;text-decoration:none;border:1px solid rgba(255,255,255,.12)}
+    .bio .btn.alt{background:transparent;color:#ffd76a;border:1px solid rgba(201,151,0,.5)}
+
+    footer{background:#111;color:#aaa;text-align:center;padding:18px;margin-top:10px;position:relative;z-index:1}
+
+    .lightbox{position:fixed; inset:0; background:rgba(0,0,0,.92); display:none; align-items:center; justify-content:center; z-index:9999; padding:20px}
+    .lightbox.open{display:flex}
+    .lightbox img{max-width:92vw; max-height:92vh; border:1px solid rgba(255,255,255,.15); border-radius:12px}
+    .lightbox .close{position:absolute; top:14px; right:14px; font-size:18px; color:#fff; cursor:pointer}
+  </style>
+</head>
+<body>
+  <div id="sparkles"></div>
+
+  <div class="wrap">
+    <div class="bar">
+      <a class="btn-mini" href="index.html">← Back to Home</a>
+      <a class="btn-mini" href="acts.html">Browse all acts</a>
+    </div>
+  </div>
+
+  <header>
+    <a href="index.html"><img id="logo" src="logo.png" alt="Geneius Entertainment"></a>
+    <h1>Tribute Acts</h1>
+  </header>
+
+  <div class="container">
+    <div class="cards">
+
+      <!-- 1) Spice Girls Tribute -->
+      <article class="artist-card" tabindex="0" data-name="Spice Girls Tribute">
+        <div class="frame gallery">
+          <div class="slides">
+            <img src="Spice.png" alt="Spice Girls Tribute – poster 1">
+            <img src="Spice-2.jpg" alt="Spice Girls Tribute – poster 2">
+          </div>
+          <button class="nav prev" type="button" aria-label="Previous">‹</button>
+          <button class="nav next" type="button" aria-label="Next">›</button>
+        </div>
+
+        <div class="artist-meta">
+          <span class="name" tabindex="0" role="button" aria-expanded="false">SPICE GIRLS TRIBUTE</span>
+        </div>
+
+        <div class="bio" aria-hidden="true">
+          <h3>Spice Girls Tribute</h3>
+          <p class="tags">90s • Girl Power • Party</p>
+          <p>High-energy tribute packed with 90s anthems, choreography and crowd interaction — perfect for venues and festivals.</p>
+          <div class="actions">
+            <a class="btn enquire" href="#">Enquire</a>
+            <a class="btn alt view-poster" href="Spice.png">View Poster</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- 2) ABBA Gels -->
+      <article class="artist-card" tabindex="0" data-name="ABBA Gels">
+        <div class="frame gallery">
+          <div class="slides">
+            <img src="Abbagels.jpg" alt="ABBA Gels – poster 1">
+            <img src="AbbaGels-2.jpg" alt="ABBA Gels – poster 2">
+          </div>
+          <button class="nav prev" type="button" aria-label="Previous">‹</button>
+          <button class="nav next" type="button" aria-label="Next">›</button>
+        </div>
+
+        <div class="artist-meta">
+          <span class="name" tabindex="0" role="button" aria-expanded="false">ABBA GELS</span>
+        </div>
+
+        <div class="bio" aria-hidden="true">
+          <h3>ABBA Gels</h3>
+          <p class="tags">70s • Pop • Disco</p>
+          <p>Glittering ABBA tribute with harmonies, costume changes and all the dancefloor classics — ideal with a 70s party set.</p>
+          <div class="actions">
+            <a class="btn enquire" href="#">Enquire</a>
+            <a class="btn alt view-poster" href="Abbagels.jpg">View Poster</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- 3) Britney Tribute -->
+      <article class="artist-card" tabindex="0" data-name="Britney Tribute">
+        <div class="frame gallery">
+          <div class="slides">
+            <img src="Britney1.jpg" alt="Britney Tribute – poster 1">
+            <img src="Britney-2.jpg" alt="Britney Tribute – poster 2">
+          </div>
+          <button class="nav prev" type="button" aria-label="Previous">‹</button>
+          <button class="nav next" type="button" aria-label="Next">›</button>
+        </div>
+
+        <div class="artist-meta">
+          <span class="name" tabindex="0" role="button" aria-expanded="false">BRITNEY TRIBUTE</span>
+        </div>
+
+        <div class="bio" aria-hidden="true">
+          <h3>Britney Tribute</h3>
+          <p class="tags">00s • Pop • Club</p>
+          <p>Iconic looks and chart-topping hits — choreography, vocals and crowd-pleasers for club nights and special events.</p>
+          <div class="actions">
+            <a class="btn enquire" href="#">Enquire</a>
+            <a class="btn alt view-poster" href="Britney1.jpg">View Poster</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- 4) Princes of Motown -->
+      <article class="artist-card" tabindex="0" data-name="Princes of Motown">
+        <div class="frame gallery">
+          <div class="slides">
+            <img src="POMT2.jpg" alt="Princes of Motown – poster 1">
+            <img src="PrincesOfMotown-2.jpg" alt="Princes of Motown – poster 2">
+          </div>
+          <button class="nav prev" type="button" aria-label="Previous">‹</button>
+          <button class="nav next" type="button" aria-label="Next">›</button>
+        </div>
+
+        <div class="artist-meta">
+          <span class="name" tabindex="0" role="button" aria-expanded="false">PRINCES OF MOTOWN</span>
+        </div>
+
+        <div class="bio" aria-hidden="true">
+          <h3>Princes of Motown</h3>
+          <p class="tags">Motown • Soul • Party</p>
+          <p>Silky harmonies and dance-floor Motown classics — a feel-good set that keeps the crowd singing all night.</p>
+          <div class="actions">
+            <a class="btn enquire" href="#">Enquire</a>
+            <a class="btn alt view-poster" href="POMT2.jpg">View Poster</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- 5) Slim Shadow - Eminem Tribute -->
+      <article class="artist-card" tabindex="0" data-name="Slim Shadow - Eminem Tribute">
+        <div class="frame gallery">
+          <div class="slides">
+            <img src="Slim1.jpg" alt="Slim Shadow – poster 1">
+            <img src="Slim2.jpg" alt="Slim Shadow – poster 2">
+            <img src="Slim3.jpg" alt="Slim Shadow – poster 3">
+          </div>
+          <button class="nav prev" type="button" aria-label="Previous">‹</button>
+          <button class="nav next" type="button" aria-label="Next">›</button>
+        </div>
+
+        <div class="artist-meta">
+          <span class="name" tabindex="0" role="button" aria-expanded="false">SLIM SHADOW – EMINEM TRIBUTE</span>
+        </div>
+
+        <div class="bio" aria-hidden="true">
+          <h3>Slim Shadow - Eminem Tribute</h3>
+          <p class="tags">90s • Hip Hop • Club</p>
+          <p>A high-energy, authentic tribute to the real Slim Shady — packed with hits and crowd interaction.</p>
+          <div class="actions">
+            <a class="btn enquire" href="#">Enquire</a>
+            <a class="btn alt view-poster" href="Slim1.jpg">View Poster</a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+
+  <footer>© <span id="y"></span> Geneius Entertainment</footer>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="close" type="button" aria-label="Close">×</button>
+    <img id="lightboxImg" src="" alt="Poster">
+  </div>
+
+  <script>
+    // Footer year
+    document.getElementById('y').textContent=new Date().getFullYear();
+
+    // sparkles
+    (function(){
+      const w=document.getElementById('sparkles');const N=100;
+      function go(){w.innerHTML='';for(let i=0;i<N;i++){const e=document.createElement('div');
+        e.className='sparkle';
+        e.style.top=Math.random()*innerHeight+'px';
+        e.style.left=Math.random()*innerWidth+'px';
+        e.style.animationDuration=(3+Math.random()*4)+'s';
+        e.style.animationDelay=(Math.random()*5)+'s';
+        w.appendChild(e)}}
+      go();addEventListener('resize',()=>{clearTimeout(window._t);window._t=setTimeout(go,200)});
+    })();
+
+    // ===== Gallery setup =====
+    document.querySelectorAll('.gallery').forEach(function(root){
+      const slides = root.querySelector('.slides');
+      const imgs = Array.from(slides.querySelectorAll('img'));
+      const prev = root.querySelector('.nav.prev');
+      const next = root.querySelector('.nav.next');
+      let index = 0;
+
+      function render(){
+        slides.style.transform = 'translateX(-' + (index*100) + '%)';
+      }
+      function go(i){
+        if(!imgs.length) return;
+        index = (i + imgs.length) % imgs.length;
+        render();
+      }
+
+      if(prev) prev.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); go(index-1); });
+      if(next) next.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); go(index+1); });
+
+      // swipe
+      let startX=0, dx=0;
+      slides.addEventListener('touchstart', function(e){ startX=e.touches[0].clientX; dx=0; }, {passive:true});
+      slides.addEventListener('touchmove', function(e){ dx=e.touches[0].clientX-startX; }, {passive:true});
+      slides.addEventListener('touchend', function(){ if(Math.abs(dx)>40) go(index + (dx<0?1:-1)); });
+
+      // expose getter for current image src
+      root.getCurrentSrc = function(){ return (imgs[index]||{}).src; };
+
+      render();
+    });
+
+    // ===== Card interactions (open bio by clicking name; close on mouseleave) =====
+    document.querySelectorAll('.artist-card').forEach(function(card){
+      const nameEl = card.querySelector('.artist-meta .name');
+      const bioEl  = card.querySelector('.bio');
+      if(!nameEl || !bioEl) return;
+
+      function openBio(){
+        document.querySelectorAll('.artist-card.bio-open').forEach(function(c){
+          if(c!==card) c.classList.remove('bio-open');
+        });
+        card.classList.add('bio-open');
+        nameEl.setAttribute('aria-expanded','true');
+        bioEl.setAttribute('aria-hidden','false');
+      }
+      function closeBio(){
+        card.classList.remove('bio-open');
+        nameEl.setAttribute('aria-expanded','false');
+        bioEl.setAttribute('aria-hidden','true');
+      }
+
+      nameEl.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); openBio(); });
+      nameEl.addEventListener('keydown', function(e){ if(e.key==='Enter' || e.key===' ') { e.preventDefault(); openBio(); } });
+      card.addEventListener('mouseleave', closeBio);
+    });
+
+    // ===== Lightbox for "View Poster" =====
+    (function(){
+      const lb = document.getElementById('lightbox');
+      const lbImg = document.getElementById('lightboxImg');
+      if(!lb || !lbImg) return;
+      function closeLb(){ lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); }
+      lb.addEventListener('click', function(e){ if(e.target===lb || e.target.classList.contains('close')) closeLb(); });
+      document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeLb(); });
+
+      document.querySelectorAll('.view-poster').forEach(function(btn){
+        btn.addEventListener('click', function(e){
+          e.preventDefault();
+          const card = btn.closest('.artist-card');
+          const gal = card ? card.querySelector('.gallery') : null;
+          const src = gal && gal.getCurrentSrc ? gal.getCurrentSrc() : (gal ? (gal.querySelector('img')||{}).src : btn.getAttribute('href'));
+          if(src){
+            lbImg.src = src;
+            lb.classList.add('open');
+            lb.setAttribute('aria-hidden','false');
+          }
+        });
+      });
+    })();
+
+    // ===== Enquire buttons → contact page with subject =====
+    document.querySelectorAll('.btn.enquire, a[href^="mailto:"]').forEach(function(btn){
+      const card = btn.closest('[data-name]');
+      const actName = (card && card.getAttribute('data-name')) ? card.getAttribute('data-name') : (btn.textContent || 'Act Enquiry');
+      btn.classList.add('enquire');
+      btn.removeAttribute('target');
+      btn.setAttribute('href', 'contact.html?subject=' + encodeURIComponent(actName));
+    });
+  </script>
+</body>
+</html>
