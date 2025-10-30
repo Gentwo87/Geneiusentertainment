@@ -42,7 +42,14 @@
     p.sub{color:var(--muted);margin:0 0 24px;text-align:center}
 
     .container{width:min(1120px,92vw);margin:0 auto}
-    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;padding:30px 20px;position:relative;z-index:1}
+    .cards {
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap:16px;
+  padding:30px 20px;
+  position:relative;
+  z-index:1;
+    }
 
     /* Card */
     .artist-card{
@@ -53,7 +60,16 @@
     .artist-card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.35);border-color:rgba(212,175,55,.45)}
 
     /* Frame */
-    .frame{position:relative; height:260px; overflow:hidden;}
+    .frame {
+  position:relative;
+  height:240px;
+  overflow:hidden;
+}
+
+/* optional: mobile tweak to match others */
+@media (max-width:700px) {
+  .frame { height:220px; }
+}
     .slides{display:flex; width:100%; height:100%; transition:transform .35s ease}
     .slides img{width:100%; height:100%; object-fit:cover; flex:0 0 100%; display:block}
 
