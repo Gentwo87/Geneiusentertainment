@@ -341,7 +341,212 @@
   });
 })();
 </script>
+<style>
+/* === UNIVERSAL CARD POLISH AND SLIDES INDICATORS === */
 
+.cards {display:grid; gap:22px; grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+
+/* Remove extra hint text */
+.artist-meta .hint {display:none!important}
+
+/* Frame (poster area) */
+.artist-card .frame {
+  position:relative;
+  overflow:hidden;
+  border-radius:14px;
+  height:230px;
+  background:#000;
+  cursor:pointer;
+}
+.artist-card .slides {
+  display:flex;
+  width:100%;
+  height:100%;
+  transition:transform .35s ease;
+}
+.artist-card .slides img {
+  flex:0 0 100%;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+/* Pagination dots */
+.artist-card .dots {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:6px;
+  margin-top:8px;
+}
+.artist-card .dots button {
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  border:2px solid var(--gold,#c99700);
+  background:transparent;
+  cursor:pointer;
+  transition:background .2s ease;
+}
+.artist-card .dots button.active {
+  background:var(--gold,#c99700);
+}
+
+/* Bio overlay */
+.artist-card .bio {
+  position:absolute;
+  left:0; right:0; bottom:0;
+  background:rgba(0,0,0,0.82);
+  padding:14px;
+  border-radius:0 0 14px 14px;
+  transform:translateY(100%);
+  transition:transform .25s ease;
+  color:#fff;
+}
+.artist-card:hover .bio {
+  transform:translateY(0);
+}
+.bio h3 {
+  margin:0 0 4px;
+  font-size:1rem;
+  color:var(--gold,#c99700);
+  text-transform:uppercase;
+}
+.bio p {margin:4px 0; color:#f5f5f5; line-height:1.4;}
+.bio .tags {color:#f0e6c0; margin-bottom:6px;}
+.bio .actions {display:flex; gap:8px; margin-top:10px;}
+.bio .btn {
+  background:var(--gold,#c99700);
+  color:#111;
+  padding:0.45rem 0.75rem;
+  border-radius:10px;
+  font-weight:700;
+  text-decoration:none;
+}
+.bio .btn.alt {
+  background:transparent;
+  color:#f5f5f5;
+  border:1px solid #f5f5f5;
+}
+
+/* Artist meta name bar */
+.artist-meta {
+  background:rgba(255,255,255,0.07);
+  border:1px solid rgba(255,255,255,0.15);
+  border-radius:12px;
+  margin-top:8px;
+  text-align:center;
+  font-weight:700;
+  letter-spacing:0.3px;
+  padding:6px 0;
+  color:var(--gold,#c99700);
+}
+
+/* Lightbox */
+.lightbox {
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.9);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+.lightbox.open {display:flex;}
+.lightbox img {
+  max-width:92vw;
+  max-height:92vh;
+  border-radius:12px;
+  box-shadow:0 18px 40px rgba(0,0,0,.6);
+}
+.lightbox .close {
+  position:absolute;
+  top:14px;
+  right:16px;
+  font-size:28px;
+  color:#fff;
+  background:transparent;
+  border:0;
+  cursor:pointer;
+}
+</style>
+
+<script>
+(() => {
+  // Create global lightbox once
+  if (!document.querySelector('.lightbox')) {
+    const lb = document.createElement('div');
+    lb.className = 'lightbox';
+    lb.innerHTML = '<button class="close" aria-label="Close">×</button><img alt="Poster">';
+    document.body.appendChild(lb);
+    lb.addEventListener('click', e => { if (!e.target.closest('img')) lb.classList.remove('open'); });
+    lb.querySelector('.close').addEventListener('click', () => lb.classList.remove('open'));
+  }
+  const lightbox = document.querySelector('.lightbox');
+  const lbImg = lightbox.querySelector('img');
+
+  document.querySelectorAll('.artist-card').forEach(card => {
+    const slides = card.querySelector('.slides');
+    if (!slides) return;
+    const imgs = Array.from(slides.querySelectorAll('img'));
+    let i = 0;
+
+    // Remove any old hint text if present
+    const hint = card.querySelector('.hint');
+    if (hint) hint.remove();
+
+    // Create dots for number of images
+    let dots = card.querySelector('.dots');
+    if (!dots && imgs.length > 1) {
+      dots = document.createElement('div');
+      dots.className = 'dots';
+      imgs.forEach((img, idx) => {
+        const b = document.createElement('button');
+        if (idx === 0) b.classList.add('active');
+        b.addEventListener('click', e => {
+          e.stopPropagation();
+          i = idx;
+          slides.style.transform = `translateX(${-i*100}%)`;
+          dots.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+          b.classList.add('active');
+        });
+        dots.appendChild(b);
+      });
+      card.appendChild(dots);
+    }
+
+    // Bio open on hover (desktop)
+    const frame = card.querySelector('.frame');
+    if (frame) {
+      frame.addEventListener('mouseenter', () => card.classList.add('bio-open'));
+      frame.addEventListener('mouseleave', () => card.classList.remove('bio-open'));
+    }
+
+    // Enquire → contact page
+    card.querySelectorAll('.btn.enquire').forEach(btn=>{
+      const act = (card.dataset.name || '').trim() || 'Act Enquiry';
+      btn.href = 'contact.html?subject=' + encodeURIComponent(act);
+      btn.removeAttribute('target');
+    });
+
+    // View Poster → open lightbox with current image
+    card.querySelectorAll('.btn.view-poster, .btn.alt.view-poster').forEach(btn=>{
+      btn.addEventListener('click', e=>{
+        e.preventDefault(); e.stopPropagation();
+        lbImg.src = imgs[i]?.getAttribute('src') || btn.getAttribute('href');
+        lightbox.classList.add('open');
+      });
+    });
+  });
+})();
+</script>
+
+<!-- one-time shared lightbox -->
+<div class="lightbox" aria-hidden="true">
+  <button class="close" aria-label="Close">×</button>
+  <img alt="Poster">
+</div>
 
 
 </body>
