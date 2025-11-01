@@ -5,21 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Browse Acts | Geneius Entertainment</title>
 
-  <!-- Google tag (replace ID if different) -->
+  <!-- Google tag (keep your own ID if different) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-MR1NLPH5ZK"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-MR1NLPH5ZK');
+    gtag('js', new Date()); gtag('config', 'G-MR1NLPH5ZK');
   </script>
 
   <style>
-    :root{ --bg:#000; --ink:#f5f5f5; --muted:#bfbfbf; --gold:#C99700; --panel:#15151b; --line:rgba(255,255,255,.12); }
+    :root{
+      --bg:#000; --ink:#f5f5f5; --muted:#bfbfbf;
+      --gold:#C99700; --panel:#15151b; --line:rgba(255,255,255,.12);
+    }
     *{box-sizing:border-box}
     body{margin:0;background:var(--bg);color:var(--ink);font-family:"Trebuchet MS",Arial,sans-serif}
 
     .wrap{width:min(1120px,92vw);margin:0 auto;padding:28px 0 40px}
+
+    /* top bar */
     .bar{display:flex;justify-content:space-between;align-items:center;margin:0 0 12px}
     .btn-mini{
       display:inline-block;padding:8px 12px;border-radius:10px;
@@ -28,14 +32,22 @@
     }
     .btn-mini:hover{background:rgba(201,151,0,.14)}
 
-    header{display:flex;align-items:center;gap:16px;justify-content:center;margin:8px 0 18px}
+    header{display:flex;align-items:center;gap:16px;justify-content:center;margin:8px 0 6px}
     header img{height:70px;width:auto}
     h1{margin:6px 0 0;font-size:1.6rem;color:var(--gold);letter-spacing:1px}
     p.sub{color:var(--muted);margin:0 0 14px;text-align:center}
 
-    .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));margin-top:8px}
+    /* Search + chips */
+    #acts-search{
+      width:100%;max-width:720px;display:block;margin:12px auto 10px;padding:12px 14px;
+      background:#13131a;border:1px solid var(--line);border-radius:10px;color:#eee
+    }
+    .chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:8px 0 18px}
+    .chip{padding:.38rem .7rem;border-radius:999px;background:#111;border:1px solid var(--line);color:#ddd;cursor:pointer;user-select:none;font-size:.92rem}
+    .chip.active{background:#1b1710;border-color:var(--gold);color:#ffd76a}
 
-    /* Card */
+    /* Grid/cards */
+    .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));margin-top:8px}
     .artist-card{
       position:relative; overflow:hidden; border-radius:14px;
       background:var(--panel); border:1px solid var(--line);
@@ -43,56 +55,64 @@
     }
     .artist-card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.35);border-color:rgba(212,175,55,.45)}
 
-    /* Media frame – uniform height to match Singers */
-    .frame{position:relative; height:220px; overflow:hidden}
-    .slides{display:flex; width:100%; height:100%; transition:transform .35s ease}
-    .slides img{width:100%; height:100%; object-fit:cover; flex:0 0 100%; display:block}
+    /* Media frame – match other pages (e.g., Singers) */
+    .frame{position:relative;height:220px;overflow:hidden}
+    .slides{display:flex;width:100%;height:100%;transition:transform .35s ease}
+    .slides img{width:100%;height:100%;object-fit:cover;flex:0 0 100%;display:block}
 
-    /* Gallery controls (arrows) */
+    /* Gallery dots + arrows */
+    .dots{position:absolute;left:0;right:0;bottom:8px;display:flex;gap:6px;justify-content:center}
+    .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.4);cursor:pointer}
+    .dot.active{background:#ffd76a;border-color:var(--gold)}
     .nav{
-      position:absolute; top:50%; transform:translateY(-50%);
-      background:rgba(0,0,0,.45); color:#fff; border:1px solid rgba(255,255,255,.35);
-      font-weight:800; line-height:1; padding:.35rem .6rem; border-radius:10px;
-      cursor:pointer; opacity:.9;
+      position:absolute;top:50%;transform:translateY(-50%);
+      background:rgba(0,0,0,.45);color:#fff;border:1px solid rgba(255,255,255,.35);
+      font-weight:800;line-height:1;padding:.35rem .6rem;border-radius:10px;cursor:pointer;opacity:.9
     }
     .nav.prev{left:8px} .nav.next{right:8px}
 
-    /* Dots under image */
-    .dots{position:absolute; left:0; right:0; bottom:8px; display:flex; gap:6px; justify-content:center}
-    .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.4);cursor:pointer}
-    .dot.active{background:#ffd76a;border-color:var(--gold)}
-
-    /* Name row */
-    .artist-meta{padding:12px 14px; text-align:center}
+    /* Name + tags row (tags always visible) */
+    .artist-meta{padding:12px 14px;text-align:center}
     .artist-meta .name{
-      color:var(--gold); text-transform:uppercase; letter-spacing:.06em;
-      font-weight:800; cursor:pointer; display:inline-block;
+      color:var(--gold);text-transform:uppercase;letter-spacing:.06em;
+      font-weight:800;cursor:pointer;display:inline-block
+    }
+    .artist-meta .tags-line{
+      margin-top:6px; color:#fdeec0; font-size:.9rem; letter-spacing:.02em;
     }
 
-    /* Bio overlay (appears on name click; closes when leaving card) */
+    /* Bio overlay opened by name click */
     .bio{
-      position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-end;
-      padding:16px; gap:10px; opacity:0; pointer-events:none; transition:opacity .2s ease;
+      position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;
+      padding:16px;gap:10px;opacity:0;pointer-events:none;transition:opacity .2s ease;
       background:linear-gradient(to top, rgba(0,0,0,.82) 28%, rgba(0,0,0,.18) 65%, rgba(0,0,0,0));
       backdrop-filter:saturate(120%) blur(2px);
     }
-    .artist-card.bio-open .bio{opacity:1; pointer-events:auto}
-
+    .artist-card.bio-open .bio{opacity:1;pointer-events:auto}
     .bio h3{margin:0;color:var(--gold);text-transform:uppercase;letter-spacing:.06em;font-size:1rem}
-    .bio .tags{margin:0;color:#fdeec0;font-size:.9rem}
     .bio p{margin:0;color:#d9d9d9;line-height:1.45}
     .bio .actions{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
-    .bio .btn{display:inline-block;background:var(--gold);color:#000;padding:8px 12px;border-radius:8px;font-weight:700;text-decoration:none;border:0}
+    .bio .btn{
+      display:inline-block;background:var(--gold);color:#000;padding:8px 12px;border-radius:8px;
+      font-weight:700;text-decoration:none;border:0
+    }
     .bio .btn.alt{background:transparent;color:#f5f5f5;border:1px solid rgba(255,255,255,.25)}
 
     .empty{opacity:.7;text-align:center;padding:24px}
     footer{margin-top:26px;color:#aaa;text-align:center;padding-bottom:24px}
 
-    /* Lightbox */
-    .lightbox{position:fixed; inset:0; background:rgba(0,0,0,.92); display:none; align-items:center; justify-content:center; z-index:9999}
+    /* Lightbox with gold "Close" button */
+    .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;z-index:9999}
     .lightbox.open{display:flex}
-    .lightbox img{max-width:92vw; max-height:92vh; border:1px solid rgba(255,255,255,.15); border-radius:12px}
-    .lightbox .close{position:absolute; top:14px; right:14px; font-size:28px; color:#fff; cursor:pointer}
+    .lightbox img{max-width:92vw;max-height:92vh;border:1px solid rgba(255,255,255,.15);border-radius:12px}
+    .close-btn{
+      position:absolute;top:18px;right:22px;padding:6px 14px;
+      border:2px solid var(--gold);color:var(--gold);font-weight:700;
+      background:rgba(0,0,0,0.5);border-radius:8px;cursor:pointer;
+      transition:background .2s,border-color .2s,color .2s;
+      user-select:none;
+    }
+    .close-btn:hover{background:rgba(201,151,0,.1);color:#ffd76a;border-color:#ffd76a}
   </style>
 </head>
 <body>
@@ -106,7 +126,10 @@
       <a href="index.html" aria-label="Home"><img src="logo.png" alt="Geneius Entertainment"></a>
       <h1>Browse all acts</h1>
     </header>
-    <p class="sub">Click the <strong>name</strong> to view bio & enquire. Use dots to switch posters. “View Poster” opens a popup.</p>
+    <p class="sub">Search or filter by tag. Click the <strong>name</strong> to view bio & enquire. Use dots to switch posters.</p>
+
+    <input id="acts-search" type="search" placeholder="Search by name or tag (e.g. singers, 90s, weddings)…" />
+    <div id="chips" class="chips"></div>
 
     <div id="acts-grid" class="grid"></div>
 
@@ -115,7 +138,7 @@
 
   <!-- Lightbox -->
   <div class="lightbox" id="lightbox" aria-hidden="true">
-    <span class="close" aria-label="Close">×</span>
+    <div class="close-btn" aria-label="Close">Close</div>
     <img id="lightboxImg" src="" alt="Poster">
   </div>
 
@@ -127,15 +150,40 @@
 
     const TALENT = Array.isArray(window.TALENT) ? window.TALENT : [];
     const grid = document.getElementById('acts-grid');
+    const search = document.getElementById('acts-search');
+    const chipsWrap = document.getElementById('chips');
+    let activeTag = 'all';
+
+    /* Build tag chips dynamically */
+    function buildChips(){
+      const tags = new Set(['all']);
+      TALENT.forEach(a => (a.tags||[]).forEach(t => tags.add(String(t).toLowerCase())));
+      chipsWrap.innerHTML = '';
+      [...tags].forEach(t=>{
+        const el = document.createElement('span');
+        el.className = 'chip' + (t==='all' ? ' active':'');
+        el.dataset.tag = t;
+        el.textContent = t;
+        el.addEventListener('click', ()=>{
+          activeTag = t;
+          [...chipsWrap.children].forEach(c=>c.classList.toggle('active', c===el));
+          apply();
+        });
+        chipsWrap.appendChild(el);
+      });
+    }
 
     function cardHTML(a, idx){
       const images = Array.isArray(a.images) && a.images.length ? a.images : (a.img ? [a.img] : ['logo.png']);
       const dots = images.map((_,i)=>`<span class="dot${i===0?' active':''}" data-i="${i}"></span>`).join('');
-      const tags = (a.tags||[]).join(' • ');
       const nameEsc = (a.name||'').replace(/"/g,'&quot;');
+      const tagText = (a.tags||[]).join(' • ');
+      const bioText = a.bio ? `<p>${a.bio}</p>` : '';
 
       return `
-        <div class="artist-card" tabindex="0" data-name="${nameEsc}" data-index="${idx}">
+        <div class="artist-card" tabindex="0" data-name="${nameEsc}" data-index="${idx}"
+             data-tags="${(a.tags||[]).map(t=>String(t).toLowerCase()).join(' ')}">
+
           <div class="frame gallery" aria-label="Poster gallery for ${nameEsc}">
             <div class="slides">
               ${images.map(src=>`<img src="${src}" alt="${nameEsc} poster">`).join('')}
@@ -147,12 +195,12 @@
 
           <div class="artist-meta">
             <span class="name" role="button" tabindex="0">${nameEsc}</span>
+            ${tagText ? `<div class="tags-line">${tagText}</div>` : ``}
           </div>
 
           <div class="bio">
             <h3>${nameEsc}</h3>
-            ${tags ? `<p class="tags">${tags}</p>` : ''}
-            ${a.bio ? `<p>${a.bio}</p>` : ''}
+            ${bioText}
             <div class="actions">
               <a class="btn enquire" href="#">Enquire</a>
               <a class="btn alt view-poster" href="#" data-target="current">View Poster</a>
@@ -162,13 +210,22 @@
       `;
     }
 
-    function render(){
-      if(!TALENT.length){
-        grid.innerHTML = `<div class="empty">No acts found. Make sure <code>talent.js</code> is present and defines <code>window.TALENT</code>.</div>`;
-        return;
-      }
-      grid.innerHTML = TALENT.map(cardHTML).join('');
+    function render(list){
+      grid.innerHTML = list.length
+        ? list.map(cardHTML).join('')
+        : `<div class="empty">No acts match your filters.</div>`;
       wireUp();
+    }
+
+    function apply(){
+      const q = (search.value || '').trim().toLowerCase();
+      const out = TALENT.filter(a=>{
+        const hay = [a.name, a.bio, ...(a.tags||[])].join(' ').toLowerCase();
+        const tagOK = activeTag==='all' || (a.tags||[]).map(t=>String(t).toLowerCase()).includes(activeTag);
+        const qOK = !q || hay.includes(q);
+        return tagOK && qOK;
+      });
+      render(out);
     }
 
     function wireUp(){
@@ -199,39 +256,39 @@
         slides.addEventListener('touchmove',  e=>{dx=e.touches[0].clientX-startX;}, {passive:true});
         slides.addEventListener('touchend',   ()=>{ if(Math.abs(dx)>40) go(index + (dx<0?1:-1)); });
 
-        // expose getter
+        // getter for current poster
         root.getCurrentSrc = ()=> imgs[index]?.src;
-
         renderGal();
       });
 
-      // name click toggles bio; close when pointer leaves the card
+      // name click -> open bio; leave card -> close
       document.querySelectorAll('.artist-card').forEach(card=>{
         const nameEl = card.querySelector('.artist-meta .name');
         if(!nameEl) return;
-
         const open = ()=> card.classList.add('bio-open');
         const close= ()=> card.classList.remove('bio-open');
-
         nameEl.addEventListener('click', open);
         nameEl.addEventListener('keydown', (e)=>{
-          if(e.key==='Enter' || e.key===' '){ e.preventDefault(); open(); }
+          if(e.key==='Enter'||e.key===' '){e.preventDefault();open();}
         });
         card.addEventListener('mouseleave', close);
       });
 
-      // Enquire -> contact page with subject
+      // Enquire -> contact with subject
       document.querySelectorAll('.btn.enquire').forEach(btn=>{
         const card = btn.closest('.artist-card');
         const actName = (card?.dataset.name || '').trim();
         btn.href = 'contact.html?subject=' + encodeURIComponent(actName);
       });
 
-      // Lightbox
+      // Lightbox open/close
       const lb = document.getElementById('lightbox');
       const lbImg = document.getElementById('lightboxImg');
       const closeLb = ()=>{ lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); }
-      lb.addEventListener('click', (e)=>{ if(e.target===lb || e.target.classList.contains('close')) closeLb(); });
+
+      lb.addEventListener('click', (e)=>{
+        if(e.target===lb || e.target.classList.contains('close-btn')) closeLb();
+      });
       document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeLb(); });
 
       document.querySelectorAll('.view-poster').forEach(btn=>{
@@ -249,7 +306,12 @@
       });
     }
 
-    render();
+    // events
+    search.addEventListener('input', apply);
+
+    // init
+    buildChips();
+    apply();
   </script>
 </body>
 </html>
