@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Browse all acts | Geneius Entertainment</title>
+  <title>Browse Acts | Geneius Entertainment</title>
 
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-MR1NLPH5ZK"></script>
@@ -15,16 +15,17 @@
   </script>
 
   <style>
-    :root{
-      --bg:#000; --ink:#f5f5f5; --muted:#bfbfbf;
-      --gold:#C99700; --accent:#1b1710; --line:rgba(255,255,255,.12);
-    }
+    :root{ --bg:#000; --ink:#f5f5f5; --muted:#bfbfbf; --gold:#C99700; --panel:#15151b; --line:rgba(255,255,255,.12); }
     *{box-sizing:border-box}
-    html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Trebuchet MS",Arial,sans-serif}
-    .wrap{width:min(1120px,92vw);margin:0 auto;padding:28px 0 40px}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:"Trebuchet MS",Arial,sans-serif}
 
-    /* Top bar */
-    .bar{display:flex;align-items:center;margin:0 0 10px}
+    .wrap{width:min(1120px,92vw);margin:0 auto;padding:28px 0 40px}
+    header{display:flex;align-items:center;gap:16px;justify-content:center;margin:8px 0 18px}
+    header img{height:70px;width:auto}
+    h1{margin:6px 0 0;font-size:1.6rem;color:var(--gold);letter-spacing:1px}
+    p.sub{color:var(--muted);margin:0 0 14px;text-align:center}
+
+    .bar{display:flex;justify-content:space-between;align-items:center;margin:0 0 12px}
     .btn-mini{
       display:inline-block;padding:8px 12px;border-radius:10px;
       color:#ffd76a;background:rgba(201,151,0,.08);
@@ -32,190 +33,232 @@
     }
     .btn-mini:hover{background:rgba(201,151,0,.14)}
 
-    /* Header */
-    header{display:flex;align-items:center;gap:14px;justify-content:center;margin:6px 0 10px}
-    #logo{height:62px;width:auto}
-    h1{margin:4px 0 0;font-size:1.6rem;color:var(--gold);letter-spacing:1px}
-    p.sub{color:var(--muted);text-align:center;margin:8px 0 18px}
+    .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));margin-top:8px}
 
-    /* Search + chips */
-    #acts-search{width:100%;max-width:720px;display:block;margin:10px auto 10px;padding:12px 14px;background:#13131a;border:1px solid var(--line);border-radius:10px;color:#eee}
-    .chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:8px 0 18px}
-    .chip{padding:.38rem .7rem;border-radius:999px;background:#111;border:1px solid var(--line);color:#ddd;cursor:pointer;user-select:none;font-size:.92rem}
-    .chip.active{background:var(--accent);border-color:var(--gold);color:#ffd76a}
+    /* Card (uniform sizing) */
+    .artist-card{
+      position:relative; overflow:hidden; border-radius:14px;
+      background:var(--panel); border:1px solid var(--line);
+      transition:transform .18s, box-shadow .18s, border-color .18s;
+    }
+    .artist-card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.35);border-color:rgba(212,175,55,.45)}
 
-    /* Cards grid (uniform sizing) */
-    .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
-    .card{background:#15151b;border:1px solid var(--line);border-radius:16px;overflow:hidden;position:relative;transition:transform .18s, box-shadow .18s, border-color .18s}
-    .card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.35);border-color:rgba(212,175,55,.45)}
+    /* Media frame – fixed height */
+    .frame{position:relative; height:220px; overflow:hidden}
+    .slides{display:flex; width:100%; height:100%; transition:transform .35s ease}
+    .slides img{width:100%; height:100%; object-fit:cover; flex:0 0 100%; display:block}
 
-    .media{position:relative;height:240px;overflow:hidden;background:#0e0e12;cursor:pointer}
-    @media (max-width:700px){ .media{height:220px} }
-    .media img{width:100%;height:100%;object-fit:cover;display:block}
+    /* Gallery controls */
+    .nav{
+      position:absolute; top:50%; transform:translateY(-50%);
+      background:rgba(0,0,0,.45); color:#fff; border:1px solid rgba(255,255,255,.35);
+      font-weight:800; line-height:1; padding:.35rem .6rem; border-radius:10px;
+      cursor:pointer; opacity:.9;
+    }
+    .nav.prev{left:8px} .nav.next{right:8px}
+    .dots{position:absolute; left:0; right:0; bottom:8px; display:flex; gap:6px; justify-content:center}
+    .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.4);cursor:pointer}
+    .dot.active{background:#ffd76a;border-color:var(--gold)}
 
-    .meta{padding:12px 14px;background:linear-gradient(0deg,#121217,transparent)}
-    .meta .name{font-weight:800;color:#ffd76a;display:inline-block}
-    .meta .hint{color:#bcbcbc;font-size:.92rem;display:block;margin-top:4px}
+    /* Meta under image */
+    .artist-meta{padding:12px 14px}
+    .artist-meta .name{
+      color:var(--gold); text-transform:uppercase; letter-spacing:.06em;
+      font-weight:800; cursor:pointer; display:inline-block;
+    }
 
-    /* Bio overlay (hidden until poster is tapped/hovered) */
+    /* Bio overlay */
     .bio{
-      position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;
-      background:linear-gradient(180deg,rgba(0,0,0,.0) 40%, rgba(0,0,0,.82) 100%);
-      padding:14px;opacity:0;pointer-events:none;transition:opacity .22s ease;
+      position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-end;
+      padding:16px; gap:10px; opacity:0; pointer-events:none; transition:opacity .2s ease;
+      background:linear-gradient(to top, rgba(0,0,0,.82) 28%, rgba(0,0,0,.18) 65%, rgba(0,0,0,0));
+      backdrop-filter:saturate(120%) blur(2px);
     }
-    .card.bio-open .bio{opacity:1;pointer-events:auto}
-    .bio h3{margin:0 0 6px;color:#ffd76a;font-size:1.05rem}
-    .bio .tagsline{margin:0 0 8px;color:#d7caa0}
-    .bio p{margin:0 0 10px;color:#e8e8e8}
+    /* Show on name hover (desktop) */
+    .artist-meta:hover ~ .bio{opacity:1; pointer-events:auto}
+    /* Show when toggled (mobile or name click) */
+    .artist-card.bio-open .bio{opacity:1; pointer-events:auto}
 
-    .actions{display:flex;gap:8px;flex-wrap:wrap}
-    .btn{
-      display:inline-block;background:var(--gold);color:#000;padding:8px 12px;border-radius:8px;
-      text-decoration:none;font-weight:800;border:1px solid rgba(255,255,255,.12)
-    }
-    .btn.alt{background:transparent;color:#ffd76a;border:1px solid rgba(201,151,0,.5)}
-
-    .tags{margin-top:6px;display:flex;gap:6px;flex-wrap:wrap}
-    .tag{display:inline-block;font-size:.78rem;color:#fdeec0;background:#1b1710;border:1px solid rgba(212,175,55,.45);padding:.18rem .48rem;border-radius:999px}
+    .bio h3{margin:0;color:var(--gold);text-transform:uppercase;letter-spacing:.06em;font-size:1rem}
+    .bio .tags{margin:0;color:#fdeec0;font-size:.9rem}
+    .bio p{margin:0;color:#d9d9d9;line-height:1.45}
+    .bio .actions{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+    .bio .btn{display:inline-block;background:var(--gold);color:#000;padding:8px 12px;border-radius:8px;font-weight:700;text-decoration:none;border:0}
+    .bio .btn.alt{background:transparent;color:#f5f5f5;border:1px solid rgba(255,255,255,.25)}
 
     .empty{opacity:.7;text-align:center;padding:24px}
-    footer{margin-top:26px;color:#aaa;text-align:center}
+    footer{margin-top:26px;color:#aaa;text-align:center;padding-bottom:24px}
+
+    /* Lightbox */
+    .lightbox{position:fixed; inset:0; background:rgba(0,0,0,.92); display:none; align-items:center; justify-content:center; z-index:9999}
+    .lightbox.open{display:flex}
+    .lightbox img{max-width:92vw; max-height:92vh; border:1px solid rgba(255,255,255,.15); border-radius:12px}
+    .lightbox .close{position:absolute; top:14px; right:14px; font-size:28px; color:#fff; cursor:pointer}
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="bar">
       <a class="btn-mini" href="index.html">← Back to Home</a>
+      <a class="btn-mini" href="contact.html">Contact</a>
     </div>
 
     <header>
-      <a href="index.html" aria-label="Home"><img id="logo" src="logo.png" alt="Geneius Entertainment"></a>
+      <a href="index.html" aria-label="Home"><img src="logo.png" alt="Geneius Entertainment"></a>
       <h1>Browse all acts</h1>
     </header>
-    <p class="sub">Use search or tap a category. Acts can appear in multiple categories.</p>
+    <p class="sub">Click the <strong>name</strong> for bio & enquiry. Use dots to switch posters. “View Poster” opens a popup.</p>
 
-    <input id="acts-search" type="search" placeholder="Search by name or tag (e.g. singers, duos, 90s, weddings)…" />
-
-    <div class="chips" role="tablist" aria-label="Categories">
-      <span class="chip active" data-tag="all" role="tab" aria-selected="true">all</span>
-      <span class="chip" data-tag="singers"  role="tab">singers</span>
-      <span class="chip" data-tag="duos"     role="tab">duos</span>
-      <span class="chip" data-tag="trios"    role="tab">trios</span>
-      <span class="chip" data-tag="quartets" role="tab">quartets</span>
-      <span class="chip" data-tag="bands"    role="tab">bands</span>
-      <span class="chip" data-tag="tributes" role="tab">tributes</span>
-      <span class="chip" data-tag="djs"      role="tab">djs</span>
-      <span class="chip" data-tag="90s"      role="tab">90s</span>
-      <span class="chip" data-tag="clubs"    role="tab">clubs</span>
-      <span class="chip" data-tag="weddings" role="tab">weddings</span>
-    </div>
-
-    <div id="acts-grid" class="grid" aria-live="polite"></div>
+    <div id="acts-grid" class="grid"></div>
 
     <footer>© <span id="y"></span> Geneius Entertainment</footer>
   </div>
 
-  <!-- Shared data -->
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <span class="close" aria-label="Close">×</span>
+    <img id="lightboxImg" src="" alt="Poster">
+  </div>
+
+  <!-- Load your talent list -->
   <script src="talent.js"></script>
 
-  <!-- Inline renderer -->
   <script>
-  (function(){
-    const TALENT = (window.TALENT || []);
-    const grid  = document.getElementById('acts-grid');
-    const input = document.getElementById('acts-search');
-    const chips = [...document.querySelectorAll('.chip')];
-    let activeTag = 'all';
+    document.getElementById('y').textContent = new Date().getFullYear();
 
-    function contactHref(name){ return 'contact.html?subject=' + encodeURIComponent(name); }
+    // Safety: TALENT must exist
+    const TALENT = Array.isArray(window.TALENT) ? window.TALENT : [];
 
-    function cardHTML(a){
-      const tagsRow = (a.tags||[]).map(t=>`<span class="tag">${t}</span>`).join('');
-      const safeBio = a.bio ? `<p>${a.bio}</p>` : '';
-      const safeTags = a.tags?.length ? `<p class="tagsline">${a.tags.join(' • ')}</p>` : '';
+    const grid = document.getElementById('acts-grid');
 
-      // fallback poster: use image if poster not defined
-      const posterURL = a.poster || a.img || 'logo.png';
+    function cardHTML(a, idx){
+      const images = Array.isArray(a.images) && a.images.length ? a.images : (a.img ? [a.img] : ['logo.png']);
+      const dots = images.map((_,i)=>`<span class="dot${i===0?' active':''}" data-i="${i}"></span>`).join('');
+      const tags = (a.tags||[]).join(' • ');
+      const nameEsc = (a.name||'').replace(/"/g,'&quot;');
 
       return `
-        <article class="card" data-name="${a.name}">
-          <div class="media" role="button" tabindex="0" aria-label="Open bio for ${a.name}">
-            <img src="${a.img || 'logo.png'}" alt="${a.name}">
-            <div class="bio" aria-hidden="true">
-              <h3>${a.name}</h3>
-              ${safeTags}
-              ${safeBio}
-              <div class="actions">
-                <a class="btn enquire" href="${contactHref(a.name)}">Enquire</a>
-                <a class="btn alt view-poster" href="${posterURL}" target="_blank" rel="noopener">View poster</a>
-              </div>
+        <div class="artist-card" tabindex="0" data-name="${nameEsc}" data-index="${idx}">
+          <div class="frame gallery" aria-label="Poster gallery for ${nameEsc}">
+            <div class="slides">
+              ${images.map(src=>`<img src="${src}" alt="${nameEsc} poster">`).join('')}
+            </div>
+            <button class="nav prev" aria-label="Previous">‹</button>
+            <button class="nav next" aria-label="Next">›</button>
+            <div class="dots">${dots}</div>
+          </div>
+
+          <div class="artist-meta">
+            <span class="name" role="button" tabindex="0">${nameEsc}</span>
+          </div>
+
+          <div class="bio">
+            <h3>${nameEsc}</h3>
+            ${tags ? `<p class="tags">${tags}</p>` : ''}
+            ${a.bio ? `<p>${a.bio}</p>` : ''}
+            <div class="actions">
+              <a class="btn enquire" href="#">Enquire</a>
+              <a class="btn alt view-poster" href="#" data-target="current">View Poster</a>
             </div>
           </div>
-          <div class="meta">
-            <span class="name">${a.name}</span>
-            <span class="hint">Tap poster for bio</span>
-            ${tagsRow ? `<div class="tags">${tagsRow}</div>` : ''}
-          </div>
-        </article>
+        </div>
       `;
     }
 
-    function render(list){
-      grid.innerHTML = list.length
-        ? list.map(cardHTML).join('')
-        : `<div class="empty">No acts match your filters.</div>`;
+    function render(){
+      if(!TALENT.length){
+        grid.innerHTML = `<div class="empty">No acts found. Make sure <code>talent.js</code> is present and defines <code>window.TALENT</code>.</div>`;
+        return;
+      }
+      grid.innerHTML = TALENT.map(cardHTML).join('');
+      wireUp();
+    }
 
-      grid.querySelectorAll('.card').forEach(card=>{
-        const media = card.querySelector('.media');
-        const bio   = card.querySelector('.bio');
-        const actName = (card.dataset.name||'').trim();
+    function wireUp(){
+      // gallery
+      document.querySelectorAll('.gallery').forEach((root)=>{
+        const slides = root.querySelector('.slides');
+        const imgs = [...slides.querySelectorAll('img')];
+        const prev = root.querySelector('.nav.prev');
+        const next = root.querySelector('.nav.next');
+        const dotsWrap = root.querySelector('.dots');
+        let index = 0;
 
-        function toggle(){
-          const open = card.classList.toggle('bio-open');
-          bio.setAttribute('aria-hidden', open ? 'false' : 'true');
+        function renderGal(){
+          slides.style.transform = `translateX(-${index*100}%)`;
+          [...dotsWrap.children].forEach((d,i)=>d.classList.toggle('active', i===index));
         }
-        media.addEventListener('click', toggle);
-        media.addEventListener('keydown', e=>{
-          if(e.key==='Enter'||e.key===' '){ e.preventDefault(); toggle(); }
-        });
-        card.addEventListener('mouseleave', ()=>{
-          card.classList.remove('bio-open'); bio.setAttribute('aria-hidden','true');
+        function go(i){ index = (i+imgs.length)%imgs.length; renderGal(); }
+
+        prev.addEventListener('click',()=>go(index-1));
+        next.addEventListener('click',()=>go(index+1));
+        dotsWrap.querySelectorAll('.dot').forEach(d=>{
+          d.addEventListener('click',()=>{ go(parseInt(d.dataset.i,10)||0); });
         });
 
-        const enquire = card.querySelector('.btn.enquire');
-        if(enquire) enquire.href = contactHref(actName);
-    // Poster fallback: if poster 404s, use main image
-const view = card.querySelector('.view-poster');
-const mainImg = card.querySelector('.media img')?.src;
-if (view && view.href) {
-  const test = new Image();
-  test.onerror = () => { if (mainImg) view.href = mainImg; };
-  test.src = view.href;
-}
+        // touch swipe
+        let startX=0, dx=0;
+        slides.addEventListener('touchstart', e=>{startX=e.touches[0].clientX; dx=0;}, {passive:true});
+        slides.addEventListener('touchmove',  e=>{dx=e.touches[0].clientX-startX;}, {passive:true});
+        slides.addEventListener('touchend',   ()=>{ if(Math.abs(dx)>40) go(index + (dx<0?1:-1)); });
+
+        // expose getter
+        root.getCurrentSrc = ()=> imgs[index]?.src;
+
+        renderGal();
+      });
+
+      // name click toggles bio (and hides when pointer leaves the card)
+      document.querySelectorAll('.artist-card').forEach(card=>{
+        const nameEl = card.querySelector('.artist-meta .name');
+        const bioEl  = card.querySelector('.bio');
+
+        if(nameEl){
+          const open = ()=> card.classList.add('bio-open');
+          const close= ()=> card.classList.remove('bio-open');
+
+          nameEl.addEventListener('click', open);
+          nameEl.addEventListener('keydown', (e)=>{
+            if(e.key==='Enter' || e.key===' '){ e.preventDefault(); open(); }
+          });
+
+          // hide bio when pointer leaves the card
+          card.addEventListener('mouseleave', close);
+          // keep open while mouse is over the card
+          card.addEventListener('mouseenter', ()=>{ /* no-op */ });
+        }
+      });
+
+      // Enquire -> contact page with subject
+      document.querySelectorAll('.btn.enquire').forEach(btn=>{
+        const card = btn.closest('.artist-card');
+        const actName = (card?.dataset.name || '').trim();
+        btn.href = 'contact.html?subject=' + encodeURIComponent(actName);
+      });
+
+      // Lightbox
+      const lb = document.getElementById('lightbox');
+      const lbImg = document.getElementById('lightboxImg');
+      const closeLb = ()=>{ lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); }
+      lb.addEventListener('click', (e)=>{ if(e.target===lb || e.target.classList.contains('close')) closeLb(); });
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeLb(); });
+
+      document.querySelectorAll('.view-poster').forEach(btn=>{
+        btn.addEventListener('click', e=>{
+          e.preventDefault();
+          const card = btn.closest('.artist-card');
+          const gal = card.querySelector('.gallery');
+          const src = gal.getCurrentSrc ? gal.getCurrentSrc() : gal.querySelector('img')?.src;
+          if(src){
+            lbImg.src = src;
+            lb.classList.add('open');
+            lb.setAttribute('aria-hidden','false');
+          }
+        });
       });
     }
 
-    function apply(){
-      const q = (input?.value || '').trim().toLowerCase();
-      const out = TALENT.filter(a=>{
-        const hay = [a.name, a.bio, ...(a.tags||[])].join(' ').toLowerCase();
-        const tagOK = activeTag==='all' || (a.tags||[]).includes(activeTag);
-        const qOK = !q || hay.includes(q);
-        return tagOK && qOK;
-      });
-      render(out);
-    }
-
-    if(input) input.addEventListener('input', apply);
-    chips.forEach(c=>c.addEventListener('click',()=>{
-      chips.forEach(x=>x.classList.toggle('active',x===c));
-      activeTag = c.dataset.tag;
-      apply();
-    }));
-
-    document.getElementById('y').textContent = new Date().getFullYear();
-    apply();
-  })();
+    render();
   </script>
 </body>
 </html>
