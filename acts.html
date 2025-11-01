@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Browse Acts | Geneius Entertainment</title>
 
-  <!-- Google tag (gtag.js) -->
+  <!-- Google tag (replace ID if different) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-MR1NLPH5ZK"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -20,11 +20,6 @@
     body{margin:0;background:var(--bg);color:var(--ink);font-family:"Trebuchet MS",Arial,sans-serif}
 
     .wrap{width:min(1120px,92vw);margin:0 auto;padding:28px 0 40px}
-    header{display:flex;align-items:center;gap:16px;justify-content:center;margin:8px 0 18px}
-    header img{height:70px;width:auto}
-    h1{margin:6px 0 0;font-size:1.6rem;color:var(--gold);letter-spacing:1px}
-    p.sub{color:var(--muted);margin:0 0 14px;text-align:center}
-
     .bar{display:flex;justify-content:space-between;align-items:center;margin:0 0 12px}
     .btn-mini{
       display:inline-block;padding:8px 12px;border-radius:10px;
@@ -33,9 +28,14 @@
     }
     .btn-mini:hover{background:rgba(201,151,0,.14)}
 
+    header{display:flex;align-items:center;gap:16px;justify-content:center;margin:8px 0 18px}
+    header img{height:70px;width:auto}
+    h1{margin:6px 0 0;font-size:1.6rem;color:var(--gold);letter-spacing:1px}
+    p.sub{color:var(--muted);margin:0 0 14px;text-align:center}
+
     .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));margin-top:8px}
 
-    /* Card (uniform sizing) */
+    /* Card */
     .artist-card{
       position:relative; overflow:hidden; border-radius:14px;
       background:var(--panel); border:1px solid var(--line);
@@ -43,12 +43,12 @@
     }
     .artist-card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.35);border-color:rgba(212,175,55,.45)}
 
-    /* Media frame – fixed height */
+    /* Media frame – uniform height to match Singers */
     .frame{position:relative; height:220px; overflow:hidden}
     .slides{display:flex; width:100%; height:100%; transition:transform .35s ease}
     .slides img{width:100%; height:100%; object-fit:cover; flex:0 0 100%; display:block}
 
-    /* Gallery controls */
+    /* Gallery controls (arrows) */
     .nav{
       position:absolute; top:50%; transform:translateY(-50%);
       background:rgba(0,0,0,.45); color:#fff; border:1px solid rgba(255,255,255,.35);
@@ -56,27 +56,26 @@
       cursor:pointer; opacity:.9;
     }
     .nav.prev{left:8px} .nav.next{right:8px}
+
+    /* Dots under image */
     .dots{position:absolute; left:0; right:0; bottom:8px; display:flex; gap:6px; justify-content:center}
     .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.4);cursor:pointer}
     .dot.active{background:#ffd76a;border-color:var(--gold)}
 
-    /* Meta under image */
-    .artist-meta{padding:12px 14px}
+    /* Name row */
+    .artist-meta{padding:12px 14px; text-align:center}
     .artist-meta .name{
       color:var(--gold); text-transform:uppercase; letter-spacing:.06em;
       font-weight:800; cursor:pointer; display:inline-block;
     }
 
-    /* Bio overlay */
+    /* Bio overlay (appears on name click; closes when leaving card) */
     .bio{
       position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-end;
       padding:16px; gap:10px; opacity:0; pointer-events:none; transition:opacity .2s ease;
       background:linear-gradient(to top, rgba(0,0,0,.82) 28%, rgba(0,0,0,.18) 65%, rgba(0,0,0,0));
       backdrop-filter:saturate(120%) blur(2px);
     }
-    /* Show on name hover (desktop) */
-    .artist-meta:hover ~ .bio{opacity:1; pointer-events:auto}
-    /* Show when toggled (mobile or name click) */
     .artist-card.bio-open .bio{opacity:1; pointer-events:auto}
 
     .bio h3{margin:0;color:var(--gold);text-transform:uppercase;letter-spacing:.06em;font-size:1rem}
@@ -107,7 +106,7 @@
       <a href="index.html" aria-label="Home"><img src="logo.png" alt="Geneius Entertainment"></a>
       <h1>Browse all acts</h1>
     </header>
-    <p class="sub">Click the <strong>name</strong> for bio & enquiry. Use dots to switch posters. “View Poster” opens a popup.</p>
+    <p class="sub">Click the <strong>name</strong> to view bio & enquire. Use dots to switch posters. “View Poster” opens a popup.</p>
 
     <div id="acts-grid" class="grid"></div>
 
@@ -120,15 +119,13 @@
     <img id="lightboxImg" src="" alt="Poster">
   </div>
 
-  <!-- Load your talent list -->
+  <!-- Talent list -->
   <script src="talent.js"></script>
 
   <script>
     document.getElementById('y').textContent = new Date().getFullYear();
 
-    // Safety: TALENT must exist
     const TALENT = Array.isArray(window.TALENT) ? window.TALENT : [];
-
     const grid = document.getElementById('acts-grid');
 
     function cardHTML(a, idx){
@@ -208,25 +205,19 @@
         renderGal();
       });
 
-      // name click toggles bio (and hides when pointer leaves the card)
+      // name click toggles bio; close when pointer leaves the card
       document.querySelectorAll('.artist-card').forEach(card=>{
         const nameEl = card.querySelector('.artist-meta .name');
-        const bioEl  = card.querySelector('.bio');
+        if(!nameEl) return;
 
-        if(nameEl){
-          const open = ()=> card.classList.add('bio-open');
-          const close= ()=> card.classList.remove('bio-open');
+        const open = ()=> card.classList.add('bio-open');
+        const close= ()=> card.classList.remove('bio-open');
 
-          nameEl.addEventListener('click', open);
-          nameEl.addEventListener('keydown', (e)=>{
-            if(e.key==='Enter' || e.key===' '){ e.preventDefault(); open(); }
-          });
-
-          // hide bio when pointer leaves the card
-          card.addEventListener('mouseleave', close);
-          // keep open while mouse is over the card
-          card.addEventListener('mouseenter', ()=>{ /* no-op */ });
-        }
+        nameEl.addEventListener('click', open);
+        nameEl.addEventListener('keydown', (e)=>{
+          if(e.key==='Enter' || e.key===' '){ e.preventDefault(); open(); }
+        });
+        card.addEventListener('mouseleave', close);
       });
 
       // Enquire -> contact page with subject
