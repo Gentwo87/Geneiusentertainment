@@ -6,7 +6,7 @@ window.TALENT = [
   {
     id: 'gemma-andrew',
     name: 'Gemma Andrew',
-    img: 'Gemma.jpg',
+    img: 'Gem3.jpg',
     poster: 'Singer.png',
     link: 'singers.html',
     bio: 'Diverse singer with a strong, soulful voice and vibrant, high-energy shows.',
