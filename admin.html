@@ -1,30 +1,91 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Geneius | Booking Admin</title><style>
-:root{color-scheme:dark;--bg:#0d0d10;--panel:#19191e;--line:#333238;--gold:#dfb65f;--text:#f4f1eb;--muted:#b3b0ad}*{box-sizing:border-box}body{font:15px system-ui,Arial,sans-serif;background:var(--bg);color:var(--text);margin:0}header{padding:20px max(20px,calc((100vw - 1150px)/2));border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;align-items:center}.brand{font-size:20px;font-weight:800;letter-spacing:.04em}.brand span{color:var(--gold)}main{max-width:1150px;margin:24px auto;padding:0 16px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:18px}.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between}.grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;margin-top:15px}.day{min-height:116px;border:1px solid var(--line);border-radius:8px;padding:7px;overflow:hidden;background:#121216}.day.off{opacity:.3}.day.today{outline:1px solid var(--gold)}.dow{text-align:center;color:var(--muted);font-size:12px}.num{font-weight:700;color:var(--gold)}.event{display:block;width:100%;border:0;text-align:left;padding:5px;margin-top:5px;border-radius:5px;background:#33313a;color:white;font-size:11px;cursor:pointer;overflow-wrap:anywhere}.event.confirmed{background:#225342}.event.provisional,.event.checking{background:#66501f}.event.cancelled{opacity:.45;text-decoration:line-through}button{background:var(--gold);border:0;border-radius:8px;padding:10px 15px;color:#16120b;font-weight:700;cursor:pointer}button.secondary{background:#34323a;color:white}button:disabled{opacity:.5}input,select,textarea{width:100%;background:#101014;color:white;border:1px solid #55515a;border-radius:7px;padding:11px;font:inherit}label{display:block;margin:10px 0 4px;color:var(--muted);font-size:13px}h2{margin:0 0 14px;font-size:20px}h3{margin:0 0 10px}small,.muted{color:var(--muted)}.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 14px}.full{grid-column:1/-1}.hidden{display:none!important}.error{color:#ff9b9b}.success{color:#9bdeb9}.pill{border:1px solid var(--line);padding:7px 10px;border-radius:20px}.listrow{border-top:1px solid var(--line);padding:12px 0}.listrow:first-child{border-top:0}dialog{width:min(650px,95vw);max-height:92vh;overflow:auto;background:var(--panel);color:white;border:1px solid #625332;border-radius:14px;padding:20px}dialog::backdrop{background:#000b}.check{display:flex;align-items:center;gap:8px}.check input{width:auto}@media(max-width:650px){.day{min-height:76px;padding:4px}.event{font-size:9px;padding:3px}.formgrid{grid-template-columns:1fr}header{padding:16px}.brand{font-size:16px}.grid{gap:2px}.dow{font-size:10px}}
-</style></head><body><header><div class="brand">GENEIUS <span>ENTERTAINMENT</span><div class="muted" style="font-size:12px;font-weight:400">Private booking calendar</div></div><button class="secondary hidden" id="logout">Sign out</button></header><main>
-<section class="panel" id="setup"><h2>Connect your Supabase project</h2><p class="muted">Enter your Project URL and <b>publishable/anon</b> key from Supabase → Project Settings → API Keys. Never enter the service_role or secret key.</p><label>Project URL</label><input id="url" placeholder="https://your-project.supabase.co"><label>Publishable / anon key</label><input id="key" placeholder="sb_publishable_... or anon key"><p><button id="connect">Connect</button></p><p id="setupMsg" class="error"></p></section>
-<section class="panel hidden" id="login"><h2>Administrator sign in</h2><label>Email</label><input id="email" type="email" autocomplete="username"><label>Password</label><input id="password" type="password" autocomplete="current-password"><p><button id="signin">Sign in</button></p><p id="loginMsg" class="error"></p></section>
-<section class="hidden" id="app"><div class="panel"><div class="row"><div><h2>Booking calendar</h2><small id="count"></small></div><button id="new">+ Add booking</button></div><div class="row" style="margin-top:18px"><div class="row"><button class="secondary" id="prev">◀</button><strong id="month"></strong><button class="secondary" id="next">▶</button></div><label style="margin:0">Performer <select id="filter" style="min-width:170px"><option value="">All performers</option></select></label></div><div class="grid" id="calendar"></div></div><section class="panel"><h2>Bookings this month</h2><div id="bookingList"></div></section><p class="muted">Private dashboard only. Public availability and payments are not enabled in this version. Booking clashes are checked here, but are not yet enforced by a database transaction.</p></section>
-</main><dialog id="modal"><div class="row"><h2 id="modalTitle">Add booking</h2><button class="secondary" id="close">✕</button></div><form id="bookingForm"><div class="formgrid"><div><label>Date</label><input type="date" id="date" required></div><div><label>Act</label><select id="act" required></select></div><div><label>Slot</label><select id="slot"><option value="daytime">Brunch / daytime</option><option value="evening">Evening</option><option value="custom">Custom time</option><option value="all_day">All day unavailable</option></select></div><div><label>Status</label><select id="status"><option value="confirmed">Confirmed</option><option value="provisional">Provisional hold</option><option value="enquiry">Enquiry</option><option value="checking">Checking</option><option value="quoted">Quoted</option><option value="awaiting_deposit">Awaiting deposit</option><option value="cancelled">Cancelled</option></select></div><div><label>Start</label><input id="start" type="time" value="13:00"></div><div><label>End</label><input id="end" type="time" value="16:00"></div><div class="full check"><input id="nextday" type="checkbox"><label for="nextday">Finishes after midnight (next day)</label></div><div class="full"><label>Private calendar title (e.g. DJ Gander Inn)</label><input id="title" required maxlength="180"></div><div class="full"><label>Private notes (optional)</label><textarea id="notes" rows="2"></textarea></div></div><p class="muted" id="members"></p><p class="error" id="formMsg"></p><div class="row"><button type="button" class="secondary hidden" id="delete">Delete booking</button><button type="submit" id="save">Save booking</button></div></form></dialog>
-<script type="module">
-import {createClient} from 'https://esm.sh/@supabase/supabase-js@2';
-const $=id=>document.getElementById(id);let db=null,acts=[],people=[],links=[],bookings=[],bookingPeople=[],editing=null,view=new Date();view.setDate(1);
-const show=(id,on)=>$(id).classList.toggle('hidden',!on);const fmt=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function client(){const u=$('url').value.trim(),k=$('key').value.trim();if(!/^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/.test(u)||!k||/service_role|sb_secret_/.test(k))throw Error('Enter a valid Supabase URL and publishable/anon key.');db=createClient(u,k,{auth:{persistSession:true,autoRefreshToken:true}});localStorage.setItem('geneius_api_url',u);localStorage.setItem('geneius_public_key',k)}
-async function connect(){try{client();$('setupMsg').textContent='';show('setup',false);const {data:{session}}=await db.auth.getSession();if(session)await load();else show('login',true)}catch(e){$('setupMsg').textContent=e.message}}
-$('connect').onclick=connect;$('url').value=localStorage.getItem('geneius_api_url')||'';$('key').value=localStorage.getItem('geneius_public_key')||'';if($('url').value&&$('key').value)connect();
-$('signin').onclick=async()=>{const {error}=await db.auth.signInWithPassword({email:$('email').value,password:$('password').value});if(error){$('loginMsg').textContent=error.message;return}await load()};$('logout').onclick=async()=>{await db.auth.signOut();show('app',false);show('login',true);show('logout',false)};
-async function get(table,cols='*'){const {data,error}=await db.from(table).select(cols);if(error)throw Error(`${table}: ${error.message}`);return data||[]}
-async function load(){try{[acts,people,links]=await Promise.all([get('acts'),get('performers'),get('act_members')]);if(!acts.length||!people.length)throw Error('No acts or performers found. Run setup.sql in Supabase first.');show('login',false);show('app',true);show('logout',true);$('act').innerHTML=acts.filter(a=>a.active).sort((a,b)=>a.name.localeCompare(b.name)).map(a=>`<option value="${esc(a.id)}">${esc(a.name)}</option>`).join('');$('filter').innerHTML='<option value="">All performers</option>'+people.filter(p=>p.active).map(p=>`<option value="${esc(p.id)}">${esc(p.name)}</option>`).join('');await refresh()}catch(e){show('app',false);show('login',true);$('loginMsg').textContent=e.message}}
-async function refresh(){[bookings,bookingPeople]=await Promise.all([get('bookings'),get('booking_performers')]);render()}
-function members(actId){return links.filter(x=>x.act_id===actId).map(x=>x.performer_id)}function idsFor(b){const explicit=bookingPeople.filter(x=>x.booking_id===b.id).map(x=>x.performer_id);return explicit.length?explicit:members(b.act_id)}
-function bounds(b){let s=new Date(`${b.event_date}T${b.start_time||'00:00:00'}`),e=new Date(`${b.event_date}T${b.end_time||'00:00:00'}`);if(b.slot==='all_day'||!b.start_time||!b.end_time){e=new Date(s.getTime()+86400000)}else if(b.ends_next_day)e=new Date(e.getTime()+86400000);return [s.getTime(),e.getTime()]}
-function clashes(candidate,exclude){const [s,e]=bounds(candidate),who=members(candidate.act_id);return bookings.filter(b=>b.id!==exclude&&b.status!=='cancelled'&&b.status!=='enquiry'&&b.status!=='quoted'&&who.some(id=>idsFor(b).includes(id))&&(()=>{const [x,y]=bounds(b);return s<y&&x<e})())}
-function render(){const y=view.getFullYear(),m=view.getMonth(),first=new Date(y,m,1),offset=(first.getDay()+6)%7,days=new Date(y,m+1,0).getDate(),selected=$('filter').value;const visible=bookings.filter(b=>!selected||idsFor(b).includes(selected));$('month').textContent=first.toLocaleDateString('en-GB',{month:'long',year:'numeric'});$('count').textContent=`${visible.filter(b=>b.event_date.slice(0,7)===fmt(first).slice(0,7)).length} entries this month`;let html=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(x=>`<div class="dow">${x}</div>`).join('');for(let i=0;i<Math.ceil((offset+days)/7)*7;i++){let n=i-offset+1,valid=n>=1&&n<=days,d=valid?fmt(new Date(y,m,n)):null;html+=`<div class="day ${valid?'':'off'} ${d===fmt(new Date())?'today':''}">${valid?`<div class="num">${n}</div>`:''}${valid?visible.filter(b=>b.event_date===d).sort((a,b)=>(a.start_time||'').localeCompare(b.start_time||'')).map(b=>`<button class="event ${esc(b.status)}" data-id="${esc(b.id)}" title="${esc(b.title)}">${esc(b.start_time?.slice(0,5)||'All day')} ${esc(b.title)}</button>`).join(''):''}</div>`} $('calendar').innerHTML=html;document.querySelectorAll('[data-id]').forEach(x=>x.onclick=()=>openForm(bookings.find(b=>b.id===x.dataset.id)));$('bookingList').innerHTML=visible.filter(b=>b.event_date.slice(0,7)===fmt(first).slice(0,7)).sort((a,b)=>(a.event_date+a.start_time).localeCompare(b.event_date+b.start_time)).map(b=>`<div class="listrow"><b>${esc(b.event_date)} · ${esc(b.title)}</b><div class="muted">${esc(acts.find(a=>a.id===b.act_id)?.name||'Unassigned')} · ${esc(b.status)} · ${esc(b.start_time?.slice(0,5)||'All day')}–${esc(b.end_time?.slice(0,5)||'')}</div></div>`).join('')||'<p class="muted">No entries this month.</p>'}
-$('prev').onclick=()=>{view.setMonth(view.getMonth()-1);render()};$('next').onclick=()=>{view.setMonth(view.getMonth()+1);render()};$('filter').onchange=render;
-function times(){let slot=$('slot').value;if(slot==='daytime'){$('start').value='13:00';$('end').value='16:00';$('nextday').checked=false}else if(slot==='evening'){$('start').value='19:00';$('end').value='23:00';$('nextday').checked=false}toggleTime()};function toggleTime(){const off=$('slot').value==='all_day';$('start').disabled=off;$('end').disabled=off;$('nextday').disabled=off}$('slot').onchange=times;
-function memberText(){let names=members($('act').value).map(id=>people.find(p=>p.id===id)?.name).filter(Boolean);$('members').textContent='Performers: '+(names.join(' + ')||'None linked — run setup.sql')}$('act').onchange=memberText;
-function openForm(b){editing=b?.id||null;$('modalTitle').textContent=b?'Edit booking':'Add booking';$('bookingForm').reset();$('date').value=b?.event_date||fmt(new Date());$('act').value=b?.act_id||acts.find(a=>a.name==='The General — DJ')?.id||acts[0].id;$('slot').value=b?.slot||'daytime';$('status').value=b?.status||'confirmed';$('start').value=b?.start_time?.slice(0,5)||'13:00';$('end').value=b?.end_time?.slice(0,5)||'16:00';$('nextday').checked=!!b?.ends_next_day;$('title').value=b?.title||'';$('notes').value=b?.notes||'';$('formMsg').textContent='';show('delete',!!b);toggleTime();memberText();$('modal').showModal()}
-$('new').onclick=()=>openForm();$('close').onclick=()=>$('modal').close();
-$('bookingForm').onsubmit=async e=>{e.preventDefault();$('save').disabled=true;try{let slot=$('slot').value,all=slot==='all_day',b={event_date:$('date').value,act_id:$('act').value,slot,status:$('status').value,start_time:all?null:$('start').value,end_time:all?null:$('end').value,ends_next_day:all?false:$('nextday').checked,title:$('title').value.trim(),notes:$('notes').value.trim()||null};if(!members(b.act_id).length)throw Error('This act has no linked performers. Run setup.sql.');if(!all&&(!b.start_time||!b.end_time||(!b.ends_next_day&&b.end_time<=b.start_time)))throw Error('Check start and end times. Use next-day for after-midnight finishes.');let hits=clashes(b,editing);if(hits.length&&!confirm('PERFORMER CLASH with: '+hits.map(x=>`${x.event_date} ${x.title}`).join(', ')+'. Save anyway?'))return;let id=editing;if(editing){const {error}=await db.from('bookings').update(b).eq('id',editing);if(error)throw error}else{const {data,error}=await db.from('bookings').insert(b).select('id').single();if(error)throw error;id=data.id}const {error:delErr}=await db.from('booking_performers').delete().eq('booking_id',id);if(delErr)throw delErr;const {error:linkErr}=await db.from('booking_performers').insert(members(b.act_id).map(performer_id=>({booking_id:id,performer_id})));if(linkErr)throw linkErr;$('modal').close();view=new Date(`${b.event_date}T12:00:00`);view.setDate(1);await refresh()}catch(err){$('formMsg').textContent=err.message}finally{$('save').disabled=false}};
-$('delete').onclick=async()=>{if(!editing||!confirm('Permanently delete this booking?'))return;const {error}=await db.from('bookings').delete().eq('id',editing);if(error){$('formMsg').textContent=error.message;return}$('modal').close();await refresh()};
-</script></body></html>
+-- Geneius Entertainment: corrected import (no temporary tables).
+-- Safe to re-run: skips bookings with the same date and private title.
+-- Times remain NULL because they have not been confirmed.
+BEGIN;
+
+INSERT INTO public.acts (name)
+SELECT v.name
+FROM (VALUES ('DJ + ABBA Mega Gems'), ('Jingle Bell Ball — DJ + Gel Duo')) AS v(name)
+WHERE NOT EXISTS (SELECT 1 FROM public.acts a WHERE a.name = v.name);
+
+INSERT INTO public.act_members (act_id, performer_id)
+SELECT a.id, p.id
+FROM public.acts a CROSS JOIN public.performers p
+WHERE a.name IN ('DJ + ABBA Mega Gems', 'Jingle Bell Ball — DJ + Gel Duo')
+  AND p.name IN ('Gene', 'Gem', 'Megan')
+  AND NOT EXISTS (
+    SELECT 1 FROM public.act_members am
+    WHERE am.act_id = a.id AND am.performer_id = p.id
+  );
+
+DO $import$
+DECLARE
+  gig RECORD;
+  chosen_act uuid;
+  chosen_booking uuid;
+BEGIN
+  FOR gig IN
+    SELECT *
+    FROM (VALUES
+  ('2026-11-07','daytime','Garage / 90s Brunch — Ginger Italian','DJ GEM&I'),
+  ('2026-11-13','evening','DJ + ABBA Mega Gems — Windsor','DJ + ABBA Mega Gems'),
+  ('2026-11-14','evening','DJ & Karaoke — Gander Inn','The General — DJ & Karaoke'),
+  ('2026-11-20','evening','ABBA Mega Gems — Royal Heaven','ABBA Mega Gems'),
+  ('2026-11-27','evening','Gem Solo Singer — Royal Heaven','Gem — Solo Singer'),
+  ('2026-11-28','evening','DJ — Gander Inn','The General — DJ'),
+  ('2026-12-05','evening','Jingle Bell Ball — Team Social','Jingle Bell Ball — DJ + Gel Duo'),
+  ('2026-12-11','evening','DJ — Park Grill','The General — DJ'),
+  ('2026-12-12','evening','DJ — Gander Inn','The General — DJ'),
+  ('2026-12-24','evening','DJ — Gander Inn','The General — DJ'),
+  ('2026-12-26','evening','DJ — Park Grill','The General — DJ'),
+  ('2026-12-31','evening','DJ GEM&I — Carshalton Social','DJ GEM&I')
+    ) AS gigs(event_date, slot, title, act_name)
+  LOOP
+    SELECT id INTO chosen_act
+    FROM public.acts WHERE name = gig.act_name;
+
+    IF chosen_act IS NULL THEN
+      RAISE EXCEPTION 'Missing act: %. Run starter setup.sql first.', gig.act_name;
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM public.act_members WHERE act_id = chosen_act) THEN
+      RAISE EXCEPTION 'No performers linked to act: %', gig.act_name;
+    END IF;
+
+    SELECT id INTO chosen_booking
+    FROM public.bookings
+    WHERE event_date = gig.event_date::date AND title = gig.title
+    LIMIT 1;
+
+    IF chosen_booking IS NULL THEN
+      INSERT INTO public.bookings
+        (event_date, slot, title, act_id, status, start_time, end_time, notes)
+      VALUES
+        (gig.event_date::date, gig.slot, gig.title, chosen_act,
+         'confirmed', NULL, NULL,
+         'Imported from Geneius diary; exact times to confirm. Venue is private.')
+      RETURNING id INTO chosen_booking;
+    END IF;
+
+    INSERT INTO public.booking_performers (booking_id, performer_id)
+    SELECT chosen_booking, am.performer_id
+    FROM public.act_members am
+    WHERE am.act_id = chosen_act
+      AND NOT EXISTS (
+        SELECT 1 FROM public.booking_performers bp
+        WHERE bp.booking_id = chosen_booking AND bp.performer_id = am.performer_id
+      );
+  END LOOP;
+END
+$import$;
+
+COMMIT;
+
+SELECT b.event_date, b.slot, b.title,
+       string_agg(DISTINCT p.name, ', ' ORDER BY p.name) AS performers
+FROM public.bookings b
+JOIN public.booking_performers bp ON bp.booking_id = b.id
+JOIN public.performers p ON p.id = bp.performer_id
+WHERE b.event_date BETWEEN '2026-11-01' AND '2026-12-31'
+GROUP BY b.id, b.event_date, b.slot, b.title
+ORDER BY b.event_date, b.title;
