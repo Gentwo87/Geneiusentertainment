@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Explore Shows | Geneius Entertainment</title>
+<style>
+:root{color-scheme:dark;--gold:#c99700;--muted:#c5c0b6}*{box-sizing:border-box}body{margin:0;background:#050505;color:#f5f5f5;font:16px 'Trebuchet MS',Arial,sans-serif}header{text-align:center;padding:45px 18px;background:radial-gradient(circle at top,#382b08,#050505 70%)}header img{width:min(260px,65vw);height:auto}h1,h2{color:var(--gold)}h1{font-size:clamp(25px,5vw,42px);letter-spacing:2px}p{color:var(--muted);line-height:1.55}a{color:var(--gold)}.back{display:inline-block;margin:15px;text-decoration:none}main{max-width:1150px;margin:auto;padding:20px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:20px}.show{background:#15151b;border:1px solid #393223;border-radius:14px;overflow:hidden}.poster{width:100%;aspect-ratio:4/5;object-fit:cover;background:#111}.info{padding:16px}.info h2{font-size:20px;margin:0 0 8px}.act{color:#e3c77a;font-size:13px}.cta{display:inline-block;background:var(--gold);color:#000;padding:10px 16px;border-radius:7px;text-decoration:none;font-weight:bold;margin-top:10px}.notice{padding:16px;background:#19191e;border-radius:10px;text-align:center}footer{text-align:center;color:#aaa;padding:30px} .empty{color:#bbb;text-align:center;padding:24px}
+</style></head><body>
+<a class="back" href="index.html">← Back to home</a><header><a href="index.html"><img src="logo.png" alt="Geneius Entertainment"></a><h1>Explore Shows</h1><p>Find the perfect entertainment for your event.</p></header>
+<main><div id="message" class="notice">Loading our shows…</div><div id="shows" class="grid" aria-live="polite"></div></main><footer>© <span id="year"></span> Geneius Entertainment · <a href="contact.html">Contact us</a></footer>
+<script type="module">
+import {createClient} from 'https://esm.sh/@supabase/supabase-js@2';
+// Paste your Supabase PUBLISHABLE/ANON key below. NEVER use a secret or service_role key.
+const SUPABASE_URL='https://gtzneetxgefimvadwqew.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY='PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE';
+const $=id=>document.getElementById(id);
+$('year').textContent=new Date().getFullYear();
+const msg=(s)=>{$('message').textContent=s;$('message').hidden=false};
+function posterUrl(value){if(!value)return null;try{const u=new URL(value,location.href);return ['https:','http:'].includes(u.protocol)?u.href:null}catch{return null}}
+function element(tag,cls,text){const el=document.createElement(tag);if(cls)el.className=cls;if(text!=null)el.textContent=text;return el}
+async function load(){
+ if(SUPABASE_PUBLISHABLE_KEY.startsWith('PASTE_')){msg('Explore Shows is being connected. Please check back soon.');return}
+ try{
+  const db=createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}});
+  const {data,error}=await db.from('agency_shows').select('name,description,poster_url,act_id').eq('published',true).order('name');
+  if(error)throw error;
+  const items=data||[];if(!items.length){msg('New shows are coming soon. Contact us to discuss your event.');return}
+  const ids=[...new Set(items.map(x=>x.act_id).filter(Boolean))];let actNames={};
+  if(ids.length){const r=await db.from('acts').select('id,name').in('id',ids);if(!r.error)actNames=Object.fromEntries((r.data||[]).map(a=>[a.id,a.name]));}
+  $('message').hidden=true;const grid=$('shows');grid.replaceChildren();
+  for(const sh of items){const card=element('article','show');const url=posterUrl(sh.poster_url);
+   if(url){const img=element('img','poster');img.src=url;img.alt=sh.name+' poster';img.loading='lazy';img.onerror=()=>img.remove();card.append(img)}
+   const info=element('div','info');info.append(element('h2','',sh.name));
+   if(actNames[sh.act_id])info.append(element('div','act',actNames[sh.act_id]));
+   if(sh.description)info.append(element('p','',sh.description));
+   const cta=element('a','cta','Enquire about this show');cta.href='contact.html';info.append(cta);card.append(info);grid.append(card)
+  }
+ }catch(e){console.error('Explore Shows:',e);msg('Shows are temporarily unavailable. Please contact us for details.')}
+}
+load();
+</script></body></html>
