@@ -35,7 +35,7 @@ if (panel) {
 
   root.innerHTML = `
     <style>
-      #geneiusBookingReview { margin-top:20px; }
+      #geneiusBookingReview { margin-top:20px; } #geReviewList{display:grid;gap:12px} #geneiusBookingReview .ge-review-card{border-left:4px solid #6c5939} #geneiusBookingReview .ge-review-card.ge-new{border-left-color:#f0c66d;background:#272116} #geneiusBookingReview .ge-review-card.ge-payment{border-left-color:#70c9b7;background:#162523} #geneiusBookingReview .ge-review-card.ge-confirmed{border-left-color:#79ba8d} #geneiusBookingReview .ge-inbox-toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0} #geneiusBookingReview .ge-inbox-toolbar input{flex:2;min-width:190px} #geneiusBookingReview .ge-inbox-toolbar select{flex:1;min-width:130px} #geneiusBookingReview .ge-review-card .ge-preview{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#c7b9a5} #geneiusBookingReview .ge-review-card .ge-meta{font-size:12px;color:#e4c78b}
       #geneiusBookingReview button {
         margin:4px;
         padding:10px 14px;
@@ -90,7 +90,7 @@ if (panel) {
       Refresh enquiries
     </button>
     <p id="geReviewStatus" role="status"></p>
-    <div id="geReviewList"></div>
+    <div class="ge-inbox-toolbar"><input id="geReviewSearch" placeholder="Search customer, act or message" aria-label="Search requests"><select id="geReviewFilter" aria-label="Filter requests"><option value="all">All requests</option><option value="new">New enquiries</option><option value="payment_pending">Payments to verify</option><option value="accepted">Accepted quotes</option><option value="sent">Quotes sent</option><option value="paid">Deposits verified</option></select></div><div id="geReviewList"></div>
     <div id="geReviewEditor"></div>
   `;
 
@@ -168,34 +168,36 @@ if (panel) {
   function renderList() {
     const list = $("#geReviewList");
     list.replaceChildren();
-
+    const term = ($("#geReviewSearch").value || "").toLowerCase().trim();
+    const filter = $("#geReviewFilter").value;
+    const latestOffer = e => offers.filter(o => o.enquiry_id === e.id)
+      .sort((a,b) => (b.revision || 0) - (a.revision || 0))[0];
+    let shown = 0;
     enquiries.forEach(e => {
-      const div = document.createElement("div");
-      div.className = "ge-review-card";
-
-      const offer = offers.find(o => o.enquiry_id === e.id);
-
-      div.innerHTML = `
-        <strong>${esc(e.customer_name)}</strong>
-        · ${esc(e.status)}
-        <p class="ge-review-muted">
-          ${esc(e.event_date || "Date TBC")}
-          · ${esc(actName(e.act_id))}
-          · ${esc(offer?.status || "No quote")}
-        </p>
-      `;
-
+      const offer = latestOffer(e);
+      const searchable = [e.customer_name,e.customer_email,e.notes,e.request_type,actName(e.act_id),e.event_date].join(" ").toLowerCase();
+      if(term && !searchable.includes(term)) return;
+      if(filter !== "all" && !(filter === "new" ? e.status === "new" : offer?.status === filter)) return;
+      shown++;
+      const div = document.createElement("article");
+      div.className = "ge-review-card" + (e.status === "new" ? " ge-new" : offer?.status === "payment_pending" ? " ge-payment" : offer?.status === "paid" ? " ge-confirmed" : "");
+      const title = document.createElement("h3");
+      title.textContent = e.customer_name || "Customer";
+      const meta = document.createElement("p");
+      meta.className = "ge-meta";
+      meta.textContent = [e.status === "new" ? "● NEW REQUEST" : "Request: " + e.status,
+        "Offer: " + (offer?.status || "Not quoted"),e.event_date || "Date TBC",actName(e.act_id)].join(" · ");
+      const preview = document.createElement("p");
+      preview.className = "ge-preview";
+      preview.textContent = e.notes || e.customer_email || "No message supplied";
       const button = document.createElement("button");
-      button.textContent = "Review full enquiry";
+      button.type = "button";
+      button.textContent = "Open request & quotation";
       button.onclick = () => edit(e);
-
-      div.append(button);
+      div.append(title,meta,preview,button);
       list.append(div);
     });
-
-    if (!enquiries.length) {
-      list.textContent = "No enquiries yet.";
-    }
+    if(!shown) list.textContent = "No requests match this filter.";
   }
 
   const defaultTerms = `
@@ -458,5 +460,7 @@ must be agreed in writing.
   }
 
   $("#geReviewRefresh").onclick = load;
+  $("#geReviewSearch").oninput = renderList;
+  $("#geReviewFilter").onchange = renderList;
   load();
 }
