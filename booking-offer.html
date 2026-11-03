@@ -1,5 +1,96 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><title>Your Booking Offer | Geneius Entertainment</title><style>:root{color-scheme:dark}body{margin:0;background:radial-gradient(ellipse at top,#352714,#090909 65%);color:#f7f0e4;font:16px/1.6 system-ui,sans-serif}main{max-width:760px;margin:35px auto;padding:24px;background:#17130f;border:1px solid #806336;border-radius:20px}h1,h2{font-family:Georgia,serif;color:#efd18b}label{display:flex;align-items:flex-start;gap:10px;margin:20px 0}button{background:linear-gradient(120deg,#a47a36,#f0d18a);color:#1d150a;padding:13px 22px;border:0;border-radius:30px;font-weight:bold}button:disabled{opacity:.5}section{border-top:1px solid #4d3d2a;padding-top:12px;margin-top:20px}.muted{color:#c1b3a0}pre{white-space:pre-wrap;font:inherit}</style></head><body><main><small>GENEIUS ENTERTAINMENT</small><h1>Your Booking Offer</h1><div id="app" role="status">Loading your private offer…</div></main><script type="module">
-import{createClient}from'https://esm.sh/@supabase/supabase-js@2';
-const db=createClient('https://gtzneetxgefimvadwqew.supabase.co','sb_publishable_tv5_T8hCxDhCmCehDZFWXA_BUgkTIO0');const app=document.getElementById('app');const token=new URL(location.href).searchParams.get('token');const money=n=>'£'+(Number(n||0)/100).toFixed(2);const node=(tag,text)=>{const x=document.createElement(tag);x.textContent=text??'';return x};function line(parent,title,value){const p=node('p');p.append(node('b',title+': '),node('span',String(value??'Not specified')));parent.append(p)}
-async function load(){if(!token){app.textContent='This booking link is incomplete.';return}const {data,error}=await db.rpc('geneius_customer_offer',{p_token:token});if(error||!data){app.textContent='This offer is unavailable. Please contact Geneius Entertainment for a new link.';return}app.replaceChildren();app.append(node('h2','Hello '+data.customer_name));app.append(node('p',data.admin_message));const details=node('section');details.append(node('h2','Booking details'));line(details,'Event date',data.event_date);line(details,'Venue',data.venue);line(details,'Performance',`${data.start_time||'TBC'} – ${data.end_time||'TBC'}`);line(details,'Total',money(data.price_pence));line(details,'Deposit',money(data.deposit_pence));line(details,'Remaining balance',money(data.price_pence-data.deposit_pence));if(data.amendments)line(details,'Amendments',data.amendments);app.append(details);const contract=node('section');contract.append(node('h2','Booking agreement'),node('pre',data.contract_terms));app.append(contract);const pay=node('section');pay.append(node('h2','Deposit & booking status'));line(pay,'Status',data.status);if(data.deposit_deadline)line(pay,'Deposit deadline',new Date(data.deposit_deadline).toLocaleString('en-GB'));if(data.status==='sent'){const label=node('label');const check=document.createElement('input');check.type='checkbox';label.append(check,node('span','I have read and agree to the booking terms, including the deposit requirement.'));const button=node('button','Accept agreement');button.disabled=true;check.onchange=()=>button.disabled=!check.checked;const feedback=node('p');button.onclick=async()=>{button.disabled=true;const result=await db.rpc('geneius_accept_offer',{p_token:token});if(result.error){feedback.textContent=result.error.message;button.disabled=false;return}await load()};pay.append(label,button,feedback)}else if(data.status==='accepted'){pay.append(node('p','Agreement accepted. Your deposit is due within 24 hours. Payment instructions will be provided by Geneius Entertainment. Your booking is not confirmed until payment has been received.'))}else if(data.status==='paid'){pay.append(node('p','Deposit recorded as paid.'))}else{pay.append(node('p','This offer is no longer available for acceptance.'))}app.append(pay)}load();
-</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex,nofollow">
+<title>Your Booking Offer | Geneius Entertainment</title>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#352714,#090909 65%);color:#f7f0e4;font:16px/1.6 system-ui,sans-serif}main{max-width:760px;margin:35px auto;padding:24px;background:#17130f;border:1px solid #806336;border-radius:20px}h1,h2{font-family:Georgia,serif;color:#efd18b}label{display:flex;align-items:flex-start;gap:10px;margin:20px 0}button{background:linear-gradient(120deg,#a47a36,#f0d18a);color:#1d150a;padding:13px 22px;border:0;border-radius:30px;font-weight:bold;cursor:pointer}button:disabled{opacity:.5;cursor:default}section{border-top:1px solid #4d3d2a;padding-top:12px;margin-top:20px}.muted{color:#c1b3a0}pre{white-space:pre-wrap;font:inherit}.bank{padding:18px;border:1px solid #a47a36;border-radius:12px;background:#241b11}.bank p{overflow-wrap:anywhere}.notice{color:#efd18b}.error{color:#ffb4a8}
+</style>
+</head>
+<body>
+<main><small>GENEIUS ENTERTAINMENT</small><h1>Your Booking Offer</h1><div id="app" role="status">Loading your private offer…</div></main>
+<script type="module">
+import {createClient} from 'https://esm.sh/@supabase/supabase-js@2';
+const db=createClient('https://gtzneetxgefimvadwqew.supabase.co','sb_publishable_tv5_T8hCxDhCmCehDZFWXA_BUgkTIO0');
+const app=document.getElementById('app');
+const token=new URL(location.href).searchParams.get('token');
+const money=n=>'£'+(Number(n||0)/100).toFixed(2);
+const node=(tag,text)=>{const x=document.createElement(tag);x.textContent=text??'';return x};
+function line(parent,title,value){const p=node('p');p.append(node('b',title+': '),node('span',String(value??'Not specified')));parent.append(p)}
+function errorMessage(parent,message){const p=node('p',message);p.className='error';parent.append(p)}
+async function load(){
+ if(!token){app.textContent='This booking link is incomplete.';return}
+ const {data,error}=await db.rpc('geneius_customer_offer',{p_token:token});
+ if(error||!data){app.textContent='This offer is unavailable. Please contact Geneius Entertainment for a new link.';return}
+ app.replaceChildren();
+ app.append(node('h2','Hello '+(data.customer_name||'there')));
+ if(data.admin_message)app.append(node('p',data.admin_message));
+ const details=node('section');details.append(node('h2','Booking details'));
+ line(details,'Event date',data.event_date);line(details,'Venue',data.venue);
+ line(details,'Performance',`${data.start_time||'TBC'} – ${data.end_time||'TBC'}`);
+ line(details,'Total',money(data.price_pence));
+ line(details,'Deposit',money(data.deposit_pence));
+ line(details,'Remaining balance',money(Number(data.price_pence||0)-Number(data.deposit_pence||0)));
+ if(data.amendments)line(details,'Amendments',data.amendments);
+ app.append(details);
+ const contract=node('section');contract.append(node('h2','Booking agreement'),node('pre',data.contract_terms||'Please contact Geneius Entertainment for the booking terms.'));app.append(contract);
+ const pay=node('section');pay.append(node('h2','Deposit & booking status'));line(pay,'Status',data.status);
+ if(data.deposit_deadline)line(pay,'Deposit deadline',new Date(data.deposit_deadline).toLocaleString('en-GB'));
+ if(data.status==='sent'){
+  const label=node('label');const check=document.createElement('input');check.type='checkbox';
+  label.append(check,node('span','I have read and agree to the booking terms, including the deposit requirement.'));
+  const button=node('button','Accept agreement');button.disabled=true;check.onchange=()=>button.disabled=!check.checked;
+  const feedback=node('p');button.onclick=async()=>{button.disabled=true;const result=await db.rpc('geneius_accept_offer',{p_token:token});if(result.error){feedback.textContent=result.error.message;button.disabled=false;return}await load()};
+  pay.append(label,button,feedback);
+ }else if(['accepted','payment_pending'].includes(data.status)){
+  pay.append(node('p','Your agreement has been accepted. Please use the bank transfer instructions below. Your booking is not confirmed until Geneius Entertainment verifies receipt.'));
+  if(Number(data.deposit_pence||0)===0){pay.append(node('p','No deposit is specified for this offer. Please contact Geneius Entertainment for confirmation of the payment arrangement.'))}
+  else{
+   const bank=node('div');bank.className='bank';bank.append(node('h2','Bank transfer details'));
+   // Bank details must be returned by a secure, token-validated server RPC.
+   // Never fetch the private bank settings table directly with the public anon key.
+   const result=await db.rpc('geneius_customer_bank_details',{p_token:token});
+   if(result.error||!result.data){
+    errorMessage(bank,'Bank transfer details are not available yet. Please contact Geneius Entertainment.');
+   }else{
+    const b=Array.isArray(result.data)?result.data[0]:result.data;
+    if(!b?.account_name||!b?.sort_code||!b?.account_number){
+     errorMessage(bank,'Bank transfer details have not been configured yet. Please contact Geneius Entertainment.');
+    }else{
+     line(bank,'Amount to transfer',money(data.deposit_pence));
+     line(bank,'Account name',b.account_name);line(bank,'Sort code',b.sort_code);line(bank,'Account number',b.account_number);
+     const reference=b.payment_reference||data.payment_reference;
+     if(reference)line(bank,'Payment reference',reference);
+     else errorMessage(bank,'Ask Geneius Entertainment for your unique payment reference before transferring.');
+     if(b.payment_instructions)bank.append(node('p',b.payment_instructions));
+     if(data.status==='accepted'){
+      const claim=node('button',"I've Made Payment");
+      const feedback=node('p');
+      claim.onclick=async()=>{
+       if(!window.confirm('Have you sent the bank transfer? This does not confirm your booking.'))return;
+       claim.disabled=true;feedback.textContent='Submitting your payment declaration…';
+       const response=await db.rpc('geneius_customer_claim_bank_payment',{p_token:token});
+       if(response.error){feedback.textContent='Unable to record payment declaration: '+response.error.message;claim.disabled=false;return}
+       await load();
+      };
+      bank.append(claim,feedback);
+     }
+    }
+   }
+   pay.append(bank);
+  }
+  if(data.status==='payment_pending'){const message=node('p','Thank you. Your payment declaration has been received. We will check our bank account and confirm once the funds arrive.');message.className='notice';pay.append(message)}
+ }else if(['paid','confirmed'].includes(data.status)){
+  pay.append(node('p','Your payment has been marked as received by Geneius Entertainment. Please refer to your booking confirmation for the final booking status.'));
+ }else{
+  pay.append(node('p','This offer is no longer available for acceptance. Please contact Geneius Entertainment if you need assistance.'));
+ }
+ app.append(pay);
+}
+load().catch(e=>{app.textContent='Unable to load your offer. Please try again later.';console.error(e)});
+</script>
+</body>
+</html>
