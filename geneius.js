@@ -1,43 +1,40 @@
 
 /*
-  GENEIUS ENTERTAINMENT
-  Central Public Website Engine — Version 2
+  GENEIUS ENTERTAINMENT & MANAGEMENT
+  Central Public Website Engine
 
-  Features:
+  Pages:
   - Homepage
   - Explore Artists
   - Explore Shows
-  - Artist profiles and galleries
-  - Published show posters
-  - Original and new artist/show relationships
+  - Artist profiles
+  - Show posters
   - Customer enquiries
   - Optional DJ packages
   - Genie lamp video navigation
 
   Data source: Supabase
-
-  IMPORTANT:
-  Never put passwords, service-role keys or private
-  booking information in this public JavaScript file.
 */
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-/* ==================================================
+/* ==========================================
    CONFIGURATION
-================================================== */
+========================================== */
 
 const CONFIG = {
   url: "https://gtzneetxgefimvadwqew.supabase.co",
   key: "sb_publishable_tv5_T8hCxDhCmCehDZFWXA_BUgkTIO0",
-  email: "contact@geneiusentertainment.com"
+  email: "contact@geneiusentertainment.com",
+  gemLogo: "GEMlogo.png",
+  genieLogo: "logo.png"
 };
 
 const db = createClient(CONFIG.url, CONFIG.key);
 
-/* ==================================================
+/* ==========================================
    HELPERS
-================================================== */
+========================================== */
 
 const $ = (selector, root = document) =>
   root.querySelector(selector);
@@ -45,9 +42,7 @@ const $ = (selector, root = document) =>
 function el(tag, className = "", content) {
   const node = document.createElement(tag);
 
-  if (className) {
-    node.className = className;
-  }
+  if (className) node.className = className;
 
   if (content !== undefined) {
     node.textContent = content;
@@ -59,9 +54,7 @@ function el(tag, className = "", content) {
 function truncate(value, length = 160) {
   const text = String(value || "");
 
-  if (text.length <= length) {
-    return text;
-  }
+  if (text.length <= length) return text;
 
   return text.slice(0, length - 1).trim() + "…";
 }
@@ -89,18 +82,16 @@ function uniqueById(items) {
   const seen = new Set();
 
   return items.filter(item => {
-    if (!item || seen.has(item.id)) {
-      return false;
-    }
+    if (!item || seen.has(item.id)) return false;
 
     seen.add(item.id);
     return true;
   });
 }
 
-/* ==================================================
+/* ==========================================
    APPLICATION STATE
-================================================== */
+========================================== */
 
 const state = {
   artists: [],
@@ -112,9 +103,9 @@ const state = {
   filter: "all"
 };
 
-/* ==================================================
+/* ==========================================
    WEBSITE STYLING
-================================================== */
+========================================== */
 
 const styles = `
 :root {
@@ -193,7 +184,29 @@ button {
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  min-height: 86px;
+  min-height: 100px;
+}
+
+.ge-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  flex-shrink: 0;
+}
+
+.ge-brand-image {
+  display: block;
+  width: clamp(125px, 17vw, 200px);
+  height: 90px;
+  object-fit: contain;
+}
+
+.ge-brand-lamp {
+  display: block;
+  width: 65px;
+  height: 85px;
+  object-fit: contain;
 }
 
 .ge-logo {
@@ -207,7 +220,7 @@ button {
 .ge-logo small {
   display: block;
   font: 10px system-ui;
-  letter-spacing: .35em;
+  letter-spacing: .18em;
   text-align: center;
   color: var(--muted);
   margin-top: 4px;
@@ -247,13 +260,11 @@ button {
     );
 
   border: 1px solid #d9b76b;
-
   color: #191207;
   font-weight: 750;
 
   border-radius: 999px;
   padding: 12px 21px;
-
   min-height: 44px;
 }
 
@@ -295,7 +306,6 @@ button {
     serif;
 
   letter-spacing: -.04em;
-
   margin: 20px auto;
   max-width: 960px;
 }
@@ -308,9 +318,7 @@ button {
 .ge-lead {
   max-width: 640px;
   margin: 0 auto;
-
   color: #cbbfae;
-
   font-size: clamp(15px, 1.8vw, 19px);
   line-height: 1.65;
 }
@@ -327,9 +335,7 @@ button {
 
 .ge-video-grid {
   display: grid;
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
-
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px;
   margin: 25px 0 75px;
 }
@@ -338,7 +344,6 @@ button {
   position: relative;
   display: block;
   overflow: hidden;
-
   min-height: 310px;
 
   border: 1px solid #5b4729;
@@ -364,10 +369,8 @@ button {
 .ge-video-card video {
   position: absolute;
   inset: 0;
-
   width: 100%;
   height: 100%;
-
   object-fit: cover;
   opacity: .75;
 }
@@ -375,13 +378,10 @@ button {
 .ge-video-fallback {
   position: absolute;
   inset: 0;
-
   display: grid;
   place-items: center;
-
   color: #a77e38;
   font: 90px Georgia, serif;
-
   opacity: .23;
 }
 
@@ -390,7 +390,6 @@ button {
   bottom: 0;
   left: 0;
   right: 0;
-
   padding: 55px 25px 25px;
 
   background:
@@ -407,10 +406,8 @@ button {
 
 .ge-video-label small {
   display: block;
-
   color: #d4c1a0;
   font: 12px system-ui;
-
   margin-top: 8px;
   letter-spacing: .07em;
 }
@@ -433,9 +430,7 @@ button {
 
 .ge-section-intro {
   color: var(--muted);
-
   max-width: 690px;
-
   line-height: 1.6;
   margin: 0 0 28px;
 }
@@ -446,7 +441,6 @@ button {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
-
   margin: 26px 0;
 }
 
@@ -454,11 +448,8 @@ button {
   background: #171511;
   border: 1px solid #5c4c35;
   border-radius: 12px;
-
   padding: 13px 15px;
-
   color: #fff;
-
   min-height: 46px;
   width: 100%;
 }
@@ -497,12 +488,10 @@ button {
 
   border: 1px solid #443725;
   border-radius: 17px;
-
   overflow: hidden;
 
   display: flex;
   flex-direction: column;
-
   min-height: 100%;
 }
 
@@ -521,7 +510,6 @@ button {
 
   color: #b58a46;
   font: 68px Georgia, serif;
-
   overflow: hidden;
 }
 
@@ -541,11 +529,9 @@ button {
 
 .ge-card-body {
   padding: 20px;
-
   display: flex;
   flex: 1;
   flex-direction: column;
-
   gap: 10px;
 }
 
@@ -556,10 +542,8 @@ button {
 
 .ge-card p {
   color: var(--muted);
-
   line-height: 1.55;
   font-size: 14px;
-
   margin: 0;
 }
 
@@ -585,7 +569,6 @@ button {
 .ge-empty {
   border: 1px dashed #54432c;
   border-radius: 12px;
-
   padding: 24px;
   color: var(--muted);
 }
@@ -594,15 +577,12 @@ button {
 
 .ge-footer {
   border-top: 1px solid #352c20;
-
   padding: 25px 0;
-
   color: #a79a89;
   font-size: 12px;
 
   display: flex;
   gap: 20px;
-
   justify-content: space-between;
   flex-wrap: wrap;
 }
@@ -612,7 +592,6 @@ button {
 .ge-dialog {
   width: min(760px, calc(100% - 24px));
   max-height: min(90vh, 900px);
-
   overflow: auto;
 
   background: #14110e;
@@ -620,9 +599,7 @@ button {
 
   border: 1px solid #8b6a35;
   border-radius: 20px;
-
   padding: 0;
-
   box-shadow: 0 24px 100px #000c;
 }
 
@@ -649,23 +626,17 @@ button {
 .ge-close {
   background: #30271d;
   border: 1px solid #655033;
-
   color: #fff;
-
   border-radius: 50%;
-
   width: 38px;
   height: 38px;
-
   flex: none;
 }
 
 .ge-detail-image {
   max-height: 400px;
-
   width: 100%;
   object-fit: contain;
-
   border-radius: 12px;
   margin: 12px 0;
 }
@@ -681,7 +652,6 @@ button {
 .ge-form label {
   display: grid;
   gap: 6px;
-
   color: #e5d6be;
   font-size: 13px;
 }
@@ -711,9 +681,7 @@ button {
   display: flex !important;
   align-items: center;
   gap: 12px;
-
   padding: 10px;
-
   border: 1px solid #54432c;
   border-radius: 10px;
 }
@@ -721,7 +689,6 @@ button {
 .ge-show-option img {
   width: 53px;
   height: 68px;
-
   object-fit: contain;
   border-radius: 5px;
 }
@@ -741,11 +708,24 @@ button {
 @media (max-width: 650px) {
 
   .ge-nav {
-    align-items: start;
+    align-items: flex-start;
     flex-direction: column;
-
     padding: 18px 0;
     gap: 17px;
+  }
+
+  .ge-brand {
+    gap: 8px;
+  }
+
+  .ge-brand-image {
+    width: 145px;
+    height: 70px;
+  }
+
+  .ge-brand-lamp {
+    width: 50px;
+    height: 65px;
   }
 
   .ge-links {
@@ -783,13 +763,12 @@ button {
 function injectStyle() {
   const style = el("style");
   style.textContent = styles;
-
   document.head.append(style);
 }
 
-/* ==================================================
+/* ==========================================
    NAVIGATION
-================================================== */
+========================================== */
 
 function nav(active) {
   const header = el("header");
@@ -797,25 +776,51 @@ function nav(active) {
   header.innerHTML = `
     <div class="ge-wrap ge-nav">
 
-      <a class="ge-logo" href="index.html">
-        GENEIUS
-        <small>ENTERTAINMENT</small>
+      <a
+        class="ge-brand"
+        href="index.html"
+        aria-label="Geneius Entertainment & Management — Home"
+      >
+        <img
+          class="ge-brand-lamp"
+          src="${CONFIG.genieLogo}"
+          alt=""
+          onerror="this.style.display='none'"
+        >
+
+        <img
+          class="ge-brand-image"
+          src="${CONFIG.gemLogo}"
+          alt="Geneius Entertainment & Management"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='block'"
+        >
+
+        <span class="ge-logo" style="display:none">
+          GENEIUS
+          <small>ENTERTAINMENT &amp; MANAGEMENT</small>
+        </span>
       </a>
 
       <nav class="ge-links" aria-label="Main navigation">
 
-        <a href="index.html"
-          ${active === "home" ? 'aria-current="page"' : ""}>
+        <a
+          href="index.html"
+          ${active === "home" ? 'aria-current="page"' : ""}
+        >
           Home
         </a>
 
-        <a href="acts.html"
-          ${active === "artists" ? 'aria-current="page"' : ""}>
+        <a
+          href="acts.html"
+          ${active === "artists" ? 'aria-current="page"' : ""}
+        >
           Explore Artists
         </a>
 
-        <a href="explore-shows.html"
-          ${active === "shows" ? 'aria-current="page"' : ""}>
+        <a
+          href="explore-shows.html"
+          ${active === "shows" ? 'aria-current="page"' : ""}
+        >
           Explore Shows
         </a>
 
@@ -836,12 +841,15 @@ function nav(active) {
 }
 
 function footer() {
-  const footerNode = el("footer", "ge-wrap ge-footer");
+  const footerNode = el(
+    "footer",
+    "ge-wrap ge-footer"
+  );
 
   const copyright = el(
     "span",
     "",
-    `© ${new Date().getFullYear()} Geneius Entertainment`
+    `© ${new Date().getFullYear()} Geneius Entertainment & Management`
   );
 
   const contact = el("span");
@@ -852,19 +860,27 @@ function footer() {
     )
   );
 
-  const emailLink = el("a", "", CONFIG.email);
+  const emailLink = el(
+    "a",
+    "",
+    CONFIG.email
+  );
+
   emailLink.href = `mailto:${CONFIG.email}`;
 
   contact.append(emailLink);
 
-  footerNode.append(copyright, contact);
+  footerNode.append(
+    copyright,
+    contact
+  );
 
   return footerNode;
 }
 
-/* ==================================================
+/* ==========================================
    IMAGES AND CARDS
-================================================== */
+========================================== */
 
 function imageBox(url, label, isPoster = false) {
   const box = el(
@@ -884,12 +900,16 @@ function imageBox(url, label, isPoster = false) {
     image.loading = "lazy";
 
     image.onerror = () => {
-      box.replaceChildren(el("span", "", "✦"));
+      box.replaceChildren(
+        el("span", "", "✦")
+      );
     };
 
     box.append(image);
   } else {
-    box.append(el("span", "", "✦"));
+    box.append(
+      el("span", "", "✦")
+    );
   }
 
   return box;
@@ -904,13 +924,19 @@ function card(
   onClick,
   isPoster = false
 ) {
-  const article = el("article", "ge-card");
+  const article = el(
+    "article",
+    "ge-card"
+  );
 
   article.append(
     imageBox(image, title, isPoster)
   );
 
-  const body = el("div", "ge-card-body");
+  const body = el(
+    "div",
+    "ge-card-body"
+  );
 
   body.append(
     el("h3", "", title),
@@ -919,7 +945,11 @@ function card(
 
   if (tags && tags.length) {
     body.append(
-      el("div", "ge-tags", tags.join(" · "))
+      el(
+        "div",
+        "ge-tags",
+        tags.join(" · ")
+      )
     );
   }
 
@@ -938,19 +968,9 @@ function card(
   return article;
 }
 
-/* ==================================================
+/* ==========================================
    ARTIST AND SHOW RELATIONSHIPS
-
-   Supports both:
-
-   Original:
-   agency_shows.act_id
-
-   New:
-   agency_show_offerings
-
-   This is the main Explore Shows fix.
-================================================== */
+========================================== */
 
 function offeringsFor(actId) {
   return uniqueById(
@@ -974,9 +994,7 @@ function artistsFor(showId) {
     item => item.id === showId
   );
 
-  if (!show) {
-    return [];
-  }
+  if (!show) return [];
 
   return state.artists.filter(artist => {
     const originalLink =
@@ -1023,9 +1041,9 @@ function performerNamesForShow(show) {
   return names;
 }
 
-/* ==================================================
+/* ==========================================
    SEARCH FILTERS
-================================================== */
+========================================== */
 
 function filteredArtists() {
   const query = state.query;
@@ -1067,26 +1085,15 @@ function filteredShows() {
       .join(" ")
       .toLowerCase();
 
-    // Do not hide a published show just because
-    // its artist profile has not been published.
-
     return searchableText.includes(query);
   });
 }
 
-/* ==================================================
+/* ==========================================
    SUPABASE DATA LOADING
-================================================== */
+========================================== */
 
 async function load() {
-  /*
-    Artist profiles and shows are the two
-    essential catalogue sources.
-
-    Optional relationships and packages must
-    not stop the entire public site loading.
-  */
-
   const [
     artistResult,
     showResult
@@ -1122,11 +1129,6 @@ async function load() {
 
   state.artists = artistResult.data || [];
   state.shows = showResult.data || [];
-
-  /*
-    Load optional show offerings,
-    packages and original act names.
-  */
 
   const [
     offeringsResult,
@@ -1180,7 +1182,10 @@ async function load() {
     );
   } else {
     (actsResult.data || []).forEach(act => {
-      state.actNames.set(act.id, act.name);
+      state.actNames.set(
+        act.id,
+        act.name
+      );
     });
   }
 
@@ -1193,12 +1198,15 @@ async function load() {
   );
 }
 
-/* ==================================================
+/* ==========================================
    MODAL SYSTEM
-================================================== */
+========================================== */
 
 function createDialog() {
-  const dialog = el("dialog", "ge-dialog");
+  const dialog = el(
+    "dialog",
+    "ge-dialog"
+  );
 
   dialog.id = "ge-dialog";
 
@@ -1214,7 +1222,10 @@ function createDialog() {
 }
 
 function detailHead(title) {
-  const header = el("div", "ge-dialog-head");
+  const header = el(
+    "div",
+    "ge-dialog-head"
+  );
 
   header.append(
     el("h2", "", title)
@@ -1258,9 +1269,9 @@ function addImage(root, url, alt) {
   root.append(image);
 }
 
-/* ==================================================
+/* ==========================================
    ARTIST DETAILS
-================================================== */
+========================================== */
 
 function showArtist(artist) {
   const dialog = $("#ge-dialog");
@@ -1306,7 +1317,10 @@ function showArtist(artist) {
       )
     );
   } else {
-    const grid = el("div", "ge-grid");
+    const grid = el(
+      "div",
+      "ge-grid"
+    );
 
     shows.forEach(show => {
       grid.append(
@@ -1343,9 +1357,9 @@ function showArtist(artist) {
   dialog.showModal();
 }
 
-/* ==================================================
+/* ==========================================
    SHOW DETAILS
-================================================== */
+========================================== */
 
 function showShow(show) {
   const dialog = $("#ge-dialog");
@@ -1383,7 +1397,10 @@ function showShow(show) {
   const artists = artistsFor(show.id);
 
   if (artists.length) {
-    const grid = el("div", "ge-grid");
+    const grid = el(
+      "div",
+      "ge-grid"
+    );
 
     artists.forEach(artist => {
       grid.append(
@@ -1400,14 +1417,6 @@ function showShow(show) {
 
     content.append(grid);
   } else {
-    /*
-      An original show may be published before
-      its new public artist profile is ready.
-
-      Keep the show visible and offer an
-      enquiry by email rather than hiding it.
-    */
-
     const names = performerNamesForShow(show);
 
     if (names.length) {
@@ -1442,11 +1451,14 @@ function showShow(show) {
   dialog.showModal();
 }
 
-/* ==================================================
+/* ==========================================
    CUSTOMER ENQUIRIES
-================================================== */
+========================================== */
 
-function showEnquiry(artist, preselectShowId = null) {
+function showEnquiry(
+  artist,
+  preselectShowId = null
+) {
   const dialog = $("#ge-dialog");
 
   dialog.replaceChildren();
@@ -1471,10 +1483,21 @@ function showEnquiry(artist, preselectShowId = null) {
     )
   );
 
-  const form = el("form", "ge-form");
+  const form = el(
+    "form",
+    "ge-form"
+  );
 
-  function field(label, type, required = true) {
-    const wrapper = el("label", "", label);
+  function field(
+    label,
+    type,
+    required = true
+  ) {
+    const wrapper = el(
+      "label",
+      "",
+      label
+    );
 
     const input = el(
       "input",
@@ -1809,9 +1832,9 @@ function showEnquiry(artist, preselectShowId = null) {
   dialog.showModal();
 }
 
-/* ==================================================
+/* ==========================================
    SECTION HEADERS
-================================================== */
+========================================== */
 
 function sectionHeader(title, intro) {
   const header = el("div");
@@ -1824,9 +1847,9 @@ function sectionHeader(title, intro) {
   return header;
 }
 
-/* ==================================================
+/* ==========================================
    SEARCH TOOLBAR
-================================================== */
+========================================== */
 
 function toolbar(type, render) {
   const wrapper = el(
@@ -1898,9 +1921,9 @@ function toolbar(type, render) {
   return wrapper;
 }
 
-/* ==================================================
+/* ==========================================
    EXPLORE ARTISTS / EXPLORE SHOWS
-================================================== */
+========================================== */
 
 function renderDirectory(type, main) {
   main.replaceChildren();
@@ -2006,9 +2029,9 @@ function renderDirectory(type, main) {
   render();
 }
 
-/* ==================================================
+/* ==========================================
    HOMEPAGE
-================================================== */
+========================================== */
 
 function home(main) {
   const hero = el(
@@ -2018,7 +2041,7 @@ function home(main) {
 
   hero.innerHTML = `
     <div class="ge-eyebrow">
-      Live entertainment, beautifully curated
+      Geneius Entertainment &amp; Management
     </div>
 
     <h1>
@@ -2189,9 +2212,9 @@ function home(main) {
   main.append(section);
 }
 
-/* ==================================================
+/* ==========================================
    APPLICATION STARTUP
-================================================== */
+========================================== */
 
 async function boot() {
   injectStyle();
