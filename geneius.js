@@ -2097,13 +2097,13 @@ function home(main) {
     [
       "Explore Artists",
       "acts.html",
-      "videos/ArtistsLamp.mp4",
+      "ArtistsLamp.mp4",
       "Meet the talent behind the magic"
     ],
     [
       "Explore Shows",
       "explore-shows.html",
-      "videos/ShowsLamp.mp4",
+      "ShowsLamp.mp4",
       "Find a show for every occasion"
     ]
   ];
