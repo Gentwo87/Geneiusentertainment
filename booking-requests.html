@@ -1,66 +1,518 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Booking Requests | Geneius Entertainment</title>
-<style>
-:root{color-scheme:dark;--gold:#dfb65f;--line:#393238}*{box-sizing:border-box}body{margin:0;background:#0d0d10;color:#f4f1eb;font:15px/1.55 system-ui,Arial,sans-serif}header{padding:19px max(18px,calc((100vw - 1120px)/2));border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}.brand{font-weight:800;letter-spacing:.06em;font-size:19px}.brand span{color:var(--gold)}main{max-width:1120px;margin:25px auto;padding:0 16px}.panel{background:#19191e;border:1px solid var(--line);border-radius:15px;padding:22px;margin-bottom:20px}h1,h2,h3{color:#eacb83}h1{margin:0 0 5px;font-size:29px}p{line-height:1.55}.muted{color:#b8b0a4}.navlink{color:var(--gold);text-decoration:none;border:1px solid #625032;padding:10px 14px;border-radius:8px}button{background:#dfb65f;color:#1a1309;border:0;border-radius:8px;padding:10px 15px;font-weight:700;cursor:pointer}button.secondary{background:#34323a;color:#fff}input,textarea,select{font:inherit;background:#111116;color:#fff;border:1px solid #665a48;border-radius:8px;padding:10px;width:100%}label{display:block;margin:10px 0}.hidden{display:none!important}.row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}.error{color:#ffaaaa}#geneiusBookingReview .ge-review-card{scroll-margin-top:15px} .section-tabs{display:flex;gap:9px;flex-wrap:wrap;margin:0 0 18px}.section-tab{background:#27242a;color:#e9dfcd;border:1px solid #66583f;padding:12px 18px}.section-tab[aria-selected="true"]{background:#dfb65f;color:#17120a;border-color:#dfb65f}.tab-pane[hidden],.sub-pane[hidden]{display:none!important}.section-head{margin:0 0 15px}.sub-tabs{display:flex;gap:7px;flex-wrap:wrap;margin:16px 0}.sub-tab{background:#2a2830;color:#e6d5b2;border:1px solid #60533c}.sub-tab[aria-selected="true"]{background:#a88342;color:#16120a}.tab-pane{min-height:170px}.section-tab:focus-visible,.sub-tab:focus-visible{outline:3px solid #fff;outline-offset:2px} @media(max-width:650px){.panel{padding:14px}h1{font-size:23px}}
-</style></head><body>
-<header><div class="brand">GENEIUS <span>ENTERTAINMENT</span></div><div class="row"><a class="navlink" href="admin.html">← Booking Calendar</a><a class="navlink" href="index.html">Website</a><button class="secondary hidden" id="signout">Sign out</button></div></header>
-<main><section class="panel hidden" id="login"><h2>Administrator sign in</h2><label>Email<input type="email" id="email" autocomplete="username"></label><label>Password<input type="password" id="password" autocomplete="current-password"></label><button id="signin">Sign in</button><p class="error" id="loginError"></p></section>
-<section id="waiting" class="panel">Checking administrator access…</section>
-<div id="workspace" class="hidden"><section class="panel"><h1>Booking Requests</h1><p class="muted">Your customer messages, quotations, contracts and payment checks — separate from the calendar.</p></section><nav class="section-tabs" aria-label="Booking request sections" id="requestTabs">
-<button type="button" class="section-tab" data-tab="enquiries" aria-selected="true">✉ Enquiries &amp; Quotes</button>
-<button type="button" class="section-tab" data-tab="payments" aria-selected="false">£ Payments</button>
-<button type="button" class="section-tab" data-tab="management" aria-selected="false">⚙ Booking Management</button>
-</nav>
-<section class="panel tab-pane" id="pane-enquiries"><h2 class="section-head">Customer Enquiries &amp; Quotations</h2></section>
-<section class="panel tab-pane" id="pane-payments" hidden><h2 class="section-head">Bank Payments &amp; Verification</h2></section>
-<section class="panel tab-pane" id="pane-management" hidden><h2 class="section-head">Booking Management</h2></section>
-<section id="notificationsPanel" hidden></section></div></main>
-<script type="module">
-import {createClient} from 'https://esm.sh/@supabase/supabase-js@2';
-const db=createClient('https://gtzneetxgefimvadwqew.supabase.co','sb_publishable_tv5_T8hCxDhCmCehDZFWXA_BUgkTIO0');
-const $=id=>document.getElementById(id);
-let started=false;
-async function check(){
- try{
- const {data:{session},error}=await db.auth.getSession();if(error)throw error;
- if(!session){$('waiting').classList.add('hidden');$('login').classList.remove('hidden');return}
- const a=await db.rpc('is_booking_admin');if(a.error)throw a.error;if(a.data!==true)throw Error('This account is not an authorised booking administrator.');
- $('waiting').classList.add('hidden');$('login').classList.add('hidden');$('workspace').classList.remove('hidden');$('signout').classList.remove('hidden');
- if(!started){
- started=true;
- await import('./geneius-booking-review.js');
- await import('./geneius-bank-admin.js');
- await import('./geneius-booking-management.js');
- for(const [id,pane] of [['geneiusBookingReview','enquiries'],['geBankPanel','payments'],['geManagement','management']]){
-  const node=$(id);if(node) $('pane-'+pane).append(node);
- }
- setupSubtabs();
- }
 
- }catch(e){$('waiting').textContent='Unable to load: '+e.message;$('login').classList.remove('hidden')}
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Booking Requests | Geneius Entertainment</title>
+
+<style>
+:root {
+  color-scheme: dark;
+  --gold: #dfb65f;
+  --line: #393238;
 }
-function switchTab(tab){
- for(const b of document.querySelectorAll('.section-tab')){
-  const selected=b.dataset.tab===tab;b.setAttribute('aria-selected',String(selected));
- }
- for(const p of document.querySelectorAll('.tab-pane'))p.hidden=p.id!=='pane-'+tab;
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #0d0d10;
+  color: #f4f1eb;
+  font: 15px/1.55 system-ui, Arial, sans-serif;
 }
-document.querySelectorAll('.section-tab').forEach(b=>b.addEventListener('click',()=>switchTab(b.dataset.tab)));
-function setupSubtabs(){
- const root=$('geManagement');if(!root)return;
- const cards=[...root.querySelectorAll(':scope > .ge-card')];
- if(cards.length<2)return;
- const labels=['Payment Terms','Cancellations','Refunds','Replacement Acts','Contracts'];
- const nav=document.createElement('nav');nav.className='sub-tabs';nav.setAttribute('aria-label','Booking management sections');
- cards.forEach((card,i)=>{
-  card.classList.add('sub-pane');card.hidden=i!==0;
-  const btn=document.createElement('button');btn.type='button';btn.className='sub-tab';btn.textContent=labels[i]||('Section '+(i+1));btn.setAttribute('aria-selected',String(i===0));
-  btn.onclick=()=>{cards.forEach((c,j)=>c.hidden=j!==i);nav.querySelectorAll('button').forEach((b,j)=>b.setAttribute('aria-selected',String(i===j)))};
-  nav.append(btn);
- });
- const first=cards[0];root.insertBefore(nav,first);
+
+header {
+  padding: 19px max(18px, calc((100vw - 1120px)/2));
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
 }
-$('signin').onclick=async()=>{const {error}=await db.auth.signInWithPassword({email:$('email').value,password:$('password').value});if(error){$('loginError').textContent=error.message;return}await check()};
-$('signout').onclick=async()=>{await db.auth.signOut();location.reload()};
+
+.brand {
+  font-weight: 800;
+  letter-spacing: .06em;
+  font-size: 19px;
+}
+
+.brand span { color: var(--gold); }
+
+main {
+  max-width: 1120px;
+  margin: 25px auto;
+  padding: 0 16px;
+}
+
+.panel {
+  background: #19191e;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  padding: 22px;
+  margin-bottom: 20px;
+}
+
+h1, h2, h3 { color: #eacb83; }
+h1 { margin: 0 0 5px; font-size: 29px; }
+p { line-height: 1.55; }
+.muted { color: #b8b0a4; }
+
+.navlink {
+  color: var(--gold);
+  text-decoration: none;
+  border: 1px solid #625032;
+  padding: 10px 14px;
+  border-radius: 8px;
+}
+
+button {
+  background: #dfb65f;
+  color: #1a1309;
+  border: 0;
+  border-radius: 8px;
+  padding: 10px 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+button.secondary {
+  background: #34323a;
+  color: #fff;
+}
+
+input, textarea, select {
+  font: inherit;
+  background: #111116;
+  color: #fff;
+  border: 1px solid #665a48;
+  border-radius: 8px;
+  padding: 10px;
+  width: 100%;
+}
+
+label { display: block; margin: 10px 0; }
+.hidden { display: none !important; }
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.error { color: #ffaaaa; }
+
+#geneiusBookingReview .ge-review-card {
+  scroll-margin-top: 15px;
+}
+
+.section-tabs {
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+  margin: 0 0 18px;
+}
+
+.section-tab {
+  background: #27242a;
+  color: #e9dfcd;
+  border: 1px solid #66583f;
+  padding: 12px 18px;
+}
+
+.section-tab[aria-selected="true"] {
+  background: #dfb65f;
+  color: #17120a;
+  border-color: #dfb65f;
+}
+
+.tab-pane[hidden],
+.sub-pane[hidden] {
+  display: none !important;
+}
+
+.section-head { margin: 0 0 15px; }
+
+.sub-tabs {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  margin: 16px 0;
+}
+
+.sub-tab {
+  background: #2a2830;
+  color: #e6d5b2;
+  border: 1px solid #60533c;
+}
+
+.sub-tab[aria-selected="true"] {
+  background: #a88342;
+  color: #16120a;
+}
+
+.tab-pane { min-height: 170px; }
+
+.section-tab:focus-visible,
+.sub-tab:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+}
+
+@media(max-width:650px) {
+  .panel { padding: 14px; }
+  h1 { font-size: 23px; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="brand">
+    GENEIUS <span>ENTERTAINMENT</span>
+  </div>
+
+  <div class="row">
+    <a class="navlink" href="admin.html">
+      ← Booking Calendar
+    </a>
+
+    <a class="navlink" href="index.html">
+      Website
+    </a>
+
+    <button class="secondary hidden" id="signout">
+      Sign out
+    </button>
+  </div>
+</header>
+
+<main>
+
+  <section class="panel hidden" id="login">
+    <h2>Administrator sign in</h2>
+
+    <label>
+      Email
+      <input
+        type="email"
+        id="email"
+        autocomplete="username"
+      >
+    </label>
+
+    <label>
+      Password
+      <input
+        type="password"
+        id="password"
+        autocomplete="current-password"
+      >
+    </label>
+
+    <button id="signin">Sign in</button>
+    <p class="error" id="loginError"></p>
+  </section>
+
+  <section id="waiting" class="panel">
+    Checking administrator access…
+  </section>
+
+  <div id="workspace" class="hidden">
+
+    <section class="panel">
+      <h1>Booking Requests</h1>
+      <p class="muted">
+        Your customer messages, quotations, contracts and
+        payment checks — separate from the calendar.
+      </p>
+    </section>
+
+    <nav
+      class="section-tabs"
+      aria-label="Booking request sections"
+      id="requestTabs"
+    >
+
+      <button
+        type="button"
+        class="section-tab"
+        data-tab="enquiries"
+        aria-selected="true"
+      >
+        ✉ Enquiries &amp; Quotes
+      </button>
+
+      <button
+        type="button"
+        class="section-tab"
+        data-tab="payments"
+        aria-selected="false"
+      >
+        £ Payments
+      </button>
+
+      <button
+        type="button"
+        class="section-tab"
+        data-tab="management"
+        aria-selected="false"
+      >
+        ⚙ Booking Management
+      </button>
+
+    </nav>
+
+    <section
+      class="panel tab-pane"
+      id="pane-enquiries"
+    >
+      <h2 class="section-head">
+        Customer Enquiries &amp; Quotations
+      </h2>
+    </section>
+
+    <section
+      class="panel tab-pane"
+      id="pane-payments"
+      hidden
+    >
+      <h2 class="section-head">
+        Bank Payments &amp; Verification
+      </h2>
+    </section>
+
+    <section
+      class="panel tab-pane"
+      id="pane-management"
+      hidden
+    >
+      <h2 class="section-head">
+        Booking Management
+      </h2>
+    </section>
+
+    <section id="notificationsPanel" hidden></section>
+
+  </div>
+
+</main>
+
+<script type="module">
+
+import { createClient } from
+  'https://esm.sh/@supabase/supabase-js@2';
+
+const db = createClient(
+  'https://gtzneetxgefimvadwqew.supabase.co',
+  'sb_publishable_tv5_T8hCxDhCmCehDZFWXA_BUgkTIO0'
+);
+
+const $ = id => document.getElementById(id);
+
+let started = false;
+
+async function check() {
+  try {
+    const {
+      data: { session },
+      error
+    } = await db.auth.getSession();
+
+    if (error) throw error;
+
+    if (!session) {
+      $('waiting').classList.add('hidden');
+      $('login').classList.remove('hidden');
+      return;
+    }
+
+    const a = await db.rpc('is_booking_admin');
+
+    if (a.error) throw a.error;
+
+    if (a.data !== true) {
+      throw Error(
+        'This account is not an authorised booking administrator.'
+      );
+    }
+
+    $('waiting').classList.add('hidden');
+    $('login').classList.add('hidden');
+    $('workspace').classList.remove('hidden');
+    $('signout').classList.remove('hidden');
+
+    if (!started) {
+      started = true;
+
+      await import('./geneius-booking-review.js');
+      await import('./geneius-bank-admin.js');
+      await import('./geneius-booking-management.js');
+
+      for (const [id, pane] of [
+        ['geneiusBookingReview', 'enquiries'],
+        ['geBankPanel', 'payments'],
+        ['geManagement', 'management']
+      ]) {
+        const node = $(id);
+
+        if (node) {
+          $('pane-' + pane).append(node);
+        }
+      }
+
+      setupSubtabs();
+    }
+
+  } catch (e) {
+    $('waiting').textContent =
+      'Unable to load: ' + e.message;
+
+    $('login').classList.remove('hidden');
+  }
+}
+
+function switchTab(tab) {
+  for (
+    const b of document.querySelectorAll('.section-tab')
+  ) {
+    const selected = b.dataset.tab === tab;
+
+    b.setAttribute(
+      'aria-selected',
+      String(selected)
+    );
+  }
+
+  for (
+    const p of document.querySelectorAll('.tab-pane')
+  ) {
+    p.hidden = p.id !== 'pane-' + tab;
+  }
+}
+
+document.querySelectorAll('.section-tab').forEach(
+  b => b.addEventListener(
+    'click',
+    () => switchTab(b.dataset.tab)
+  )
+);
+
+/*
+  BOOKING MANAGEMENT SUBTABS
+
+  Only the five named tabs are created.
+  Additional management cards remain accessible
+  below the tabs instead of producing Section 6.
+*/
+
+function setupSubtabs() {
+  const root = $('geManagement');
+
+  if (!root) return;
+
+  const cards = [
+    ...root.querySelectorAll(':scope > .ge-card')
+  ];
+
+  if (cards.length < 2) return;
+
+  const labels = [
+    'Payment Terms',
+    'Cancellations',
+    'Refunds',
+    'Replacement Acts',
+    'Contracts'
+  ];
+
+  const nav = document.createElement('nav');
+
+  nav.className = 'sub-tabs';
+
+  nav.setAttribute(
+    'aria-label',
+    'Booking management sections'
+  );
+
+  cards.forEach((card, i) => {
+
+    if (i >= labels.length) {
+      /*
+        Do not create Section 6 or later tabs.
+        Preserve additional management content.
+      */
+      card.classList.remove('sub-pane');
+      card.hidden = false;
+      return;
+    }
+
+    card.classList.add('sub-pane');
+    card.hidden = i !== 0;
+
+    const btn = document.createElement('button');
+
+    btn.type = 'button';
+    btn.className = 'sub-tab';
+    btn.textContent = labels[i];
+
+    btn.setAttribute(
+      'aria-selected',
+      String(i === 0)
+    );
+
+    btn.onclick = () => {
+
+      cards.slice(0, labels.length).forEach(
+        (item, j) => {
+          item.hidden = j !== i;
+        }
+      );
+
+      nav.querySelectorAll('button').forEach(
+        (button, j) => {
+          button.setAttribute(
+            'aria-selected',
+            String(i === j)
+          );
+        }
+      );
+
+    };
+
+    nav.append(btn);
+
+  });
+
+  root.insertBefore(nav, cards[0]);
+}
+
+$('signin').onclick = async () => {
+
+  const { error } = await db.auth.signInWithPassword({
+    email: $('email').value,
+    password: $('password').value
+  });
+
+  if (error) {
+    $('loginError').textContent = error.message;
+    return;
+  }
+
+  await check();
+};
+
+$('signout').onclick = async () => {
+  await db.auth.signOut();
+  location.reload();
+};
+
 check();
-</script></body></html>
+
+</script>
+</body>
+</html>
