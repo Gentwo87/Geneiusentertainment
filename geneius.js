@@ -200,6 +200,10 @@ button {
   width: clamp(125px, 17vw, 200px);
   height: 90px;
   object-fit: contain;
+  transform: scale(1.4);
+  transform-origin: center;
+}
+
 }
 
 .ge-brand-lamp {
@@ -2089,13 +2093,13 @@ function home(main) {
     [
       "Explore Artists",
       "acts.html",
-      "videos/explore-artists.mp4",
+      "videos/ArtistsLamp.mp4",
       "Meet the talent behind the magic"
     ],
     [
       "Explore Shows",
       "explore-shows.html",
-      "videos/explore-shows.mp4",
+      "videos/ShowsLamp.mp4",
       "Find a show for every occasion"
     ]
   ];
