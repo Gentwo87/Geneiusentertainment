@@ -195,13 +195,17 @@ button {
   flex-shrink: 0;
 }
 
+
 .ge-brand-image {
   display: block;
   width: clamp(125px, 17vw, 200px);
   height: 90px;
   object-fit: contain;
-  transform: scale(1.4);
+
+  transform: translate(15px, 22px) scale(1.65);
   transform-origin: center;
+}
+
 }
 
 }
