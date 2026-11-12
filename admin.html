@@ -155,4 +155,7 @@ $('studioForm').onsubmit=async e=>{e.preventDefault();$('studioSave').disabled=t
 function renderEnquiries(){const el=$('notificationsList');el.replaceChildren();const unread=studioEnquiries.filter(e=>e.status==='new').length;$('notificationCount').textContent=String(unread);$('dashboardNewRequests').textContent=String(unread);if(!studioEnquiries.length){el.textContent='No customer enquiries yet.';return}for(const en of studioEnquiries){const item=document.createElement('div');item.className='manage-item';const details=document.createElement('div');details.innerHTML=`<b>${esc(en.customer_name)}</b> · ${esc(en.status)}<div class="manage-note">${esc(en.customer_email)} · ${esc(en.event_date||'Date TBC')} · ${esc(en.request_type)}<div>${esc(en.notes||'')}</div></div>`;const actions=document.createElement('div');const email=studioButton('Email',()=>{location.href='mailto:'+encodeURIComponent(en.customer_email)});actions.append(email);const status=document.createElement('select');for(const st of ['new','reviewing','quoted','closed']){const opt=document.createElement('option');opt.value=st;opt.textContent=st;opt.selected=en.status===st;status.append(opt)}status.onchange=async()=>{const r=await db.from('agency_enquiries').update({status:status.value}).eq('id',en.id);if(r.error)alert(r.error.message);else await loadStudio()};actions.append(status);item.append(details,actions);el.append(item)}}
 $('refreshNotifications').onclick=loadStudio;
 const previousAgencyLoad=loadAgency;loadAgency=async function(...args){await previousAgencyLoad(...args);await loadStudio()};
-</script></body></html>
+</script>
+<script src="./admin-tabs.js"></script>
+</body>
+</html>
