@@ -404,7 +404,7 @@ must be agreed in writing.
 
         <div class="ge-review-actions">
           <button id="geSaveDraft">Save draft</button>
-          <button id="geSendOffer">Create customer review link</button>
+          <button id="geSendOffer">Create Customer Review Link</button>
         </div>
 
         <p id="geEditorStatus" role="status"></p>
@@ -516,7 +516,7 @@ must be agreed in writing.
       }
 
       msg.textContent = send
-        ? "Offer saved. Sending the private offer link to the customer's email…"
+        ? "Offer link created. Click Email Offer to Customer to send it directly."
         : "Draft saved. Refresh to see it.";
 
       if (send) {
@@ -548,45 +548,22 @@ must be agreed in writing.
 
         const email = document.createElement("button");
         email.type = "button";
-        email.textContent = "Email offer to customer";
-        email.title = "Opens your email app with a prepared message. You must press Send.";
-        email.onclick = () => {
+        email.textContent = "Email Offer to Customer";
+        email.title = "Send this private booking link directly using Geneius email.";
+        email.onclick = async () => {
           if (!e.customer_email) {
             msg.textContent = "This enquiry has no customer email address.";
             return;
           }
-          const subject = "Your Geneius Entertainment booking offer — " + (e.event_date || "event");
-          const body = [
-            "Hello " + (e.customer_name || "there") + ",",
-            "",
-            "Thank you for your enquiry. Please review your private booking offer, agreed fee, deposit and terms at the link below:",
-            "",
-            link.href,
-            "",
-            "Event date: " + (e.event_date || "To be confirmed"),
-            "Act: " + actName(e.act_id),
-            "Performance fee: £" + (p / 100).toFixed(2),
-            "Deposit: £" + (deposit / 100).toFixed(2),
-            "Balance: £" + ((p - deposit) / 100).toFixed(2),
-            "",
-            "Please read the full terms and accept the agreement using the private link.",
-            "",
-            "Geneius Entertainment & Management"
-          ].join("\n");
-          const mailto = "mailto:" + encodeURIComponent(e.customer_email)
-            + "?subject=" + encodeURIComponent(subject)
-            + "&body=" + encodeURIComponent(body);
-          window.location.href = mailto;
-          msg.textContent = "Email draft opened for " + e.customer_email + ". You must send it in your email app; Geneius has not sent it automatically.";
-        };
-        area.append(paragraph, input, copy, email);
-        // Only claim delivery when the server-side email provider confirms it.
-        // Keep the copy link available if delivery fails.
-        const { data: { session } } = await db.auth.getSession();
-        if (!session) {
-          msg.textContent = "Offer saved, but your admin session expired. Email NOT sent. Copy the private link.";
-        } else {
+          email.disabled = true;
+          email.textContent = "Sending…";
+          msg.textContent = "Sending offer to " + e.customer_email + "…";
           try {
+            const { data: { session } } = await db.auth.getSession();
+            if (!session) {
+              msg.textContent = "Email NOT sent: admin session expired. Sign in again.";
+              return;
+            }
             const response = await fetch(
               "https://gtzneetxgefimvadwqew.supabase.co/functions/v1/send-offer-email",
               {
@@ -596,17 +573,21 @@ must be agreed in writing.
                   "apikey": "sb_publishable_tv5_T8hCxDhCmCehDZFWXA_BUgkTIO0",
                   "Authorization": "Bearer " + session.access_token
                 },
-                body: JSON.stringify({offer_id:result.data.id,token})
+                body: JSON.stringify({ offer_id: result.data.id, token })
               }
             );
             const outcome = await response.json().catch(() => ({}));
             msg.textContent = response.ok && outcome.sent
-              ? "Offer emailed to " + outcome.email + ". Customer can review the fee and contract using their private link."
-              : "Offer saved but email NOT sent: " + (outcome.error || "Email function unavailable") + ". Copy the private link as a fallback.";
+              ? "Offer emailed to " + outcome.email + ". The customer can review their contract using the private link."
+              : "Email NOT sent: " + (outcome.error || "Email service unavailable") + ". You can copy the private link.";
           } catch (error) {
-            msg.textContent = "Offer saved but email NOT sent: " + error.message + ". Copy the private link as a fallback.";
+            msg.textContent = "Email NOT sent: " + error.message + ". You can copy the private link.";
+          } finally {
+            email.disabled = false;
+            email.textContent = "Email Offer to Customer";
           }
-        }
+        };
+        area.append(paragraph, input, copy, email);
       }
 
       await load();
