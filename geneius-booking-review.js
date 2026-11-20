@@ -516,7 +516,7 @@ must be agreed in writing.
       }
 
       msg.textContent = send
-        ? "Offer link created. Email delivery has NOT happened yet. Use the email button below to open a ready-to-send message, or copy the link. Automatic delivery needs a server-side email service."
+        ? "Offer saved. Sending the private offer link to the customer's email…"
         : "Draft saved. Refresh to see it.";
 
       if (send) {
@@ -580,6 +580,33 @@ must be agreed in writing.
           msg.textContent = "Email draft opened for " + e.customer_email + ". You must send it in your email app; Geneius has not sent it automatically.";
         };
         area.append(paragraph, input, copy, email);
+        // Only claim delivery when the server-side email provider confirms it.
+        // Keep the copy link available if delivery fails.
+        const { data: { session } } = await db.auth.getSession();
+        if (!session) {
+          msg.textContent = "Offer saved, but your admin session expired. Email NOT sent. Copy the private link.";
+        } else {
+          try {
+            const response = await fetch(
+              "https://gtzneetxgefimvadwqew.supabase.co/functions/v1/send-offer-email",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  "apikey": "sb_publishable_tv5_T8hCxDhCmCehDZFWXA_BUgkTIO0",
+                  "Authorization": "Bearer " + session.access_token
+                },
+                body: JSON.stringify({offer_id:result.data.id,token})
+              }
+            );
+            const outcome = await response.json().catch(() => ({}));
+            msg.textContent = response.ok && outcome.sent
+              ? "Offer emailed to " + outcome.email + ". Customer can review the fee and contract using their private link."
+              : "Offer saved but email NOT sent: " + (outcome.error || "Email function unavailable") + ". Copy the private link as a fallback.";
+          } catch (error) {
+            msg.textContent = "Offer saved but email NOT sent: " + error.message + ". Copy the private link as a fallback.";
+          }
+        }
       }
 
       await load();
