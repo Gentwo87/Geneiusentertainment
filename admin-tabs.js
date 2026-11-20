@@ -35,7 +35,7 @@
     requestsPanel.id = "geUnifiedRequests";
     requestsPanel.className = "panel";
     requestsPanel.style.cssText = "padding:0;overflow:hidden;min-height:75vh";
-    requestsPanel.hidden = true;
+
     requestsPanel.innerHTML = `
       <div style="padding:18px 20px;border-bottom:1px solid #393238">
         <h2 style="margin:0 0 6px;color:#dfb65f">Enquiries, Offers, Payments & Contracts</h2>
