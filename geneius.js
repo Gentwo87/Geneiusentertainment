@@ -649,6 +649,24 @@ button {
   margin: 12px 0;
 }
 
+
+/* PUBLIC ENQUIRY AVAILABILITY CALENDAR */
+.ge-availability {border:1px solid #655037;border-radius:14px;padding:16px;background:#19150f;display:grid;gap:12px}
+.ge-availability-top {display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ge-availability-top strong {color:#f0d18a;font-size:17px}
+.ge-availability-nav {border:1px solid #7b633c;border-radius:8px;background:#30271d;color:#fff;padding:8px 13px;cursor:pointer}
+.ge-availability-nav:disabled {opacity:.35;cursor:not-allowed}
+.ge-availability-grid {display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.ge-availability-weekday {text-align:center;color:#bfb2a1;font-size:12px;padding:5px 0}
+.ge-availability-day {min-width:0;min-height:46px;border-radius:9px;border:1px solid #625039;background:#2b241b;color:#f7eedf;font:inherit;font-weight:600;cursor:pointer}
+.ge-availability-day:disabled {background:#151515;color:#817a70;border-color:#37332d;cursor:not-allowed;text-decoration:line-through}
+.ge-availability-day[data-selected="true"] {background:#dfb65f;color:#17120a;border-color:#f5d58b;outline:2px solid #f5d58b;outline-offset:1px}
+.ge-availability-day:focus-visible,.ge-availability-nav:focus-visible {outline:3px solid #fff;outline-offset:2px}
+.ge-availability-empty {min-height:46px}
+.ge-availability-legend {display:flex;gap:14px;flex-wrap:wrap;color:#c6b7a0;font-size:12px}
+.ge-availability-status {min-height:22px;color:#f0d18a;font-size:13px}
+@media(max-width:450px){.ge-availability {padding:10px}.ge-availability-grid {gap:3px}.ge-availability-day {min-height:40px;font-size:13px}.ge-availability-empty {min-height:40px}}
+
 /* ENQUIRY FORM */
 
 .ge-form {
@@ -1463,6 +1481,158 @@ function showShow(show) {
    CUSTOMER ENQUIRIES
 ========================================== */
 
+
+/* Availability is queried through a public, date-only Supabase RPC.
+   No private booking or performer records are exposed to visitors. */
+function createEnquiryCalendar(form, artist, getPackageId) {
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const firstMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+  let visibleMonth = new Date(firstMonth);
+  let selectedDate = "";
+  let allowedDates = new Set();
+  let requestVersion = 0;
+  let ready = false;
+
+  const wrapper = el("div", "ge-availability");
+  wrapper.setAttribute("aria-label", "Event date availability calendar");
+  const title = el("strong", "", "Choose your event date");
+  const heading = el("strong");
+  const previous = el("button", "ge-availability-nav", "‹");
+  const next = el("button", "ge-availability-nav", "›");
+  previous.type = next.type = "button";
+  previous.setAttribute("aria-label", "Previous month");
+  next.setAttribute("aria-label", "Next month");
+  const top = el("div", "ge-availability-top");
+  top.append(previous, heading, next);
+  const grid = el("div", "ge-availability-grid");
+  const status = el("div", "ge-availability-status", "Checking availability…");
+  status.setAttribute("role", "status");
+  const legend = el("div", "ge-availability-legend",
+    "Available: selectable  ·  Unavailable: crossed out");
+  wrapper.append(title, top, grid, legend, status);
+  form.append(wrapper);
+
+  const iso = (year, month, day) =>
+    year + "-" + String(month + 1).padStart(2, "0") +
+    "-" + String(day).padStart(2, "0");
+
+  const actIds = () => {
+    const pkg = state.packages.find(p => p.id === getPackageId());
+    return [...new Set([artist.act_id, pkg?.dj_act_id, pkg?.vocal_act_id].filter(Boolean))];
+  };
+
+  function paint() {
+    grid.replaceChildren();
+    heading.textContent = visibleMonth.toLocaleDateString("en-GB",
+      {month:"long",year:"numeric"});
+    previous.disabled = visibleMonth <= firstMonth;
+    for (const name of ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]) {
+      grid.append(el("div", "ge-availability-weekday", name));
+    }
+    const year = visibleMonth.getFullYear(), month = visibleMonth.getMonth();
+    const startOffset = (new Date(year, month, 1).getDay() + 6) % 7;
+    const count = new Date(year, month + 1, 0).getDate();
+    for (let i = 0; i < startOffset; i++) grid.append(el("span", "ge-availability-empty"));
+    for (let day = 1; day <= count; day++) {
+      const value = iso(year, month, day);
+      const button = el("button", "ge-availability-day", String(day));
+      button.type = "button";
+      button.disabled = !ready || !allowedDates.has(value);
+      button.dataset.selected = String(value === selectedDate);
+      button.setAttribute("aria-label",
+        new Date(year, month, day).toLocaleDateString("en-GB",
+          {weekday:"long",day:"numeric",month:"long",year:"numeric"}) +
+        (button.disabled ? ", unavailable" : ", available"));
+      button.setAttribute("aria-pressed", String(value === selectedDate));
+      button.onclick = () => {
+        if (button.disabled) return;
+        selectedDate = value;
+        status.textContent = "Selected: " +
+          new Date(year, month, day).toLocaleDateString("en-GB",
+            {weekday:"long",day:"numeric",month:"long",year:"numeric"});
+        paint();
+      };
+      grid.append(button);
+    }
+  }
+
+  async function queryDates(from, to) {
+    const ids = actIds();
+    if (!ids.length) throw new Error("No act is linked to this enquiry");
+    const results = await Promise.all(ids.map(p_act_id =>
+      db.rpc("geneius_public_available_dates", {
+        p_act_id, p_from: from, p_to: to
+      })
+    ));
+    for (const result of results) {
+      if (result.error || !Array.isArray(result.data)) {
+        throw new Error(result.error?.message || "Availability could not be checked");
+      }
+    }
+    const sets = results.map(result => new Set(
+      result.data.filter(row => row.available === true).map(row => row.event_date)
+    ));
+    return new Set([...sets[0]].filter(date => sets.every(set => set.has(date))));
+  }
+
+  async function refresh() {
+    const version = ++requestVersion;
+    ready = false;
+    allowedDates.clear();
+    selectedDate = "";
+    status.textContent = "Checking availability…";
+    paint();
+    const year = visibleMonth.getFullYear(), month = visibleMonth.getMonth();
+    const from = iso(year, month, 1);
+    const to = iso(year, month, new Date(year, month + 1, 0).getDate());
+    try {
+      const available = await queryDates(from, to);
+      if (version !== requestVersion) return;
+      allowedDates = available;
+      ready = true;
+      status.textContent = available.size
+        ? "Choose an available date. Crossed-out dates cannot be selected."
+        : "No available dates this month. Try another month.";
+    } catch (error) {
+      if (version !== requestVersion) return;
+      console.warn("Availability calendar:", error);
+      status.textContent = "Availability could not be checked. Please try another month or contact us.";
+    }
+    paint();
+  }
+
+  previous.onclick = () => {
+    if (visibleMonth <= firstMonth) return;
+    visibleMonth = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth()-1, 1);
+    refresh();
+  };
+  next.onclick = () => {
+    visibleMonth = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth()+1, 1);
+    refresh();
+  };
+
+  refresh();
+  return {
+    get value() { return selectedDate; },
+    refresh,
+    async validate() {
+      if (!selectedDate) return false;
+      const current = selectedDate;
+      try {
+        const available = await queryDates(current, current);
+        if (available.has(current)) return true;
+      } catch (error) {
+        console.warn("Availability recheck:", error);
+      }
+      selectedDate = "";
+      status.textContent = "This date is no longer available or could not be verified. Please choose another.";
+      await refresh();
+      return false;
+    }
+  };
+}
+
 function showEnquiry(
   artist,
   preselectShowId = null
@@ -1535,11 +1705,10 @@ function showEnquiry(
 
   email.maxLength = 254;
 
-  const date = field(
-    "Event date",
-    "date",
-    false
-  );
+  // The inline calendar replaces the native date input.
+  // Package selection is read when checking shared performers.
+  let djSelect = null;
+  const date = createEnquiryCalendar(form, artist, () => djSelect?.value || "");
 
   const availableShows = offeringsFor(
     artist.act_id
@@ -1666,8 +1835,6 @@ function showEnquiry(
     pkg => pkg.vocal_act_id === artist.act_id
   );
 
-  let djSelect = null;
-
   if (djOptions.length) {
     const label = el(
       "label",
@@ -1704,6 +1871,7 @@ function showEnquiry(
 
     label.append(djSelect);
     form.append(label);
+    djSelect.addEventListener("change", () => date.refresh());
   }
 
   /* EVENT NOTES */
@@ -1771,6 +1939,20 @@ function showEnquiry(
         "For a full-length performance, " +
         "please select one show.";
 
+      return;
+    }
+
+    if (!date.value) {
+      message.textContent = "Please choose an available event date.";
+      return;
+    }
+
+    submit.disabled = true;
+    message.textContent = "Checking availability…";
+    const validDate = await date.validate();
+    if (!validDate) {
+      submit.disabled = false;
+      message.textContent = "Please select an available date and try again.";
       return;
     }
 
