@@ -283,6 +283,7 @@ label { display: block; margin: 10px 0; }
       <h2 class="section-head">
         Customer Enquiries &amp; Quotations
       </h2>
+      <section class="panel" id="gePerformerApprovals"></section>
     </section>
 
     <section
@@ -374,6 +375,7 @@ async function check() {
       started = true;
 
       await import('./geneius-booking-review.js');
+      await import('./geneius-performer-approvals-admin.js');
       await import('./geneius-bank-admin.js');
       await import('./geneius-booking-management.js');
       await import('./geneius-contract-records.js');
