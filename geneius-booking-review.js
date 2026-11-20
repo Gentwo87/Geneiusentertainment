@@ -90,6 +90,7 @@ if (panel) {
       Refresh enquiries
     </button>
     <p id="geReviewStatus" role="status"></p>
+    <div id="gePaymentAlerts" role="status" aria-live="polite"></div>
     <div class="ge-inbox-toolbar"><select id="geTestView" aria-label="Filter real or test enquiries"><option value="all">Real &amp; test</option><option value="real">Real only</option><option value="test">Test only</option></select><select id="geArchiveView" aria-label="Show active or archived enquiries"><option value="active">Active enquiries</option><option value="archived">Archived enquiries</option><option value="all">All enquiries</option></select><input id="geReviewSearch" placeholder="Search customer, act or message" aria-label="Search requests"><select id="geReviewFilter" aria-label="Filter requests"><option value="all">All requests</option><option value="new">New enquiries</option><option value="payment_pending">Payments to verify</option><option value="accepted">Accepted quotes</option><option value="sent">Quotes sent</option><option value="paid">Deposits verified</option></select></div><div id="geReviewList"></div>
     <div id="geReviewEditor"></div>
   `;
@@ -167,6 +168,27 @@ if (panel) {
     testIds = new Set((tests.data || []).map(t => t.enquiry_id));
     $("#geTestView").disabled = !testAvailable;
     if (!testAvailable) $("#geTestView").title = "Run supabase/test-labels-draft-cleanup.sql first";
+    const paymentOffers = offers.filter(o => o.status === "payment_pending");
+    const alerts = $("#gePaymentAlerts");
+    alerts.replaceChildren();
+    if (paymentOffers.length) {
+      const notice = document.createElement("div");
+      notice.className = "ge-review-card ge-payment";
+      const heading = document.createElement("h3");
+      heading.textContent = "Payment declarations awaiting your confirmation: " + paymentOffers.length;
+      const info = document.createElement("p");
+      info.textContent = "Customers have reported bank transfers. Check your bank before confirming; these are not confirmed bookings.";
+      const jump = document.createElement("button");
+      jump.type = "button";
+      jump.textContent = "Show payments to verify";
+      jump.onclick = () => {
+        $("#geReviewFilter").value = "payment_pending";
+        renderList();
+        $("#geReviewList").scrollIntoView({ behavior: "smooth" });
+      };
+      notice.append(heading, info, jump);
+      alerts.append(notice);
+    }
     renderList();
     if (archiveAvailable) status(enquiries.length + " enquiries loaded (" + archivedIds.size + " archived).");
   }
@@ -190,7 +212,11 @@ if (panel) {
     const latestOffer = e => offers.filter(o => o.enquiry_id === e.id)
       .sort((a,b) => (b.revision || 0) - (a.revision || 0))[0];
     let shown = 0;
-    enquiries.forEach(e => {
+    const orderedEnquiries = [...enquiries].sort((a,b) => {
+      const priority = e => latestOffer(e)?.status === "payment_pending" ? 1 : 0;
+      return priority(b) - priority(a);
+    });
+    orderedEnquiries.forEach(e => {
       const offer = latestOffer(e);
       const isArchived = archivedIds.has(e.id);
       const isTest = testIds.has(e.id);
@@ -207,7 +233,7 @@ if (panel) {
       const div = document.createElement("article");
       div.className = "ge-review-card" + (e.status === "new" ? " ge-new" : offer?.status === "payment_pending" ? " ge-payment" : offer?.status === "paid" ? " ge-confirmed" : "");
       const title = document.createElement("h3");
-      title.textContent = (isTest ? "🧪 TEST · " : "") + (e.customer_name || "Customer");
+      title.textContent = (offer?.status === "payment_pending" ? "💳 PAYMENT REPORTED · " : "") + (isTest ? "🧪 TEST · " : "") + (e.customer_name || "Customer");
       const meta = document.createElement("p");
       meta.className = "ge-meta";
       meta.textContent = [e.status === "new" ? "● NEW REQUEST" : "Request: " + e.status,
