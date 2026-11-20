@@ -182,6 +182,9 @@ if (panel) {
       jump.type = "button";
       jump.textContent = "Show payments to verify";
       jump.onclick = () => {
+        $("#geArchiveView").value = "all";
+        $("#geTestView").value = "all";
+        $("#geReviewSearch").value = "";
         $("#geReviewFilter").value = "payment_pending";
         renderList();
         $("#geReviewList").scrollIntoView({ behavior: "smooth" });
