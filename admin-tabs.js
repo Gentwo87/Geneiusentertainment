@@ -51,43 +51,43 @@
     const sections = [
       {
         id: "calendar",
-        label: "Booking Calendar",
+        label: "Calendar",
         icon: "📅",
         panel: calendarPanel
       },
       {
         id: "agency",
-        label: "Agency Management",
+        label: "Acts & Performers",
         icon: "👥",
         panel: agencyPanel
       },
       {
         id: "studio",
-        label: "Artist & Show Studio",
+        label: "Shows & Packages",
         icon: "🎤",
         panel: studioPanel
       },
       {
         id: "profiles",
-        label: "Public Artist Profiles",
+        label: "Website Profiles",
         icon: "🖼",
         panel: profilesPanel
       },
       {
         id: "notifications",
-        label: "Notifications",
+        label: "New Enquiries",
         icon: "🔔",
         panel: notificationsPanel
       },
       {
         id: "requests",
-        label: "Enquiries & Contracts",
+        label: "Bookings & Contracts",
         icon: "✉",
         panel: requestsPanel
       },
       {
         id: "monthly",
-        label: "Bookings This Month",
+        label: "Monthly Booking List",
         icon: "📋",
         panel: monthlyPanel
       }
@@ -272,6 +272,27 @@
     }
 
     app.insertBefore(nav, app.firstChild);
+
+    // A plain-language orientation note. This does not alter any existing
+    // Supabase, booking, payment, or calendar functionality.
+    const help = document.createElement("p");
+    help.id = "geAdminGuide";
+    help.style.cssText = "color:#c9bdab;font-size:13px;line-height:1.55;margin:-10px 0 20px";
+    nav.insertAdjacentElement("afterend", help);
+    const guidance = {
+      calendar: "See booked and held dates, check clashes, or add a booking.",
+      requests: "Start here for customer enquiries, offers, payment records, booking changes and contracts.",
+      agency: "Manage your acts and the performers assigned to them.",
+      studio: "Create and edit the shows and DJ packages offered on your website.",
+      profiles: "Control which performers and their photos or biographies appear publicly.",
+      notifications: "Quickly review new website enquiries. For the full booking process, use Bookings & Contracts.",
+      monthly: "See a list of bookings for the selected month."
+    };
+    const originalActivate = activate;
+    activate = id => {
+      originalActivate(id);
+      help.textContent = guidance[id] || "";
+    };
 
     // Support direct links to the booking workspace while retaining
     // the existing booking calendar as the normal default.
