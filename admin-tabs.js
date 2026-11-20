@@ -28,6 +28,23 @@
     const profilesPanel =
       document.getElementById("publicProfilesPanel");
 
+    // Booking requests remain independently protected by their existing
+    // Supabase administrator check. Embed them as a workspace, not as
+    // duplicated scripts, to preserve quotations, payments and management.
+    const requestsPanel = document.createElement("section");
+    requestsPanel.id = "geUnifiedRequests";
+    requestsPanel.className = "panel";
+    requestsPanel.style.cssText = "padding:0;overflow:hidden;min-height:75vh";
+    requestsPanel.hidden = true;
+    requestsPanel.innerHTML = `
+      <div style="padding:18px 20px;border-bottom:1px solid #393238">
+        <h2 style="margin:0 0 6px;color:#dfb65f">Enquiries, Offers, Payments & Contracts</h2>
+        <p style="margin:0;color:#b3b0ad">Manage customer enquiries and bookings without leaving the dashboard.</p>
+      </div>
+      <div id="geRequestsFrameHost" style="min-height:75vh"></div>
+    `;
+    app.appendChild(requestsPanel);
+
     const bookingList = document.getElementById("bookingList");
     const monthlyPanel = bookingList?.closest(".panel");
 
@@ -61,6 +78,12 @@
         label: "Notifications",
         icon: "🔔",
         panel: notificationsPanel
+      },
+      {
+        id: "requests",
+        label: "Enquiries & Contracts",
+        icon: "✉",
+        panel: requestsPanel
       },
       {
         id: "monthly",
@@ -124,6 +147,14 @@
         font-size: 16px;
       }
 
+      #geRequestsFrameHost iframe {
+        display: block;
+        width: 100%;
+        min-height: 85vh;
+        border: 0;
+        background: #0d0d10;
+      }
+
       #app .ge-admin-tab-hidden {
         display: none !important;
       }
@@ -184,6 +215,17 @@
         }
       }
 
+      if (id === "requests") {
+        const host = document.getElementById("geRequestsFrameHost");
+        if (host && !host.firstChild) {
+          const frame = document.createElement("iframe");
+          frame.src = "./booking-requests.html";
+          frame.title = "Geneius enquiries, offers, payments and contracts";
+          frame.loading = "eager";
+          host.appendChild(frame);
+        }
+      }
+
       if (id === "profiles") {
         // This section is normally hidden until
         // profile data has loaded.
@@ -231,8 +273,11 @@
 
     app.insertBefore(nav, app.firstChild);
 
-    // Keep the booking calendar as the default view.
-    activate("calendar");
+    // Support direct links to the booking workspace while retaining
+    // the existing booking calendar as the normal default.
+    const requested = new URLSearchParams(location.search).get("section");
+    activate(sections.some(section => section.id === requested)
+      ? requested : "calendar");
 
     // Preserve access to all original sections.
     // The original controls and event listeners remain.
