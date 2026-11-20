@@ -1,0 +1,23 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Performer approval | Geneius</title><style>body{margin:0;background:#0d0d10;color:#f4f1eb;font:16px/1.6 system-ui,Arial}main{max-width:660px;margin:7vh auto;padding:24px}.card{background:#19191e;border:1px solid #6b5735;border-radius:16px;padding:26px}h1{color:#dfb65f}button{background:#dfb65f;color:#18130b;border:0;border-radius:9px;padding:13px 18px;margin:6px 6px 6px 0;font-weight:700;cursor:pointer}textarea{box-sizing:border-box;width:100%;min-height:90px;background:#101014;border:1px solid #756242;border-radius:8px;color:white;padding:12px}#status{color:#e6ca92}button:disabled{opacity:.5}</style></head><body><main><div class="card"><h1>Geneius · Performer Approval</h1><p id="details">Checking your private invitation…</p><label for="note">Message to the agency (optional)</label><textarea id="note" maxlength="2000" placeholder="Questions about travel, timing or the event"></textarea><div id="actions" hidden><button data-choice="accepted">Accept gig</button><button data-choice="declined">Decline gig</button><button data-choice="discuss">Ask a question</button></div><p id="status" role="status"></p><p style="font-size:13px;color:#b9b2a6">Accepting here confirms your willingness to perform. The agency will arrange the customer offer and final booking separately.</p></div></main><script type="module">
+import {createClient} from "https://esm.sh/@supabase/supabase-js@2";
+const db=createClient("https://gtzneetxgefimvadwqew.supabase.co","sb_publishable_tv5_T8hCxDhCmCehDZFWXA_BUgkTIO0");
+const token=new URLSearchParams(location.search).get("token")||"";
+const details=document.getElementById("details"),status=document.getElementById("status"),actions=document.getElementById("actions");
+async function load(){
+ if(token.length!==72){details.textContent="This invitation link is invalid.";return}
+ const r=await db.rpc("geneius_private_approval_details",{p_token:token});
+ if(r.error||!r.data?.length){details.textContent="This invitation has expired or is unavailable.";return}
+ const d=r.data[0];
+ details.textContent=(d.act_name||"Performance")+" · "+(d.event_date||"Date TBC")+" · "+(d.venue||"Venue to be confirmed")+" · "+(d.event_notes||"No additional notes")+" · Current response: "+d.response_status;
+ actions.hidden=!["pending","discuss"].includes(d.response_status);
+}
+for(const button of document.querySelectorAll("[data-choice]"))button.onclick=async()=>{
+ const choice=button.dataset.choice;
+ if(!confirm("Submit your response: "+choice+"?"))return;
+ for(const b of actions.querySelectorAll("button"))b.disabled=true;
+ const r=await db.rpc("geneius_private_approval_respond",{p_token:token,p_status:choice,p_note:document.getElementById("note").value});
+ status.textContent=r.error?r.error.message:r.data?"Response recorded. Thank you.":"This link is no longer valid for a response.";
+ await load();for(const b of actions.querySelectorAll("button"))b.disabled=false;
+};
+load();
+</script></body></html>
