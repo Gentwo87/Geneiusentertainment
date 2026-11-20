@@ -516,7 +516,7 @@ must be agreed in writing.
       }
 
       msg.textContent = send
-        ? "Offer saved. Copy the customer link. Automatic emails are not configured yet."
+        ? "Offer link created. Email delivery has NOT happened yet. Use the email button below to open a ready-to-send message, or copy the link. Automatic delivery needs a server-side email service."
         : "Draft saved. Refresh to see it.";
 
       if (send) {
@@ -546,7 +546,40 @@ must be agreed in writing.
           copy.textContent = "Copied";
         };
 
-        area.append(paragraph, input, copy);
+        const email = document.createElement("button");
+        email.type = "button";
+        email.textContent = "Email offer to customer";
+        email.title = "Opens your email app with a prepared message. You must press Send.";
+        email.onclick = () => {
+          if (!e.customer_email) {
+            msg.textContent = "This enquiry has no customer email address.";
+            return;
+          }
+          const subject = "Your Geneius Entertainment booking offer — " + (e.event_date || "event");
+          const body = [
+            "Hello " + (e.customer_name || "there") + ",",
+            "",
+            "Thank you for your enquiry. Please review your private booking offer, agreed fee, deposit and terms at the link below:",
+            "",
+            link.href,
+            "",
+            "Event date: " + (e.event_date || "To be confirmed"),
+            "Act: " + actName(e.act_id),
+            "Performance fee: £" + (p / 100).toFixed(2),
+            "Deposit: £" + (deposit / 100).toFixed(2),
+            "Balance: £" + ((p - deposit) / 100).toFixed(2),
+            "",
+            "Please read the full terms and accept the agreement using the private link.",
+            "",
+            "Geneius Entertainment & Management"
+          ].join("\n");
+          const mailto = "mailto:" + encodeURIComponent(e.customer_email)
+            + "?subject=" + encodeURIComponent(subject)
+            + "&body=" + encodeURIComponent(body);
+          window.location.href = mailto;
+          msg.textContent = "Email draft opened for " + e.customer_email + ". You must send it in your email app; Geneius has not sent it automatically.";
+        };
+        area.append(paragraph, input, copy, email);
       }
 
       await load();
