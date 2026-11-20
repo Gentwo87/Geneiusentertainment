@@ -65,7 +65,7 @@ language plpgsql security definer set search_path='' as $$
 begin
  if length(coalesce(p_token,''))<>72 then raise exception 'Invalid link'; end if;
  return query
- select e.event_date::date, a.name::text, coalesce(e.venue::text,'Not specified'),coalesce(e.notes::text,''),p.status,p.expires_at
+ select e.event_date::date, a.name::text, 'See enquiry details with the agency'::text,coalesce(e.notes::text,''),p.status,p.expires_at
  from public.geneius_performer_approvals p
  join public.agency_enquiries e on e.id=p.enquiry_id
  join public.acts a on a.id=p.act_id
