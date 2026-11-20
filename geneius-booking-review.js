@@ -441,6 +441,37 @@ must be agreed in writing.
       </div>
     `;
 
+    const pendingOffer = offers.filter(o => o.enquiry_id === e.id && o.status === "payment_pending")
+      .sort((a,b) => (b.revision || 0) - (a.revision || 0))[0];
+    if (pendingOffer) {
+      const actions = box.querySelector(".ge-review-actions");
+      const verify = document.createElement("button");
+      verify.type = "button";
+      verify.textContent = "Verify Payment & Confirm Booking";
+      verify.title = "Only use after checking that the bank transfer has arrived.";
+      verify.onclick = async () => {
+        const confirmation = window.prompt(
+          "Check your bank account first. Type CONFIRM PAID to verify payment, add this booking to the calendar and block the performers:"
+        );
+        if (confirmation !== "CONFIRM PAID") return;
+        verify.disabled = true;
+        const message = box.querySelector("#geEditorStatus");
+        message.textContent = "Verifying booking and calendar availability…";
+        try {
+          const response = await db.rpc("geneius_admin_verify_payment_and_confirm", {
+            p_offer_id: pendingOffer.id
+          });
+          if (response.error) throw response.error;
+          message.textContent = "Payment verified. Booking confirmed and added to the calendar.";
+          await load();
+        } catch (error) {
+          message.textContent = "Confirmation NOT completed: " + error.message;
+          verify.disabled = false;
+        }
+      };
+      actions.append(verify);
+    }
+
     const val = id => box.querySelector("#" + id).value;
     const total = () => Math.round(Number(val("gePrice")) * 100);
 
