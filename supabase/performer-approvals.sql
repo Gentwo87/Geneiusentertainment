@@ -87,3 +87,27 @@ revoke all on function public.geneius_private_approval_details(text) from public
 revoke all on function public.geneius_private_approval_respond(text,text,text) from public;
 grant execute on function public.geneius_admin_prepare_approvals(uuid),public.geneius_admin_list_approvals(uuid),public.geneius_admin_record_approval(uuid,text,text) to authenticated;
 grant execute on function public.geneius_private_approval_details(text),public.geneius_private_approval_respond(text,text,text) to anon,authenticated;
+
+-- Enforce approval before any NEW offer is sent. Drafts remain allowed.
+-- Existing previously sent offers are not modified by this migration.
+create or replace function public.geneius_require_performer_approval()
+returns trigger language plpgsql security definer set search_path='' as $$
+declare v_act uuid; v_total integer; v_accepted integer;
+begin
+ if new.status <> 'sent' or (tg_op='UPDATE' and old.status='sent') then return new; end if;
+ select e.act_id into v_act from public.agency_enquiries e where e.id=new.enquiry_id;
+ if v_act is null then raise exception 'Cannot send: no act selected for this enquiry'; end if;
+ select count(*) into v_total from public.act_members m where m.act_id=v_act;
+ if v_total=0 then raise exception 'Cannot send: act has no performers configured'; end if;
+ select count(*) into v_accepted from public.act_members m
+ join public.geneius_performer_approvals p on p.performer_id=m.performer_id and p.enquiry_id=new.enquiry_id
+ where m.act_id=v_act and p.status='accepted';
+ if v_accepted<>v_total then
+   raise exception 'Cannot send offer: % of % performers approved',v_accepted,v_total;
+ end if;
+ return new;
+end $$;
+drop trigger if exists geneius_require_performer_approval on public.geneius_booking_offers;
+create trigger geneius_require_performer_approval before insert or update of status
+on public.geneius_booking_offers for each row
+execute function public.geneius_require_performer_approval();
