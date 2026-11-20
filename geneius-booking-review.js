@@ -90,7 +90,7 @@ if (panel) {
       Refresh enquiries
     </button>
     <p id="geReviewStatus" role="status"></p>
-    <div class="ge-inbox-toolbar"><input id="geReviewSearch" placeholder="Search customer, act or message" aria-label="Search requests"><select id="geReviewFilter" aria-label="Filter requests"><option value="all">All requests</option><option value="new">New enquiries</option><option value="payment_pending">Payments to verify</option><option value="accepted">Accepted quotes</option><option value="sent">Quotes sent</option><option value="paid">Deposits verified</option></select></div><div id="geReviewList"></div>
+    <div class="ge-inbox-toolbar"><select id="geArchiveView" aria-label="Show active or archived enquiries"><option value="active">Active enquiries</option><option value="archived">Archived enquiries</option><option value="all">All enquiries</option></select><input id="geReviewSearch" placeholder="Search customer, act or message" aria-label="Search requests"><select id="geReviewFilter" aria-label="Filter requests"><option value="all">All requests</option><option value="new">New enquiries</option><option value="payment_pending">Payments to verify</option><option value="accepted">Accepted quotes</option><option value="sent">Quotes sent</option><option value="paid">Deposits verified</option></select></div><div id="geReviewList"></div>
     <div id="geReviewEditor"></div>
   `;
 
@@ -103,6 +103,8 @@ if (panel) {
   let acts = [];
   let shows = [];
   let packages = [];
+  let archivedIds = new Set();
+  let archiveAvailable = false;
 
   const status = text => {
     $("#geReviewStatus").textContent = text;
@@ -150,8 +152,16 @@ if (panel) {
     [enquiries, offers, acts, shows, packages] =
       results.map(r => r.data || []);
 
+    const archiveResult = await db.rpc("geneius_admin_list_archives");
+    archiveAvailable = !archiveResult.error;
+    archivedIds = new Set((archiveResult.data || []).map(a => a.enquiry_id));
+    $("#geArchiveView").disabled = !archiveAvailable;
+    if (!archiveAvailable) {
+      $("#geArchiveView").title = "Archive requires supabase/enquiry-archive.sql";
+      status("Archive not installed. Enquiries loaded normally.");
+    }
     renderList();
-    status(enquiries.length + " enquiries loaded.");
+    if (archiveAvailable) status(enquiries.length + " enquiries loaded (" + archivedIds.size + " archived).");
   }
 
   function actName(id) {
@@ -175,6 +185,10 @@ if (panel) {
     let shown = 0;
     enquiries.forEach(e => {
       const offer = latestOffer(e);
+      const isArchived = archivedIds.has(e.id);
+      const archiveView = $("#geArchiveView").value;
+      if (archiveAvailable && archiveView === "active" && isArchived) return;
+      if (archiveAvailable && archiveView === "archived" && !isArchived) return;
       const searchable = [e.customer_name,e.customer_email,e.notes,e.request_type,actName(e.act_id),e.event_date].join(" ").toLowerCase();
       if(term && !searchable.includes(term)) return;
       if(filter !== "all" && !(filter === "new" ? e.status === "new" : offer?.status === filter)) return;
@@ -195,6 +209,29 @@ if (panel) {
       button.textContent = "Open request & quotation";
       button.onclick = () => edit(e);
       div.append(title,meta,preview,button);
+      if (archiveAvailable) {
+        const archiveButton = document.createElement("button");
+        archiveButton.type = "button";
+        archiveButton.textContent = isArchived ? "Restore to active" : "Archive enquiry";
+        archiveButton.title = isArchived ? "Show this enquiry in the active inbox" : "Hide this enquiry from the active inbox without deleting its booking history";
+        archiveButton.onclick = async () => {
+          if (!window.confirm(isArchived ? "Restore this enquiry to the active inbox?" : "Archive this enquiry? It will remain available under Archived enquiries.")) return;
+          archiveButton.disabled = true;
+          const result = await db.rpc("geneius_admin_set_enquiry_archive", {
+            p_enquiry_id: e.id, p_archived: !isArchived, p_reason: null
+          });
+          if (result.error || result.data !== true) {
+            status("Archive action failed: " + (result.error?.message || "Unknown error"));
+            archiveButton.disabled = false;
+            return;
+          }
+          if (isArchived) archivedIds.delete(e.id);
+          else archivedIds.add(e.id);
+          renderList();
+          status(isArchived ? "Enquiry restored." : "Enquiry archived. No booking or contract data was deleted.");
+        };
+        div.append(archiveButton);
+      }
       // Only untouched enquiries with no offers are eligible. The database
       // independently verifies status and all linked records before deleting.
       if (e.status === "new" && !offers.some(o => o.enquiry_id === e.id)) {
@@ -227,6 +264,7 @@ if (panel) {
     if(!shown) list.textContent = "No requests match this filter.";
   }
 
+  $("#geArchiveView").addEventListener("change", renderList);
   const defaultTerms = `
 This quotation is subject to the agreed performance
 details. The booking is not confirmed until the
