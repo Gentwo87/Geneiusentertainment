@@ -90,7 +90,7 @@ if (panel) {
       Refresh enquiries
     </button>
     <p id="geReviewStatus" role="status"></p>
-    <div class="ge-inbox-toolbar"><select id="geArchiveView" aria-label="Show active or archived enquiries"><option value="active">Active enquiries</option><option value="archived">Archived enquiries</option><option value="all">All enquiries</option></select><input id="geReviewSearch" placeholder="Search customer, act or message" aria-label="Search requests"><select id="geReviewFilter" aria-label="Filter requests"><option value="all">All requests</option><option value="new">New enquiries</option><option value="payment_pending">Payments to verify</option><option value="accepted">Accepted quotes</option><option value="sent">Quotes sent</option><option value="paid">Deposits verified</option></select></div><div id="geReviewList"></div>
+    <div class="ge-inbox-toolbar"><select id="geTestView" aria-label="Filter real or test enquiries"><option value="all">Real &amp; test</option><option value="real">Real only</option><option value="test">Test only</option></select><select id="geArchiveView" aria-label="Show active or archived enquiries"><option value="active">Active enquiries</option><option value="archived">Archived enquiries</option><option value="all">All enquiries</option></select><input id="geReviewSearch" placeholder="Search customer, act or message" aria-label="Search requests"><select id="geReviewFilter" aria-label="Filter requests"><option value="all">All requests</option><option value="new">New enquiries</option><option value="payment_pending">Payments to verify</option><option value="accepted">Accepted quotes</option><option value="sent">Quotes sent</option><option value="paid">Deposits verified</option></select></div><div id="geReviewList"></div>
     <div id="geReviewEditor"></div>
   `;
 
@@ -104,6 +104,8 @@ if (panel) {
   let shows = [];
   let packages = [];
   let archivedIds = new Set();
+  let testIds = new Set();
+  let testAvailable = false;
   let archiveAvailable = false;
 
   const status = text => {
@@ -160,6 +162,11 @@ if (panel) {
       $("#geArchiveView").title = "Archive requires supabase/enquiry-archive.sql";
       status("Archive not installed. Enquiries loaded normally.");
     }
+    const tests = await db.rpc("geneius_admin_list_test_labels");
+    testAvailable = !tests.error;
+    testIds = new Set((tests.data || []).map(t => t.enquiry_id));
+    $("#geTestView").disabled = !testAvailable;
+    if (!testAvailable) $("#geTestView").title = "Run supabase/test-labels-draft-cleanup.sql first";
     renderList();
     if (archiveAvailable) status(enquiries.length + " enquiries loaded (" + archivedIds.size + " archived).");
   }
@@ -186,6 +193,10 @@ if (panel) {
     enquiries.forEach(e => {
       const offer = latestOffer(e);
       const isArchived = archivedIds.has(e.id);
+      const isTest = testIds.has(e.id);
+      const testView = $("#geTestView").value;
+      if (testAvailable && testView === "real" && isTest) return;
+      if (testAvailable && testView === "test" && !isTest) return;
       const archiveView = $("#geArchiveView").value;
       if (archiveAvailable && archiveView === "active" && isArchived) return;
       if (archiveAvailable && archiveView === "archived" && !isArchived) return;
@@ -196,7 +207,7 @@ if (panel) {
       const div = document.createElement("article");
       div.className = "ge-review-card" + (e.status === "new" ? " ge-new" : offer?.status === "payment_pending" ? " ge-payment" : offer?.status === "paid" ? " ge-confirmed" : "");
       const title = document.createElement("h3");
-      title.textContent = e.customer_name || "Customer";
+      title.textContent = (isTest ? "🧪 TEST · " : "") + (e.customer_name || "Customer");
       const meta = document.createElement("p");
       meta.className = "ge-meta";
       meta.textContent = [e.status === "new" ? "● NEW REQUEST" : "Request: " + e.status,
@@ -209,6 +220,34 @@ if (panel) {
       button.textContent = "Open request & quotation";
       button.onclick = () => edit(e);
       div.append(title,meta,preview,button);
+      if (testAvailable) {
+        const testButton = document.createElement("button");
+        testButton.type = "button";
+        testButton.textContent = isTest ? "Remove test label" : "Mark as test";
+        testButton.title = "Labels are for admin organisation only; test records still use the live booking system";
+        testButton.onclick = async () => {
+          if (!window.confirm(isTest ? "Remove test label?" : "Mark this enquiry as test? This does NOT isolate it from live calendar or customer actions.")) return;
+          const result = await db.rpc("geneius_admin_mark_test",{p_enquiry_id:e.id,p_is_test:!isTest});
+          if(result.error){status(result.error.message);return}
+          if(isTest)testIds.delete(e.id);else testIds.add(e.id);
+          renderList();status("Test label updated. This is not a sandbox.");
+        };
+        div.append(testButton);
+      }
+      if (offer?.status === "draft" && !offers.some(o=>o.enquiry_id===e.id && o.status!=="draft")) {
+        const draftButton = document.createElement("button");
+        draftButton.type = "button";
+        draftButton.textContent = "Delete unsent draft";
+        draftButton.title = "Remove an unsent draft quote, not the enquiry";
+        draftButton.onclick = async () => {
+          if(!window.confirm("Delete this unsent draft quote permanently?"))return;
+          if(window.prompt("Type DELETE DRAFT to confirm:")!=="DELETE DRAFT")return;
+          const result=await db.rpc("geneius_admin_delete_unsent_draft",{p_offer_id:offer.id});
+          if(result.error||result.data!==true){status("Draft deletion refused: "+(result.error?.message||"Not deleted"));return}
+          $("#geReviewEditor").replaceChildren();await load();status("Unsent draft deleted. Enquiry retained.");
+        };
+        div.append(draftButton);
+      }
       if (archiveAvailable) {
         const archiveButton = document.createElement("button");
         archiveButton.type = "button";
@@ -265,6 +304,7 @@ if (panel) {
   }
 
   $("#geArchiveView").addEventListener("change", renderList);
+  $("#geTestView").addEventListener("change", renderList);
   const defaultTerms = `
 This quotation is subject to the agreed performance
 details. The booking is not confirmed until the
