@@ -242,9 +242,19 @@ if (host) {
              min="1" value="1">
 
       <label>Contract text</label>
-      <textarea id="gmContract" rows="9"
-        placeholder="Paste reviewed client terms here">
+      <textarea id="gmContract" rows="16"
+        placeholder="Create a draft using the button below, then review and edit it before saving.">
       </textarea>
+
+      <button type="button" id="gmContractDraft" class="secondary">
+        Fill suggested contract draft
+      </button>
+
+      <p class="ge-note">
+        Suggested wording only. Review the terms, including your cancellation
+        policy, before saving or using them with customers. This does not send
+        a contract or activate a template.
+      </p>
 
       <button id="gmContractSave">
         Save contract template
@@ -559,6 +569,76 @@ if (host) {
     }
   };
 
+  // Draft only: never activate or send legal terms without admin review.
+  const suggestedClientTerms = `GENEIUS ENTERTAINMENT & MANAGEMENT
+CLIENT ENTERTAINMENT BOOKING TERMS — DRAFT FOR REVIEW
+
+1. BOOKING DETAILS
+The agreed performer(s), event date, venue, performance times, services and
+fee are those specified in the individual booking offer or agreement.
+Any change must be agreed in writing by Geneius Entertainment & Management
+("the Agency") and the client.
+
+2. BOOKING CONFIRMATION
+A booking is confirmed only in accordance with the confirmation process
+specified in the booking offer. Any payment declaration or booking status
+displayed by the website is subject to the agreed payment obligations.
+The client remains responsible for any unpaid amount.
+
+3. FEES AND PAYMENT
+The booking offer sets out the total fee, any deposit, the remaining
+balance and payment due dates. Deposits are only required when expressly
+specified in the offer. Payments are made using the instructions provided
+in the accepted booking offer. Do not pay into account details supplied
+by an unverified third party.
+
+4. CANCELLATION BY THE CLIENT
+Please insert and approve your specific cancellation notice periods,
+applicable fees, refund conditions and any exceptions here BEFORE
+using this template. Any cancellation must be notified in writing.
+Nothing in these terms excludes statutory rights that cannot lawfully
+be excluded.
+
+5. PERFORMER UNAVAILABILITY OR REPLACEMENT
+If a performer becomes unavailable, the Agency will contact the client
+to discuss a suitable alternative or other resolution. A replacement
+act or material change to the agreed service requires client approval.
+
+6. VENUE AND EVENT ARRANGEMENTS
+The client must provide safe access, suitable performance space,
+electricity and any other requirements agreed for the booking.
+The client must communicate venue restrictions and relevant event
+details in advance.
+
+7. CHANGES TO THE BOOKING
+Changes to date, venue, timings, performance requirements or price
+must be agreed in writing. Any additional charges must be disclosed
+and agreed before the amended services are supplied.
+
+8. LIABILITY AND LEGAL RIGHTS
+Nothing in these terms limits liability where doing so would be
+unlawful, including liability for fraud or for death or personal
+injury caused by negligence. Any other limitation of liability
+must be separately reviewed and agreed.
+
+9. AGREEMENT AND RECORDS
+The final booking offer, the accepted version of these terms and
+the recorded acceptance together document the client agreement.
+A copy should be made available to the client for their records.
+
+DRAFT ONLY — REVIEW AND COMPLETE SECTION 4 BEFORE ACTIVATION.`;
+
+  el("gmContractDraft").onclick = () => {
+    const textarea = el("gmContract");
+    if (textarea.value.trim() &&
+        !window.confirm("Replace the existing contract text with the suggested draft?")) {
+      return;
+    }
+    textarea.value = suggestedClientTerms;
+    textarea.focus();
+    status("Suggested draft inserted. Review and complete the cancellation policy before saving.");
+  };
+
   el("gmContractSave").onclick = async () => {
     const title = val("gmTitle");
     const version = Number(val("gmVersion"));
@@ -570,6 +650,7 @@ if (host) {
       version < 1 ||
       !terms
     ) {
+
       status(
         "Enter a title, version and complete contract terms."
       );
