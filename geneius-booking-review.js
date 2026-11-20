@@ -195,6 +195,33 @@ if (panel) {
       button.textContent = "Open request & quotation";
       button.onclick = () => edit(e);
       div.append(title,meta,preview,button);
+      // Only untouched enquiries with no offers are eligible. The database
+      // independently verifies status and all linked records before deleting.
+      if (e.status === "new" && !offers.some(o => o.enquiry_id === e.id)) {
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.textContent = "Delete unused enquiry";
+        remove.title = "Permanent deletion — only for unused or test enquiries";
+        remove.style.cssText = "border-color:#a76b62;color:#f2b9af;background:#33201f";
+        remove.onclick = async () => {
+          const name = e.customer_name || "this enquiry";
+          if (!window.confirm("Permanently delete the unused enquiry for " + name + "? This cannot be undone.")) return;
+          const typed = window.prompt("Type DELETE to permanently remove this unused enquiry:");
+          if (typed !== "DELETE") return;
+          remove.disabled = true;
+          const result = await db.rpc("geneius_admin_delete_unused_enquiry", {p_enquiry_id:e.id});
+          if (result.error || result.data !== true) {
+            status("Delete refused: " + (result.error?.message || "Record was not deleted") +
+              ". Ensure the safe-enquiry-delete SQL has been installed.");
+            remove.disabled = false;
+            return;
+          }
+          $("#geReviewEditor").replaceChildren();
+          await load();
+          status("Unused enquiry permanently deleted.");
+        };
+        div.append(remove);
+      }
       list.append(div);
     });
     if(!shown) list.textContent = "No requests match this filter.";
