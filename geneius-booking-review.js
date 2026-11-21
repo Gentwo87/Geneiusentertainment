@@ -447,13 +447,12 @@ must be agreed in writing.
       const actions = box.querySelector(".ge-review-actions");
       const verify = document.createElement("button");
       verify.type = "button";
-      verify.textContent = "Verify Payment & Confirm Booking";
+      verify.textContent = "Verify Payment";
       verify.title = "Only use after checking that the bank transfer has arrived.";
       verify.onclick = async () => {
-        const confirmation = window.prompt(
-          "Check your bank account first. Type CONFIRM PAID to verify payment, add this booking to the calendar and block the performers:"
-        );
-        if (confirmation !== "CONFIRM PAID") return;
+        if (!window.confirm(
+          "Have you checked your bank account and verified that the customer's payment has arrived?\n\nOK = Yes, confirm booking.\nCancel = No, leave awaiting verification."
+        )) return;
         verify.disabled = true;
         const message = box.querySelector("#geEditorStatus");
         message.textContent = "Verifying booking and calendar availability…";
